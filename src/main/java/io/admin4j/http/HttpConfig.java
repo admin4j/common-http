@@ -2,10 +2,12 @@ package io.admin4j.http;
 
 import io.admin4j.http.core.HttpLogger;
 import lombok.Data;
+import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author andanyang
@@ -30,13 +32,27 @@ public class HttpConfig {
     private long connectTimeout = 30;
 
     private boolean followRedirects = false;
+
+    /**
+     * 最大的连接数
+     */
+    private int maxIdleConnections = 5;
+
+    /**
+     * 最大的kepAlive 时间 秒
+     */
+    private long keepAliveDuration = 5;
+
     private String userAgent = "OKHTTP";
 
     public OkHttpClient getHttpClient() {
 
+        ConnectionPool connectionPool = new ConnectionPool(maxIdleConnections, keepAliveDuration, TimeUnit.SECONDS);
+
         HttpLoggingInterceptor logInterceptor = new HttpLoggingInterceptor(new HttpLogger());
         logInterceptor.setLevel(getLoggLevel());
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
+                .connectionPool(connectionPool)
                 .followRedirects(isFollowRedirects())
                 .addNetworkInterceptor(logInterceptor)
                 .readTimeout(Duration.ofSeconds(getReadTimeout()))
