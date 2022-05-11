@@ -14,8 +14,17 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public abstract class AbstractRobotRequest {
+
+    static At AT_ALL = null;
     private At at;
 
     @JSONField(name = "msgtype", serialzeFeatures = SerializerFeature.WriteEnumUsingToString)
     public abstract MsgType getMsgType();
+
+    public void setAtAll() {
+        if (AT_ALL == null) {
+            AT_ALL = At.atAll();
+        }
+        this.at = AT_ALL;
+    }
 }
