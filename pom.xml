@@ -5,7 +5,7 @@
 
     <groupId>io.github.admin4j</groupId>
     <artifactId>http</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.6</version>
     <name>common-http</name>
     <description>common-http</description>
     <url>https://github.com/andanyoung</url>
@@ -97,7 +97,7 @@
                     <serverId>ossrh</serverId>
                     <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
                     <skipStagingRepositoryClose>true</skipStagingRepositoryClose>
-                    <autoReleaseAfterClose>false</autoReleaseAfterClose>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
             </plugin>
             <!-- 生成java source.jar -->
