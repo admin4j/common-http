@@ -1,13 +1,7 @@
 package io.github.admin4j.http;
 
-import io.github.admin4j.http.core.HttpLogger;
 import lombok.Data;
-import okhttp3.ConnectionPool;
-import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
-
-import java.time.Duration;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author andanyang
@@ -44,19 +38,4 @@ public class HttpConfig {
     private long keepAliveDuration = 5;
 
     private String userAgent = "OKHTTP";
-
-    public OkHttpClient buildHttpClient() {
-
-        ConnectionPool connectionPool = new ConnectionPool(maxIdleConnections, keepAliveDuration, TimeUnit.SECONDS);
-
-        HttpLoggingInterceptor logInterceptor = new HttpLoggingInterceptor(new HttpLogger());
-        logInterceptor.setLevel(getLoggLevel());
-        OkHttpClient.Builder builder = new OkHttpClient.Builder()
-                .connectionPool(connectionPool)
-                .followRedirects(isFollowRedirects())
-                .addNetworkInterceptor(logInterceptor)
-                .readTimeout(Duration.ofSeconds(getReadTimeout()))
-                .connectTimeout(Duration.ofSeconds(getReadTimeout()));
-        return builder.build();
-    }
 }

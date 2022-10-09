@@ -6,6 +6,7 @@ import io.github.admin4j.http.core.AbstractHttpRequest;
 import io.github.admin4j.http.core.MediaTypeEnum;
 import io.github.admin4j.http.core.Pair;
 import io.github.admin4j.http.exception.HttpException;
+import io.github.admin4j.http.factory.HttpClientFactory;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import okhttp3.OkHttpClient;
@@ -27,7 +28,7 @@ class JSONHttpRequest extends AbstractHttpRequest {
 
     public JSONHttpRequest(HttpConfig httpConfig) {
         super();
-        okHttpClient = httpConfig.buildHttpClient();
+        okHttpClient = HttpClientFactory.okHttpClient(httpConfig);
     }
 
     @Override

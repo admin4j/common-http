@@ -2,6 +2,7 @@ package io.github.admin4j.http;
 
 import io.github.admin4j.http.core.MediaTypeEnum;
 import io.github.admin4j.http.core.Pair;
+import io.github.admin4j.http.factory.HttpClientFactory;
 import okhttp3.OkHttpClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,7 @@ class AbstractJSONHttpRequest {
 
         HttpConfig httpConfig = new HttpConfig();
         httpRequest = new JSONHttpRequest(new HttpConfig());
-        OkHttpClient httpClient = httpConfig.buildHttpClient();
+        OkHttpClient httpClient = HttpClientFactory.okHttpClient(httpConfig);
         httpRequest.setOkHttpClient(httpClient);
     }
 

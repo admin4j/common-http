@@ -7,6 +7,7 @@ import io.github.admin4j.http.core.HttpCallback;
 import io.github.admin4j.http.core.MediaTypeEnum;
 import io.github.admin4j.http.core.Pair;
 import io.github.admin4j.http.exception.HttpException;
+import io.github.admin4j.http.factory.HttpClientFactory;
 import lombok.Getter;
 import lombok.Setter;
 import okhttp3.*;
@@ -22,7 +23,7 @@ import java.util.Map;
  */
 public class ApiClient extends AbstractHttpRequest {
 
-    public static final HttpConfig DEFAULT_HTTP_CONFIG = new HttpConfig();
+
     private static volatile OkHttpClient SINGLETON_CLIENT = null;
     @Getter
     @Setter
@@ -38,7 +39,7 @@ public class ApiClient extends AbstractHttpRequest {
     }
 
     public ApiClient(HttpConfig config) {
-        httpClient = config.buildHttpClient();
+        httpClient = HttpClientFactory.okHttpClient(config);
         init();
     }
 
@@ -57,7 +58,7 @@ public class ApiClient extends AbstractHttpRequest {
 
             synchronized (ApiClient.class) {
                 if (null == SINGLETON_CLIENT) {
-                    SINGLETON_CLIENT = DEFAULT_HTTP_CONFIG.buildHttpClient();
+                    SINGLETON_CLIENT = HttpClientFactory.okHttpClient(new HttpConfig());
                 }
             }
         }
