@@ -15,6 +15,6 @@ public class HttpLogger implements HttpLoggingInterceptor.Logger {
 
     @Override
     public void log(String message) {
-        log.info(MARKER, message);
+        log.debug(MARKER, message);
     }
 }

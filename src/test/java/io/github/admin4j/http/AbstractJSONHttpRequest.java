@@ -1,6 +1,8 @@
 package io.github.admin4j.http;
 
+import io.github.admin4j.http.core.MediaTypeEnum;
 import io.github.admin4j.http.core.Pair;
+import okhttp3.OkHttpClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,15 +10,17 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 
-class AbstractHttpRequest {
+class AbstractJSONHttpRequest {
 
-    HttpRequest httpRequest;
+    JSONHttpRequest httpRequest;
 
     @BeforeEach
     void init() {
 
         HttpConfig httpConfig = new HttpConfig();
-        httpRequest = new HttpRequest(httpConfig);
+        httpRequest = new JSONHttpRequest(new HttpConfig());
+        OkHttpClient httpClient = httpConfig.buildHttpClient();
+        httpRequest.setOkHttpClient(httpClient);
     }
 
     @Test
@@ -27,7 +31,7 @@ class AbstractHttpRequest {
 
 
         HttpConfig httpConfig = new HttpConfig();
-        HttpRequest httpRequest = new HttpRequest(httpConfig);
+        JSONHttpRequest httpRequest = new JSONHttpRequest(httpConfig);
 
         String str = "abc=adc&acd+3";
         String utf8 = URLEncoder.encode(str, "utf8");

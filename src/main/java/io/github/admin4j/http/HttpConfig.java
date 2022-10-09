@@ -45,7 +45,7 @@ public class HttpConfig {
 
     private String userAgent = "OKHTTP";
 
-    public OkHttpClient getHttpClient() {
+    public OkHttpClient buildHttpClient() {
 
         ConnectionPool connectionPool = new ConnectionPool(maxIdleConnections, keepAliveDuration, TimeUnit.SECONDS);
 

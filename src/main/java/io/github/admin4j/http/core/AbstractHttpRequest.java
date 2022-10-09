@@ -1,6 +1,5 @@
 package io.github.admin4j.http.core;
 
-import io.github.admin4j.http.MediaTypeEnum;
 import io.github.admin4j.http.exception.HttpException;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
@@ -11,9 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Type;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -228,8 +225,6 @@ public abstract class AbstractHttpRequest {
 
     public abstract String serializeJSON(Object obj);
 
-    public abstract <T> T deserializeJSON(InputStream in, Type returnType) throws IOException;
-
 
     protected String parameterToString(Object param) {
         if (param == null) {
@@ -353,70 +348,6 @@ public abstract class AbstractHttpRequest {
     }
 
     // ------------- execute -------------
-    protected <T> T handleSuccessResponse(Response response, Type returnType) throws IOException {
-        return deserializeJSON(response.body().byteStream(), returnType);
-    }
-
-    protected <T> T handleFailResponse(Response response, Type returnType) {
-        return null;
-    }
-
-    /**
-     * Handle the given response, return the deserialized object when the response is successful.
-     *
-     * @param <T>        Type
-     * @param response   Response
-     * @param returnType Return type
-     * @return Type
-     * @throws HttpException If the response has a unsuccessful status code or
-     *                       fail to deserialize the response body
-     */
-    public <T> T handleResponse(Response response, Type returnType) throws HttpException {
-        if (response.isSuccessful()) {
-            try {
-                if (returnType == null) {
-                    // returning null if the returnType is not defined,
-                    // or the status code is 204 (No Content)
-
-                    if (response.body() != null || response.code() == 204) {
-                        response.body().close();
-                    }
-                    return null;
-                } else {
-                    return handleSuccessResponse(response, returnType);
-                }
-            } catch (IOException e) {
-                throw new HttpException(response.message(), e, response.code(), response.headers().toMultimap());
-            }
-        } else {
-            Object o = handleFailResponse(response, returnType);
-            if (o != null) {
-                return (T) o;
-            }
-            String respBody = null;
-            if (response.body() != null) {
-                try {
-                    respBody = response.body().string();
-
-                } catch (IOException e) {
-                    throw new HttpException(response.message(), e, response.code(), response.headers().toMultimap());
-                }
-            }
-            throw new HttpException(response.message(), response.code(), response.headers().toMultimap(), respBody);
-        }
-    }
-
-
-    public <T> T execute(Call call, Type returnType) throws HttpException {
-        try {
-            Response response = call.execute();
-            T data = handleResponse(response, returnType);
-            return data;
-        } catch (IOException e) {
-            throw new HttpException(e);
-        }
-    }
-
     public Response execute(Call call) throws HttpException {
         try {
             return call.execute();
@@ -426,31 +357,7 @@ public abstract class AbstractHttpRequest {
     }
 
 
-    public <T> void executeAsync(Call call, final Type returnType, final HttpCallback<T> callback) {
-
-        call.enqueue(new Callback() {
-
-
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                T result;
-                try {
-                    result = (T) handleResponse(response, returnType);
-                } catch (Exception e) {
-                    callback.onFailure(e, response.code(), response.headers().toMultimap());
-                    return;
-                }
-                callback.onSuccess(result, response.code(), response.headers().toMultimap());
-            }
-
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                callback.onFailure(e, 0, null);
-            }
-        });
-    }
-
-    public <T> void executeAsync(Call call, final HttpCallback<Response> callback) {
+    public void executeAsync(Call call, final HttpCallback<Response> callback) {
 
         call.enqueue(new Callback() {
 
@@ -468,59 +375,35 @@ public abstract class AbstractHttpRequest {
     }
 
     // ======================= GET POST ===============
+    protected Call buildGet(String path, Map<String, Object> queryMap, Pair<?>... queryParams) {
 
-    public String get(String path, Pair<?>... queryParams) throws IOException {
-
-        Call call = buildCall(path, Method.GET, queryParams, null, null, null, null);
-        Response response = execute(call);
-        return response.body().string();
+        return buildCall(path, Method.GET, queryParams, queryMap, null, null, null);
     }
 
-    public <T> T get(String path, Type returnType, Pair<?>... queryParams) throws IOException {
+    public Response get(String path, Map<String, Object> queryMap, Pair<?>... queryParams) {
 
-        Call call = buildCall(path, Method.GET, queryParams, null, null, null, null);
-        return execute(call, returnType);
+        Call call = buildGet(path, queryMap, queryParams);
+        return execute(call);
     }
 
-
-    public <T> T post(String url,
-                      MediaTypeEnum mediaTypeEnum,
-                      Object body,
-                      Map<String, Object> formParams,
-                      Map<String, Object> headerParams,
-                      Type returnType) {
+    protected Call buildPost(String url,
+                             MediaTypeEnum mediaTypeEnum,
+                             Object body,
+                             Map<String, Object> formParams,
+                             Map<String, Object> headerParams) {
 
         Request request = buildRequest(url, Method.POST, mediaTypeEnum, body, formParams, headerParams);
 
-        Call call = getHttpClient().newCall(request);
-        return execute(call, returnType);
+        return getHttpClient().newCall(request);
     }
 
-    public <T> T postForm(String url,
-                          Map<String, Object> formParams,
-                          Type returnType) {
+    public Response post(String url,
+                         MediaTypeEnum mediaTypeEnum,
+                         Object body,
+                         Map<String, Object> formParams,
+                         Map<String, Object> headerParams) {
 
-        return post(url, MediaTypeEnum.FORM, null, formParams, null, returnType);
-    }
-
-    public <T> T postFormData(String url,
-                              Map<String, Object> formParams,
-                              Type returnType) {
-
-        return post(url, MediaTypeEnum.FORM_DATA, null, formParams, null, returnType);
-    }
-
-    public <T> T postJson(String url,
-                          Object body,
-                          Type returnType) {
-
-        return post(url, MediaTypeEnum.JSON, body, null, null, returnType);
-    }
-
-    public <T> T post(String url,
-                      Object body,
-                      Type returnType) {
-
-        return postJson(url, body, returnType);
+        Call call = buildPost(url, mediaTypeEnum, body, formParams, headerParams);
+        return execute(call);
     }
 }

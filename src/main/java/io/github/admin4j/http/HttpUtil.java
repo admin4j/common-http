@@ -1,16 +1,16 @@
 package io.github.admin4j.http;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import io.github.admin4j.http.core.Method;
 import io.github.admin4j.http.core.Pair;
 import lombok.Cleanup;
+import lombok.SneakyThrows;
 import okhttp3.Call;
+import okhttp3.OkHttpClient;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
-import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.Objects;
 
@@ -22,85 +22,78 @@ public class HttpUtil {
     /**
      * 单列
      */
-    private static volatile HttpRequest SINGLETON_REQUEST = null;
+    private static volatile JSONHttpRequest SINGLETON_REQUEST = null;
 
     private HttpUtil() {
 
     }
 
-    public static HttpRequest getHttpRequest() {
+    private static JSONHttpRequest getHttpRequest() {
         if (null == SINGLETON_REQUEST) {
 
             synchronized (HttpUtil.class) {
                 if (null == SINGLETON_REQUEST) {
-                    SINGLETON_REQUEST = new HttpRequest();
+                    SINGLETON_REQUEST = new JSONHttpRequest(new HttpConfig());
                 }
             }
         }
         return SINGLETON_REQUEST;
     }
 
-    public static void setHttpRequest(HttpRequest httpRequest) {
-        SINGLETON_REQUEST = httpRequest;
+    public static void okHttpClient(OkHttpClient okHttpClient) {
+        getHttpRequest().setOkHttpClient(okHttpClient);
     }
 
-    public static String get(String path, Pair<?>... queryParams) throws IOException {
+    @SneakyThrows
+    public static String getStr(String url, Pair<?>... queryParams) {
 
-        Call call = getHttpRequest().buildCall(path, Method.GET, queryParams, null, null, null, null);
-        ResponseBody body = call.execute().body();
-
-        assert body != null;
-        return body.string();
+        return getHttpRequest().get(url, null, queryParams).body().string();
     }
 
-    public static <T> T get(String path, Class<T> tClass, Pair<?>... queryParams) throws IOException {
+    public static JSONObject get(String url, Pair<?>... queryParams) {
 
-        Call call = getHttpRequest().buildCall(path, Method.GET, queryParams, null, null, null, null);
-        ResponseBody body = call.execute().body();
-
-        return JSON.parseObject(body.byteStream(), tClass);
+        return getHttpRequest().get(url, queryParams);
     }
 
-    public static String get(String path, Map<String, Object> queryParams) throws IOException {
+    public static <T> T get(String url, Class<T> tClass, Pair<?>... queryParams) {
 
-        Call call = getHttpRequest().buildCall(path, Method.GET, null, queryParams, null, null, null);
-        ResponseBody body = call.execute().body();
+        return get(url, queryParams).toJavaObject(tClass);
+    }
 
-        assert body != null;
-        return body.string();
+    public static JSONObject get(String url, Map<String, Object> queryParams) {
+
+        return getHttpRequest().get(url, queryParams);
+    }
+
+    public static <T> T get(String url, Class<T> tClass, Map<String, Object> queryParams) {
+
+        return get(url, queryParams).toJavaObject(tClass);
     }
 
 
-    public static HttpRequestBuilder postBuilder(String url) {
-        return new HttpRequestBuilder(url, Method.POST);
+    public static JSONObject post(String url, Object body) {
+        return getHttpRequest().post(url, body);
     }
 
-    public static HttpRequestBuilder getBuilder(String url) {
-        return new HttpRequestBuilder(url, Method.GET);
+    public static <T> T post(String url, Object body, Class<T> tClass) {
+        return post(url, body).toJavaObject(tClass);
     }
 
-    public static <T> T post(String url, Object body, Type returnType) {
-        return getHttpRequest().post(url, body, returnType);
+    public static JSONObject postForm(String url, Map<String, Object> formParams) {
+        return getHttpRequest().postForm(url, formParams);
     }
 
-    public static String post(String url, Object body) {
-        return (String) getHttpRequest().post(url, body, String.class);
+    public static <T> T postForm(String url, Map<String, Object> formParams, Class<T> tClass) {
+        return postForm(url, formParams).toJavaObject(tClass);
     }
 
-    public static <T> T postForm(String url, Map<String, Object> formParams, Type returnType) {
-        return getHttpRequest().postForm(url, formParams, returnType);
-    }
 
-    public static String postForm(String url, Map<String, Object> formParams) {
-        return (String) getHttpRequest().postForm(url, formParams, String.class);
-    }
-
-    public static String upload(String url, Map<String, Object> formParams) {
-        return (String) getHttpRequest().postFormData(url, formParams, String.class);
+    public static JSONObject upload(String url, Map<String, Object> formParams) {
+        return getHttpRequest().postFormData(url, formParams);
     }
 
     public static InputStream down(String url) {
-        HttpRequest httpRequest = getHttpRequest();
+        JSONHttpRequest httpRequest = getHttpRequest();
         Call call = httpRequest.buildCall(url, Method.GET, null, null, null);
         Response response = httpRequest.execute(call);
         return Objects.requireNonNull(response.body()).byteStream();
@@ -130,6 +123,5 @@ public class HttpUtil {
         while ((bufferedInputStream.read(b)) != -1) {
             fileOutputStream.write(b);// 写入数据
         }
-        //TODO
     }
 }
