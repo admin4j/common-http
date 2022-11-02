@@ -1,6 +1,7 @@
 package io.github.admin4j.http.factory;
 
 import io.github.admin4j.http.HttpConfig;
+import io.github.admin4j.http.core.CaffeineCookie;
 import io.github.admin4j.http.core.HttpLogger;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
@@ -27,6 +28,10 @@ public class HttpClientFactory {
                 .addNetworkInterceptor(logInterceptor)
                 .readTimeout(Duration.ofSeconds(httpConfig.getReadTimeout()))
                 .connectTimeout(Duration.ofSeconds(httpConfig.getReadTimeout()));
+
+        if (httpConfig.isCookie()) {
+            builder.cookieJar(new CaffeineCookie());
+        }
         return builder.build();
     }
 }

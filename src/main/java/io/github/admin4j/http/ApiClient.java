@@ -79,17 +79,6 @@ public class ApiClient extends AbstractHttpRequest {
         return JSON.parseObject(in, charset, tClass);
     }
 
-    //@Override
-    //public Response execute(Call call) throws HttpException {
-    //    Response execute = super.execute(call);
-    //    try {
-    //        Response response = call.execute();
-    //        return handleResponse(response, null);
-    //    } catch (IOException e) {
-    //        throw new HttpException(e);
-    //    }
-    //}
-
     public <T> T execute(Call call, Class<T> tClass) throws HttpException {
         try {
             Response response = call.execute();

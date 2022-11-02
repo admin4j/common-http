@@ -38,4 +38,8 @@ public class HttpConfig {
     private long keepAliveDuration = 5;
 
     private String userAgent = "OKHTTP";
+    /**
+     * 是否支持cookie
+     */
+    private boolean cookie = false;
 }
