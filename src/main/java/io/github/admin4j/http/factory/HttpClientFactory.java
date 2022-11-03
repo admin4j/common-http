@@ -4,9 +4,13 @@ import io.github.admin4j.http.HttpConfig;
 import io.github.admin4j.http.core.CaffeineCookie;
 import io.github.admin4j.http.core.HttpLogger;
 import okhttp3.ConnectionPool;
+import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
+import org.apache.commons.lang3.StringUtils;
 
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
@@ -31,6 +35,21 @@ public class HttpClientFactory {
 
         if (httpConfig.isCookie()) {
             builder.cookieJar(new CaffeineCookie());
+        }
+        //proxy
+        if (httpConfig.getProxy() != null) {
+            builder.proxy(new Proxy(httpConfig.getProxy().getType(),
+                    new InetSocketAddress(httpConfig.getProxy().getHost(), httpConfig.getProxy().getPort())));
+            if (StringUtils.isNotBlank(httpConfig.getProxy().getPassword())) {
+                builder.proxyAuthenticator((route, response) -> {
+
+                    //设置代理服务器账号密码
+                    String credential = Credentials.basic(httpConfig.getProxy().getUserName(), httpConfig.getProxy().getPassword());
+                    return response.request().newBuilder()
+                            .header("Proxy-Authorization", credential)
+                            .build();
+                });
+            }
         }
         return builder.build();
     }

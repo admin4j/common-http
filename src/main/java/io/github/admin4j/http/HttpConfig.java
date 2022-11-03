@@ -3,6 +3,8 @@ package io.github.admin4j.http;
 import lombok.Data;
 import okhttp3.logging.HttpLoggingInterceptor;
 
+import java.net.Proxy;
+
 /**
  * @author andanyang
  * @since 2022/4/21 11:32
@@ -42,4 +44,16 @@ public class HttpConfig {
      * 是否支持cookie
      */
     private boolean cookie = false;
+    private ProxyConfig proxy;
+
+
+    @Data
+    public static class ProxyConfig {
+
+        private Proxy.Type type = Proxy.Type.HTTP;
+        private String host;
+        private Integer port = 80;
+        private String userName;
+        private String password;
+    }
 }
