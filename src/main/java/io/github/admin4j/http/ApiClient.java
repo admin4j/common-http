@@ -1,262 +1,68 @@
 package io.github.admin4j.http;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import io.github.admin4j.http.core.AbstractHttpRequest;
-import io.github.admin4j.http.core.HttpCallback;
+import io.github.admin4j.http.core.HttpConfig;
 import io.github.admin4j.http.core.MediaTypeEnum;
 import io.github.admin4j.http.core.Pair;
-import io.github.admin4j.http.exception.HttpException;
 import io.github.admin4j.http.factory.HttpClientFactory;
-import lombok.Getter;
 import lombok.Setter;
-import okhttp3.*;
-import org.jetbrains.annotations.NotNull;
+import lombok.experimental.Accessors;
+import okhttp3.OkHttpClient;
+import okhttp3.Response;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Map;
 
 /**
  * @author andanyang
- * @since 2022/10/9 16:53
+ * @since 2022/4/21 11:27
  */
+@Accessors
 public class ApiClient extends AbstractHttpRequest {
 
-
-    private static volatile OkHttpClient SINGLETON_CLIENT = null;
-    @Getter
     @Setter
-    protected MediaTypeEnum mediaTypeEnum;
+    private OkHttpClient okHttpClient;
 
-    protected OkHttpClient httpClient;
-    @Getter
-    @Setter
-    protected String userAgent;
-
-    public ApiClient() {
-        init();
+    public ApiClient(HttpConfig httpConfig) {
+        super();
+        okHttpClient = HttpClientFactory.okHttpClient(httpConfig);
     }
-
-    public ApiClient(HttpConfig config) {
-        httpClient = HttpClientFactory.okHttpClient(config);
-        init();
-    }
-
-    public ApiClient(OkHttpClient.Builder builder) {
-        httpClient = builder.build();
-        init();
-    }
-
 
     @Override
     public OkHttpClient getHttpClient() {
-        if (httpClient != null) {
-            return httpClient;
-        }
-        if (null == SINGLETON_CLIENT) {
-
-            synchronized (ApiClient.class) {
-                if (null == SINGLETON_CLIENT) {
-                    SINGLETON_CLIENT = HttpClientFactory.okHttpClient(new HttpConfig());
-                }
-            }
-        }
-        return SINGLETON_CLIENT;
+        return okHttpClient;
     }
 
-    public void init() {
-
-
-    }
 
     @Override
     public String serializeJSON(Object obj) {
         return JSON.toJSONString(obj);
     }
 
-    public <T> T deserializeJSON(InputStream in, Class<T> tClass) throws IOException {
-        return JSON.parseObject(in, charset, tClass);
-    }
-
-    public <T> T execute(Call call, Class<T> tClass) throws HttpException {
-        try {
-            Response response = call.execute();
-            return handleResponse(response, tClass);
-        } catch (IOException e) {
-            throw new HttpException(e);
-        }
-    }
-
-
-    public <T> void executeAsync(Call call, final Class<T> tClass, final HttpCallback<T> callback) {
-
-        call.enqueue(new Callback() {
-
-
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) {
-                T result;
-                try {
-                    result = (T) handleResponse(response, tClass);
-                } catch (Exception e) {
-                    callback.onFailure(e, response.code(), response.headers().toMultimap());
-                    return;
-                }
-                callback.onSuccess(result, response.code(), response.headers().toMultimap());
-            }
-
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                callback.onFailure(e, 0, null);
-            }
-        });
-    }
-
-
-    // ========== handleResponse =============
-
-    /**
-     * Handle the given response, return the deserialized object when the response is successful.
-     *
-     * @param <T>      Type
-     * @param response Response
-     * @param tClass   Return type
-     * @return Type
-     * @throws HttpException If the response has a unsuccessful status code or
-     *                       fail to deserialize the response body
-     */
-    public <T> T handleResponse(Response response, Class<T> tClass) throws HttpException {
-        if (response.isSuccessful()) {
-            try {
-                if (tClass == null) {
-                    // returning null if the returnType is not defined,
-                    // or the status code is 204 (No Content)
-
-                    if (response.body() != null || response.code() == 204) {
-                        response.body().close();
-                    }
-                    return null;
-                } else {
-                    return handleSuccessResponse(response, tClass);
-                }
-            } catch (IOException e) {
-                throw new HttpException(response.message(), e, response.code(), response.headers().toMultimap());
-            }
-        } else {
-            T o = handleFailResponse(response, tClass);
-            if (o != null) {
-                return o;
-            }
-            String respBody = null;
-            if (response.body() != null) {
-                try {
-                    respBody = response.body().string();
-
-                } catch (IOException e) {
-                    throw new HttpException(response.message(), e, response.code(), response.headers().toMultimap());
-                }
-            }
-            throw new HttpException(response.message(), response.code(), response.headers().toMultimap(), respBody);
-        }
-    }
-
-    /**
-     * 服务器返回成功，解析成JSON
-     *
-     * @param response
-     * @param tClass
-     * @param <T>
-     * @return
-     * @throws IOException
-     */
-    protected <T> T handleSuccessResponse(Response response, Class<T> tClass) throws IOException {
-        return deserializeJSON(response.body().byteStream(), tClass);
-    }
-
-    /**
-     * 服务器返回S失败，解析成失败的，或者抛出错误
-     *
-     * @param response
-     * @param tClass
-     * @param <T>
-     * @return
-     * @throws IOException
-     */
-    protected <T> T handleFailResponse(Response response, Class<T> tClass) {
-        return null;
-    }
-
-    private JSONObject serialize(Response response) {
-        ResponseBody body = response.body();
-        if (body == null) {
-            throw new HttpException("response body is null");
-        }
-        try {
-            return JSONObject.parseObject(body.string());
-        } catch (IOException e) {
-
-            throw new HttpException(e);
-        }
-    }
 
     //=============== request ===============
-    public <T> T get(String path, Class<T> tClass, Pair<?>... queryParams) {
-        Call call = buildGet(path, null, queryParams);
-        return execute(call, tClass);
+    public Response get(String path, Map<String, Object> queryMap) {
+        return get(path, queryMap, null);
     }
 
-    public <T> T get(String path, Map<String, Object> queryMap, Class<T> tClass) {
-        Call call = buildGet(path, queryMap, (Pair<?>) null);
-        return execute(call, tClass);
-    }
-
-
-    public <T> T postForm(String url, Map<String, Object> formParams, Class<T> tClass) {
-
-        Response response = post(url, MediaTypeEnum.FORM, null, formParams, null);
-        return handleResponse(response, tClass);
-    }
-
-    public <T> T postFormData(String url, Map<String, Object> formParams, Class<T> tClass) {
-
-        Response response = post(url, MediaTypeEnum.FORM_DATA, null, formParams, null);
-        return handleResponse(response, tClass);
-    }
-
-    public <T> T post(String url, Object body, Class<T> tClass) {
-
-        Response response = post(url, MediaTypeEnum.JSON, body, null, null);
-        return handleResponse(response, tClass);
+    public Response get(String path, Pair<?>... queryParams) {
+        return get(path, null, queryParams);
     }
 
 
-    public JSONObject get(String path, Pair<?>... queryParams) {
-        Response response = get(path, (Map<String, Object>) null, queryParams);
-        return serialize(response);
+    public Response postForm(String url, Map<String, Object> formParams) {
+
+        return post(url, MediaTypeEnum.FORM, null, formParams, null);
     }
 
-    public JSONObject get(String path, Map<String, Object> queryMap) {
-        Response response = get(path, queryMap, (Pair<?>[]) null);
-        return serialize(response);
+    public Response postFormData(String url, Map<String, Object> formParams) {
+
+        return post(url, MediaTypeEnum.FORM_DATA, null, formParams, null);
+
     }
 
+    public Response post(String url, Object body) {
 
-    public JSONObject postForm(String url, Map<String, Object> formParams) {
-
-        Response response = post(url, MediaTypeEnum.FORM, null, formParams, null);
-        return serialize(response);
-    }
-
-    public JSONObject postFormData(String url, Map<String, Object> formParams) {
-
-        Response response = post(url, MediaTypeEnum.FORM_DATA, null, formParams, null);
-        return serialize(response);
-    }
-
-    public JSONObject post(String url, Object body) {
-
-        Response response = post(url, MediaTypeEnum.JSON, body, null, null);
-        return serialize(response);
+        return post(url, MediaTypeEnum.JSON, body, null, null);
     }
 }

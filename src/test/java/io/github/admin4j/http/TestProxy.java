@@ -1,6 +1,7 @@
 package io.github.admin4j.http;
 
 import com.alibaba.fastjson.JSONObject;
+import io.github.admin4j.http.core.HttpConfig;
 import io.github.admin4j.http.factory.HttpClientFactory;
 import okhttp3.OkHttpClient;
 import org.junit.jupiter.api.Test;
@@ -29,7 +30,7 @@ public class TestProxy {
 
         OkHttpClient okHttpClient = HttpClientFactory.okHttpClient(httpConfig);
 
-        ApiClient apiClient = new ApiClient(httpConfig);
+        ApiJsonClient apiClient = new ApiJsonClient(httpConfig);
         apiClient.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36");
         //JSONObject jsonObject = apiClient.get("https://2022.ip138.com/");
 

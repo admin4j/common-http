@@ -1,5 +1,6 @@
 package io.github.admin4j.http;
 
+import io.github.admin4j.http.core.HttpConfig;
 import io.github.admin4j.http.core.MediaTypeEnum;
 import io.github.admin4j.http.core.Pair;
 import io.github.admin4j.http.factory.HttpClientFactory;
@@ -11,15 +12,15 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 
-class AbstractJSONHttpRequest {
+class AbstractApiClient {
 
-    JSONHttpRequest httpRequest;
+    ApiClient httpRequest;
 
     @BeforeEach
     void init() {
 
         HttpConfig httpConfig = new HttpConfig();
-        httpRequest = new JSONHttpRequest(new HttpConfig());
+        httpRequest = new ApiClient(new HttpConfig());
         OkHttpClient httpClient = HttpClientFactory.okHttpClient(httpConfig);
         httpRequest.setOkHttpClient(httpClient);
     }
@@ -32,7 +33,7 @@ class AbstractJSONHttpRequest {
 
 
         HttpConfig httpConfig = new HttpConfig();
-        JSONHttpRequest httpRequest = new JSONHttpRequest(httpConfig);
+        ApiClient httpRequest = new ApiClient(httpConfig);
 
         String str = "abc=adc&acd+3";
         String utf8 = URLEncoder.encode(str, "utf8");

@@ -1,5 +1,6 @@
 package io.github.admin4j.http;
 
+import io.github.admin4j.http.core.HttpHeaderKey;
 import io.github.admin4j.http.core.MediaTypeEnum;
 import io.github.admin4j.http.core.Method;
 import okhttp3.Response;
@@ -35,6 +36,18 @@ public class HttpRequest {
         httpRequest.url = url;
         httpRequest.method = Method.GET;
         return httpRequest;
+    }
+
+    public HttpRequest userAgent(String userAgent) {
+
+        this.headers.put(HttpHeaderKey.USER_AGENT, userAgent);
+        return this;
+    }
+
+    public HttpRequest referer(String referer) {
+
+        this.headers.put(HttpHeaderKey.REFERER, referer);
+        return this;
     }
 
     public HttpRequest header(String key, String value) {

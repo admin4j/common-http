@@ -1,4 +1,4 @@
-package io.github.admin4j.http;
+package io.github.admin4j.http.core;
 
 import lombok.Data;
 import okhttp3.logging.HttpLoggingInterceptor;

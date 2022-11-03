@@ -375,7 +375,7 @@ public abstract class AbstractHttpRequest {
     }
 
     // ======================= GET POST ===============
-    protected Call buildGet(String path, Map<String, Object> queryMap, Pair<?>... queryParams) {
+    public Call buildGet(String path, Map<String, Object> queryMap, Pair<?>... queryParams) {
 
         return buildCall(path, Method.GET, queryParams, queryMap, null, null, null);
     }
