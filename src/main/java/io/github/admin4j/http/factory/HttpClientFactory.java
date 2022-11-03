@@ -1,18 +1,21 @@
 package io.github.admin4j.http.factory;
 
 import io.github.admin4j.http.HttpConfig;
-import io.github.admin4j.http.core.CaffeineCookie;
 import io.github.admin4j.http.core.HttpLogger;
 import okhttp3.ConnectionPool;
 import okhttp3.Credentials;
+import okhttp3.JavaNetCookieJar;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import org.apache.commons.lang3.StringUtils;
 
+import java.net.CookieManager;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
+
+import static java.net.CookiePolicy.ACCEPT_ORIGINAL_SERVER;
 
 /**
  * @author andanyang
@@ -34,7 +37,8 @@ public class HttpClientFactory {
                 .connectTimeout(Duration.ofSeconds(httpConfig.getReadTimeout()));
 
         if (httpConfig.isCookie()) {
-            builder.cookieJar(new CaffeineCookie());
+            CookieManager cookieManager = new CookieManager(null, ACCEPT_ORIGINAL_SERVER);
+            builder.cookieJar(new JavaNetCookieJar(cookieManager));
         }
         //proxy
         if (httpConfig.getProxy() != null) {
