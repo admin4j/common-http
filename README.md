@@ -34,18 +34,18 @@ System.out.println("response = " + response);
 一行代码即可搞定，当然Post请求也很简单：
 
 ```
-## JSON 格式的body
-Response post = HttpUtil.post("https://oapi.dingtalk.com/robot/send?access_token=27f5954ab60ea8b2e431ae9101b1289c138e85aa6eb6e3940c35ee13ff8b6335", "{\"msgtype\": \"text\",\"text\": {\"content\":\"【反馈提醒】我就是我, 是不一样的烟火\"}}");
-System.out.println("post = " + post);
-
-## form 请求
-Map<String, Object> formParams = new HashMap<>(16);
-formParams.put("username", "admin");
-formParams.put("password", "admin123");
-Response response = HttpUtil.postForm("http://192.168.1.13:9100/auth/login",
-                formParams
-);
-System.out.println("response = " + response);
+        # JSON 格式的body
+        Response post = HttpUtil.post("https://oapi.dingtalk.com/robot/send?access_token=27f5954ab60ea8b2e431ae9101b1289c138e85aa6eb6e3940c35ee13ff8b6335", "{\"msgtype\": \"text\",\"text\": {\"content\":\"【反馈提醒】我就是我, 是不一样的烟火\"}}");
+        System.out.println("post = " + post);
+        
+        # form 请求
+        Map<String, Object> formParams = new HashMap<>(16);
+        formParams.put("username", "admin");
+        formParams.put("password", "admin123");
+        Response response = HttpUtil.postForm("http://192.168.1.13:9100/auth/login",
+                        formParams
+        );
+        System.out.println("response = " + response);
 ```
 
 返回格式为JSON的 可以使用 HttpJsonUtil 自动返回JsonObject
@@ -79,14 +79,14 @@ System.out.println("response = " + response);
 
 ```java
 
-## get
+        # get
         Response response=HttpRequest.get("https://search.gitee.com/?skin=rec&type=repository")
         .queryMap("q","admin4j")
         .header(HttpHeaderKey.USER_AGENT,"admin4j")
         .execute();
         System.out.println("response = "+response);
 
-        ## post form
+        # post form
         Response response=HttpRequest.get("http://192.168.1.13:9100/auth/login")
         .queryMap("q","admin4j")
         .header(HttpHeaderKey.USER_AGENT,"admin4j")
@@ -98,27 +98,27 @@ System.out.println("response = " + response);
 
 post form 日志
 
-```java
+```
 16:49:14.092[main]DEBUG io.github.admin4j.http.core.HttpLogger- -->GET http://192.168.1.13:9100/auth/login?q=admin4j http/1.1
-        16:49:14.094[main]DEBUG io.github.admin4j.http.core.HttpLogger-User-Agent:admin4j
-        16:49:14.094[main]DEBUG io.github.admin4j.http.core.HttpLogger-Host:192.168.1.13:9100
-        16:49:14.094[main]DEBUG io.github.admin4j.http.core.HttpLogger-Connection:Keep-Alive
-        16:49:14.094[main]DEBUG io.github.admin4j.http.core.HttpLogger-Accept-Encoding:gzip
-        16:49:14.094[main]DEBUG io.github.admin4j.http.core.HttpLogger- -->END GET
-        16:49:14.670[main]DEBUG io.github.admin4j.http.core.HttpLogger-<--200OK http://192.168.1.13:9100/auth/login?q=admin4j (575ms)
-        16:49:14.670[main]DEBUG io.github.admin4j.http.core.HttpLogger-transfer-encoding:chunked
-        16:49:14.670[main]DEBUG io.github.admin4j.http.core.HttpLogger-Vary:Origin
-        16:49:14.670[main]DEBUG io.github.admin4j.http.core.HttpLogger-Vary:Access-Control-Request-Method
-        16:49:14.670[main]DEBUG io.github.admin4j.http.core.HttpLogger-Vary:Access-Control-Request-Headers
-        16:49:14.670[main]DEBUG io.github.admin4j.http.core.HttpLogger-Vary:Origin
-        16:49:14.670[main]DEBUG io.github.admin4j.http.core.HttpLogger-Vary:Access-Control-Request-Method
-        16:49:14.670[main]DEBUG io.github.admin4j.http.core.HttpLogger-Vary:Access-Control-Request-Headers
-        16:49:14.671[main]DEBUG io.github.admin4j.http.core.HttpLogger-Content-Type:application/json;charset=utf-8
-        16:49:14.671[main]DEBUG io.github.admin4j.http.core.HttpLogger-Date:Tue,08Nov 2022 08:49:14GMT
-        16:49:14.671[main]DEBUG io.github.admin4j.http.core.HttpLogger-
-        16:49:14.671[main]DEBUG io.github.admin4j.http.core.HttpLogger-{"code":406,"msg":"Full authentication is required to access this resource"}
-        16:49:14.671[main]DEBUG io.github.admin4j.http.core.HttpLogger-<--END HTTP(76-byte body)
-        response=Response{protocol=http/1.1,code=200,message=OK,url=http://192.168.1.13:9100/auth/login?q=admin4j}
+16:49:14.094[main]DEBUG io.github.admin4j.http.core.HttpLogger-User-Agent:admin4j
+16:49:14.094[main]DEBUG io.github.admin4j.http.core.HttpLogger-Host:192.168.1.13:9100
+16:49:14.094[main]DEBUG io.github.admin4j.http.core.HttpLogger-Connection:Keep-Alive
+16:49:14.094[main]DEBUG io.github.admin4j.http.core.HttpLogger-Accept-Encoding:gzip
+16:49:14.094[main]DEBUG io.github.admin4j.http.core.HttpLogger- -->END GET
+16:49:14.670[main]DEBUG io.github.admin4j.http.core.HttpLogger-<--200OK http://192.168.1.13:9100/auth/login?q=admin4j (575ms)
+16:49:14.670[main]DEBUG io.github.admin4j.http.core.HttpLogger-transfer-encoding:chunked
+16:49:14.670[main]DEBUG io.github.admin4j.http.core.HttpLogger-Vary:Origin
+16:49:14.670[main]DEBUG io.github.admin4j.http.core.HttpLogger-Vary:Access-Control-Request-Method
+16:49:14.670[main]DEBUG io.github.admin4j.http.core.HttpLogger-Vary:Access-Control-Request-Headers
+16:49:14.670[main]DEBUG io.github.admin4j.http.core.HttpLogger-Vary:Origin
+16:49:14.670[main]DEBUG io.github.admin4j.http.core.HttpLogger-Vary:Access-Control-Request-Method
+16:49:14.670[main]DEBUG io.github.admin4j.http.core.HttpLogger-Vary:Access-Control-Request-Headers
+16:49:14.671[main]DEBUG io.github.admin4j.http.core.HttpLogger-Content-Type:application/json;charset=utf-8
+16:49:14.671[main]DEBUG io.github.admin4j.http.core.HttpLogger-Date:Tue,08Nov 2022 08:49:14GMT
+16:49:14.671[main]DEBUG io.github.admin4j.http.core.HttpLogger-
+16:49:14.671[main]DEBUG io.github.admin4j.http.core.HttpLogger-{"code":406,"msg":"Full authentication is required to access this resource"}
+16:49:14.671[main]DEBUG io.github.admin4j.http.core.HttpLogger-<--END HTTP(76-byte body)
+response=Response{protocol=http/1.1,code=200,message=OK,url=http://192.168.1.13:9100/auth/login?q=admin4j}
 ```
 
 # 再 Springboot 中使用
