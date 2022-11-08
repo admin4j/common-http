@@ -201,3 +201,117 @@ public class HttpConfig {
 }
 
 ```
+
+# 如何快速封装外部接口
+
+以实体项目为例，封装 ebay接口
+
+```java
+public class EbayClient extends ApiJsonClient {
+
+    /**
+     * 店铺配置
+     *
+     * @param storeId
+     */
+    public EbayClient(Long storeId) {
+
+        //TODO 获取店铺相关配置
+        Map<String, String> config = new HashMap<>();
+
+        basePath = "https://api.ebay.com";
+        defaultHeaderMap.put("Authorization", "Bearer " + config.get("accessToken"));
+        defaultHeaderMap.put("X-EBAY-C-MARKETPLACE-ID", config.get("marketplaceId"));
+    }
+}
+```
+
+EbayClient 封装ebay api请求 基础类
+
+```java
+/**
+ * ebay 库存相关api
+ * @author andanyang
+ */
+public class EbayInventoryClient extends EbayClient {
+
+    /**
+     * 店铺配置
+     *
+     * @param storeId
+     */
+    public EbayInventoryClient(Long storeId) {
+        super(storeId);
+    }
+
+    /**
+     * 库存列表
+     *
+     * @param limit
+     * @param offset
+     * @return
+     * @throws IOException
+     */
+    public JSONObject inventoryItem(Integer limit, Integer offset) throws IOException {
+
+        Map<String, Object> queryMap = new HashMap(2);
+        queryMap.put("limit", limit);
+        queryMap.put("offset", offset);
+        return get("/sell/inventory/v1/inventory_item", queryMap);
+    }
+}
+```
+
+EbayInventoryClient 封装ebay 库存 api请求  
+使用
+
+```java
+        EbayInventoryClient ebayInventoryClient=new EbayInventoryClient(1L);
+        JSONObject jsonObject=ebayInventoryClient.inventoryItem(0,10);
+```
+
+```java
+
+/**
+ * 订单相关api
+ * @author andanyang
+ */
+public class EbayOrderClient extends EbayClient {
+
+
+    /**
+     * 店铺配置
+     *
+     * @param storeId
+     */
+    public EbayOrderClient(Long storeId) {
+        super(storeId);
+    }
+
+    /**
+     * 订单列表
+     *
+     * @param beginTime
+     * @param endTime
+     * @param limit
+     * @param offset
+     * @return
+     */
+    public JSONObject orders(String beginTime, String endTime, int limit, int offset) {
+
+        final String path = "/sell/fulfillment/v1/order";
+
+        String filter = MessageFormat.format("lastmodifieddate:[{0}..{1}]", beginTime, endTime);
+
+        //
+        Map<String, Object> queryMap = new HashMap<>(8);
+        queryMap.put("filter", filter);
+        queryMap.put("limit", limit);
+        queryMap.put("offset", offset);
+
+        return get("/sell/inventory/v1/inventory_item", queryMap);
+    }
+}
+```
+
+库存相关的使用`EbayInventoryClient`,订单相关的使用`EbayOrderClient`,是不是很清晰
