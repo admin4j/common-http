@@ -5,6 +5,16 @@
 来说，OkHttp 现在几乎已经占据了所有的网络请求操作，对于服务器端请求外部接口也是必备的选择 。针对OKHttp
 OkHttpUtil做了一层封装，使Http请求变得无比简单。
 
+# OKHttpUtil 功能
+
+- 根据URL自动判断是请求HTTP还是HTTPS，不需要单独写多余的代码。
+- 默认情况下Cookie自动记录，比如可以实现模拟登录，即第一次访问登录URL后后续请求就是登录状态。
+- 自动识别304跳转并二次请求
+- 支持代理配置
+- 自动识别并解压Gzip格式返回内容
+- 支持springboot 配置文件
+- 极简的封装调用
+
 # OKHttpUtil使用
 
 maven引入
@@ -79,7 +89,7 @@ System.out.println("response = " + response);
 
 ```java
 
-        # get
+# get
         Response response=HttpRequest.get("https://search.gitee.com/?skin=rec&type=repository")
         .queryMap("q","admin4j")
         .header(HttpHeaderKey.USER_AGENT,"admin4j")
