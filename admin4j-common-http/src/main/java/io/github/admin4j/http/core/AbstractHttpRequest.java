@@ -310,6 +310,7 @@ public abstract class AbstractHttpRequest {
      */
     public Call buildCall(String path,
                           Method method,
+                          MediaTypeEnum mediaType,
                           Pair<?>[] queryParams,
                           Map<String, Object> queryMap,
                           Object body,
@@ -318,9 +319,7 @@ public abstract class AbstractHttpRequest {
     ) {
 
         final String url = buildUrl(path, queryParams, queryMap);
-        Request request = buildRequest(url, method, null, body, formParams, headerParams);
-
-
+        Request request = buildRequest(url, method, mediaType, body, formParams, headerParams);
         return getHttpClient().newCall(request);
     }
 
@@ -340,10 +339,7 @@ public abstract class AbstractHttpRequest {
                           Object body,
                           Map<String, Object> formParams,
                           Map<String, Object> headerParams) {
-
-        Request request = buildRequest(url, method, null, body, formParams, headerParams);
-
-        return getHttpClient().newCall(request);
+        return buildCall(url, method, null, null, null, body, formParams, headerParams);
     }
 
     // ------------- execute -------------
@@ -364,7 +360,7 @@ public abstract class AbstractHttpRequest {
     // ======================= GET POST ===============
     public Call buildGet(String path, Map<String, Object> queryMap, Pair<?>... queryParams) {
 
-        return buildCall(path, Method.GET, queryParams, queryMap, null, null, null);
+        return buildCall(path, Method.GET, null, queryParams, queryMap, null, null, null);
     }
 
     public Response get(String path, Map<String, Object> queryMap, Pair<?>... queryParams) {

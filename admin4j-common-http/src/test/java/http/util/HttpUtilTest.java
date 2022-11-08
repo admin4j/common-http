@@ -5,6 +5,8 @@ import io.github.admin4j.http.util.HttpUtil;
 import okhttp3.Response;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,10 +52,19 @@ public class HttpUtilTest {
 
     @Test
     void upload() {
+        File file = new File("C:\\Users\\andanyang\\Downloads\\Sql.txt");
+        Map<String, Object> formParams = new HashMap<>();
+        formParams.put("key", "test");
+        formParams.put("file", file);
+        formParams.put("token", "WXyUseb-D4sCum-EvTIDYL-mEehwDtrSBg-Zca7t:qgOcR2gUoKmxt-VnsNb657Oatzo=:eyJzY29wZSI6InpoYW56aGkiLCJkZWFkbGluZSI6MTY2NTMwNzUxNH0=");
+        Response response = HttpUtil.upload("https://upload.qiniup.com/", formParams);
+        System.out.println(response);
     }
 
     @Test
-    void down() {
+    void down() throws IOException {
+
+        HttpUtil.down("https://gitee.com/admin4j/common-http", "path/");
     }
 
     @Test

@@ -34,10 +34,15 @@ class ApiClientTest {
     @Test
     void get() throws IOException {
 
-        JSONObject object = HttpJsonUtil.get("http://192.168.1.13:9100/system/dict/i18n",
-                Pair.of("id", "介绍"),
+        JSONObject object = HttpJsonUtil.get("https://github.com/search",
+                Pair.of("q", "http"),
                 Pair.of("username", "agonie201218"));
-        System.out.println("s1 = " + object);
+        System.out.println("object = " + object);
+
+        //object = HttpJsonUtil.get("http://192.168.1.13:9100/system/dict/i18n",
+        //        Pair.of("id", "介绍"),
+        //        Pair.of("username", "agonie201218"));
+        //System.out.println("s1 = " + object);
 
     }
 

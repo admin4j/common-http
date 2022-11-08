@@ -30,11 +30,7 @@ public class HttpUtil {
 
     }
 
-    public static void setClient(ApiClient apiJsonClient) {
-        SINGLETON_REQUEST = apiJsonClient;
-    }
-
-    private static ApiClient getHttpRequest() {
+    public static ApiClient getClient() {
         if (null == SINGLETON_REQUEST) {
 
             synchronized (HttpUtil.class) {
@@ -46,32 +42,36 @@ public class HttpUtil {
         return SINGLETON_REQUEST;
     }
 
+    public static void setClient(ApiClient apiJsonClient) {
+        SINGLETON_REQUEST = apiJsonClient;
+    }
+
     public static Response get(String url, Pair<?>... queryParams) {
 
-        return getHttpRequest().get(url, (Map<String, Object>) null, queryParams);
+        return getClient().get(url, (Map<String, Object>) null, queryParams);
     }
 
 
     public static Response get(String url, Map<String, Object> queryParams) {
 
-        return getHttpRequest().get(url, queryParams, (Pair<?>[]) null);
+        return getClient().get(url, queryParams, (Pair<?>[]) null);
     }
 
 
     public static Response post(String url, Object body) {
-        return getHttpRequest().post(url, MediaTypeEnum.JSON, body, (Map<String, Object>) null, (Map<String, Object>) null);
+        return getClient().post(url, MediaTypeEnum.JSON, body, (Map<String, Object>) null, (Map<String, Object>) null);
     }
 
     public static Response postForm(String url, Map<String, Object> formParams) {
-        return getHttpRequest().post(url, MediaTypeEnum.FORM, null, formParams, (Map<String, Object>) null);
+        return getClient().post(url, MediaTypeEnum.FORM, null, formParams, (Map<String, Object>) null);
     }
 
     public static Response upload(String url, Map<String, Object> formParams) {
-        return getHttpRequest().post(url, MediaTypeEnum.FORM_DATA, null, formParams, (Map<String, Object>) null);
+        return getClient().post(url, MediaTypeEnum.FORM_DATA, null, formParams, (Map<String, Object>) null);
     }
 
     public static InputStream down(String url) {
-        ApiClient httpRequest = getHttpRequest();
+        ApiClient httpRequest = getClient();
         Call call = httpRequest.buildCall(url, Method.GET, null, null, null);
         Response response = httpRequest.execute(call);
         return Objects.requireNonNull(response.body()).byteStream();
