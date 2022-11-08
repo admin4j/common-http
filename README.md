@@ -60,7 +60,7 @@ System.out.println("response = " + response);
 ## 文件上传
 
 ```java
-       File file=new File("C:\\Users\\andanyang\\Downloads\\Sql.txt");
+        File file=new File("C:\\Users\\andanyang\\Downloads\\Sql.txt");
         Map<String, Object> formParams=new HashMap<>();
         formParams.put("key","test");
         formParams.put("file",file);
