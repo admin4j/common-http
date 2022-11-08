@@ -8,4 +8,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @ConfigurationProperties(prefix = "admin4j.http")
 public class HttpPropsConfiguration extends io.github.admin4j.http.core.HttpConfig {
+    /**
+     * 是否启用
+     */
+    private boolean enabled = true;
 }

@@ -8,6 +8,7 @@ import io.github.admin4j.http.util.HttpJsonUtil;
 import io.github.admin4j.http.util.HttpUtil;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 import javax.annotation.PostConstruct;
@@ -17,6 +18,7 @@ import javax.annotation.PostConstruct;
  * @since 2022/11/3 15:27
  */
 @EnableConfigurationProperties(HttpPropsConfiguration.class)
+@ConditionalOnProperty(prefix = "admin4j.http", name = "enabled", matchIfMissing = true)
 public class HttpAutoConfiguration implements InitializingBean {
     @Autowired
     HttpPropsConfiguration httpConfig;

@@ -6,7 +6,6 @@ import okhttp3.*;
 import okhttp3.internal.http.HttpMethod;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,7 +41,7 @@ public abstract class AbstractHttpRequest {
      */
     public String escapeString(String str) {
         try {
-            return URLEncoder.encode(str, "utf8").replaceAll("\\+", "%20");
+            return URLEncoder.encode(str, "utf8").replace("\\+", "%20");
         } catch (UnsupportedEncodingException e) {
             return str;
         }
@@ -328,10 +327,10 @@ public abstract class AbstractHttpRequest {
     /**
      * Build HTTP call with the given options.
      *
-     * @param path         The sub-path of the HTTP URL
+     * @param url          The sub-path of the HTTP URL
      * @param method       The request method, one of "GET", "HEAD", "OPTIONS", "POST", "PUT", "PATCH" and "DELETE"
-     * @param queryParams  The query parameters
      * @param body         The request body object
+     * @param formParams   The query parameters
      * @param headerParams The header parameters
      * @param formParams   The form parameters
      * @return The HTTP call
@@ -357,21 +356,9 @@ public abstract class AbstractHttpRequest {
     }
 
 
-    public void executeAsync(Call call, final HttpCallback<Response> callback) {
+    public void executeAsync(Call call, final Callback callback) {
 
-        call.enqueue(new Callback() {
-
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-
-                callback.onSuccess(response, response.code(), response.headers().toMultimap());
-            }
-
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                callback.onFailure(e, 0, null);
-            }
-        });
+        call.enqueue(callback);
     }
 
     // ======================= GET POST ===============
@@ -405,5 +392,16 @@ public abstract class AbstractHttpRequest {
 
         Call call = buildPost(url, mediaTypeEnum, body, formParams, headerParams);
         return execute(call);
+    }
+
+    public void asyncPost(String url,
+                          MediaTypeEnum mediaTypeEnum,
+                          Object body,
+                          Map<String, Object> formParams,
+                          Map<String, Object> headerParams,
+                          Callback callback) {
+
+        Call call = buildPost(url, mediaTypeEnum, body, formParams, headerParams);
+        executeAsync(call, callback);
     }
 }
