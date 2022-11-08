@@ -37,11 +37,8 @@ public class ApiJsonClient extends AbstractHttpRequest {
 
     public ApiJsonClient(HttpConfig config) {
         httpClient = HttpClientFactory.okHttpClient(config);
-        init();
-    }
-
-    public ApiJsonClient(OkHttpClient.Builder builder) {
-        httpClient = builder.build();
+        defaultHeaderMap.put(HttpHeaderKey.USER_AGENT, config.getUserAgent());
+        defaultHeaderMap.put(HttpHeaderKey.REFERER, config.getReferer());
         init();
     }
 
@@ -62,7 +59,7 @@ public class ApiJsonClient extends AbstractHttpRequest {
         return SINGLETON_CLIENT;
     }
 
-    public void init() {
+    protected void init() {
 
 
     }

@@ -40,6 +40,7 @@ public class HttpConfig {
     private long keepAliveDuration = 5;
 
     private String userAgent = "OKHTTP";
+    private String referer = "";
     /**
      * 是否支持cookie
      */

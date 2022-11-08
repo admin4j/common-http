@@ -24,11 +24,12 @@ public class ApiClient extends AbstractHttpRequest {
     public ApiClient(HttpConfig httpConfig) {
         super();
         okHttpClient = HttpClientFactory.okHttpClient(httpConfig);
+        defaultHeaderMap.put(HttpHeaderKey.USER_AGENT, httpConfig.getUserAgent());
+        defaultHeaderMap.put(HttpHeaderKey.REFERER, httpConfig.getReferer());
     }
 
     public ApiClient() {
-        super();
-        okHttpClient = HttpClientFactory.okHttpClient(HttpDefaultConfig.get());
+        this(HttpDefaultConfig.get());
     }
 
     @Override

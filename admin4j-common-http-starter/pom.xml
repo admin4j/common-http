@@ -5,7 +5,7 @@
     <parent>
         <artifactId>common-http</artifactId>
         <groupId>io.github.admin4j</groupId>
-        <version>0.4.0</version>
+        <version>0.4.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -20,13 +20,14 @@
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
+        <admin4j.http.version>${project.parent.version}</admin4j.http.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>io.github.admin4j</groupId>
             <artifactId>http</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${admin4j.http.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
