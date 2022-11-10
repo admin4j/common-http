@@ -1,6 +1,8 @@
 package io.github.admin4j.http.core;
 
 import io.github.admin4j.http.exception.HttpException;
+import io.github.admin4j.http.factory.HttpClientFactory;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import okhttp3.internal.http.HttpMethod;
@@ -26,12 +28,32 @@ import java.util.Map;
  */
 @Slf4j
 public abstract class AbstractHttpRequest {
-
+    protected static OkHttpClient DEFAULT_HTTP_CLIENT;
     protected Map<String, String> defaultHeaderMap = new HashMap<String, String>();
     protected String basePath = null;
     protected java.nio.charset.Charset charset = StandardCharsets.UTF_8;
+    @Setter
+    protected OkHttpClient okHttpClient;
 
-    public abstract OkHttpClient getHttpClient();
+    protected AbstractHttpRequest() {
+        okHttpClient = defaultHttpClient();
+    }
+
+    private static OkHttpClient defaultHttpClient() {
+        if (DEFAULT_HTTP_CLIENT == null) {
+            DEFAULT_HTTP_CLIENT = HttpClientFactory.okHttpClient(HttpDefaultConfig.get());
+        }
+        return DEFAULT_HTTP_CLIENT;
+    }
+
+    private static void setDefaultHttpClient(OkHttpClient okHttpClient) {
+
+        DEFAULT_HTTP_CLIENT = okHttpClient;
+    }
+
+    public OkHttpClient getHttpClient() {
+        return okHttpClient;
+    }
 
     /**
      * Escape the given string to be used as URL query value.
@@ -118,16 +140,17 @@ public abstract class AbstractHttpRequest {
      * @param reqBuilder   Reqeust.Builder
      */
     public void processHeaderParams(Map<String, Object> headerParams, Request.Builder reqBuilder) {
+        for (Map.Entry<String, String> header : defaultHeaderMap.entrySet()) {
+            if (headerParams == null || !headerParams.containsKey(header.getKey())) {
+                reqBuilder.header(header.getKey(), parameterToString(header.getValue()));
+            }
+        }
+
         if (ObjectUtils.isEmpty(headerParams)) {
             return;
         }
         for (Map.Entry<String, Object> param : headerParams.entrySet()) {
             reqBuilder.header(param.getKey(), parameterToString(param.getValue()));
-        }
-        for (Map.Entry<String, String> header : defaultHeaderMap.entrySet()) {
-            if (!headerParams.containsKey(header.getKey())) {
-                reqBuilder.header(header.getKey(), parameterToString(header.getValue()));
-            }
         }
     }
 
@@ -256,6 +279,10 @@ public abstract class AbstractHttpRequest {
      */
     protected RequestBody buildRequestBodyFormEncoding(Map<String, Object> formParams) {
 
+        if (formParams == null || formParams.isEmpty()) {
+            FormBody.Builder builder = new FormBody.Builder();
+            return builder.build();
+        }
         FormBody.Builder builder = new FormBody.Builder();
         for (Map.Entry<String, Object> param : formParams.entrySet()) {
             builder.add(param.getKey(), parameterToString(param.getValue()));

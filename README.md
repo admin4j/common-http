@@ -26,7 +26,7 @@ maven引入
 <dependency>
     <groupId>io.github.admin4j</groupId>
     <artifactId>http</artifactId>
-    <version>0.4.0</version>
+    <version>0.4.2</version>
 </dependency>
 ```
 
@@ -108,6 +108,14 @@ System.out.println("response = " + response);
         System.out.println("response = "+response);
 ```
 
+### 开启日志
+
+```yaml
+logging:
+  level:
+    io.github.admin4j.http.core: debug
+```
+
 post form 日志
 
 ```
@@ -142,7 +150,7 @@ maven引入
 <dependency>
     <groupId>io.github.admin4j</groupId>
     <artifactId>common-http-starter</artifactId>
-    <version>0.4.0</version>
+    <version>0.4.2</version>
 </dependency>
 ```
 

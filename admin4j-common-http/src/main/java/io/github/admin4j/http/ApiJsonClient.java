@@ -7,7 +7,10 @@ import io.github.admin4j.http.exception.HttpException;
 import io.github.admin4j.http.factory.HttpClientFactory;
 import lombok.Getter;
 import lombok.Setter;
-import okhttp3.*;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -20,43 +23,23 @@ import java.util.Map;
  */
 public class ApiJsonClient extends AbstractHttpRequest {
 
-
-    private static volatile OkHttpClient SINGLETON_CLIENT = null;
     @Getter
     @Setter
     protected MediaTypeEnum mediaTypeEnum;
 
-    protected OkHttpClient httpClient;
     @Getter
     @Setter
     protected String userAgent;
 
     public ApiJsonClient() {
-        init();
+        super();
     }
 
     public ApiJsonClient(HttpConfig config) {
-        httpClient = HttpClientFactory.okHttpClient(config);
+        okHttpClient = HttpClientFactory.okHttpClient(config);
         defaultHeaderMap.put(HttpHeaderKey.USER_AGENT, config.getUserAgent());
         defaultHeaderMap.put(HttpHeaderKey.REFERER, config.getReferer());
         init();
-    }
-
-
-    @Override
-    public OkHttpClient getHttpClient() {
-        if (httpClient != null) {
-            return httpClient;
-        }
-        if (null == SINGLETON_CLIENT) {
-
-            synchronized (ApiJsonClient.class) {
-                if (null == SINGLETON_CLIENT) {
-                    SINGLETON_CLIENT = HttpClientFactory.okHttpClient(HttpDefaultConfig.get());
-                }
-            }
-        }
-        return SINGLETON_CLIENT;
     }
 
     protected void init() {

@@ -3,10 +3,8 @@ package io.github.admin4j.http;
 import com.alibaba.fastjson.JSON;
 import io.github.admin4j.http.core.*;
 import io.github.admin4j.http.factory.HttpClientFactory;
-import lombok.Setter;
 import lombok.experimental.Accessors;
 import okhttp3.Callback;
-import okhttp3.OkHttpClient;
 import okhttp3.Response;
 
 import java.util.Map;
@@ -17,9 +15,9 @@ import java.util.Map;
  */
 @Accessors
 public class ApiClient extends AbstractHttpRequest {
-
-    @Setter
-    private OkHttpClient okHttpClient;
+    public ApiClient() {
+        super();
+    }
 
     public ApiClient(HttpConfig httpConfig) {
         super();
@@ -27,16 +25,6 @@ public class ApiClient extends AbstractHttpRequest {
         defaultHeaderMap.put(HttpHeaderKey.USER_AGENT, httpConfig.getUserAgent());
         defaultHeaderMap.put(HttpHeaderKey.REFERER, httpConfig.getReferer());
     }
-
-    public ApiClient() {
-        this(HttpDefaultConfig.get());
-    }
-
-    @Override
-    public OkHttpClient getHttpClient() {
-        return okHttpClient;
-    }
-
 
     @Override
     public String serializeJSON(Object obj) {
