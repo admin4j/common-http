@@ -1,12 +1,11 @@
 package io.github.admin4j.http;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import io.github.admin4j.http.core.*;
 import io.github.admin4j.http.exception.HttpException;
 import io.github.admin4j.http.factory.HttpClientFactory;
-import lombok.Getter;
-import lombok.Setter;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -23,27 +22,18 @@ import java.util.Map;
  */
 public class ApiJsonClient extends AbstractHttpRequest {
 
-    @Getter
-    @Setter
-    protected MediaTypeEnum mediaTypeEnum;
-
-    @Getter
-    @Setter
-    protected String userAgent;
-
     public ApiJsonClient() {
         super();
     }
 
     public ApiJsonClient(HttpConfig config) {
         okHttpClient = HttpClientFactory.okHttpClient(config);
-        defaultHeaderMap.put(HttpHeaderKey.USER_AGENT, config.getUserAgent());
-        defaultHeaderMap.put(HttpHeaderKey.REFERER, config.getReferer());
+        headerMap.put(HttpHeaderKey.USER_AGENT, config.getUserAgent());
+        headerMap.put(HttpHeaderKey.REFERER, config.getReferer());
         init();
     }
 
     protected void init() {
-
 
     }
 
@@ -103,7 +93,7 @@ public class ApiJsonClient extends AbstractHttpRequest {
      * @throws HttpException If the response has a unsuccessful status code or
      *                       fail to deserialize the response body
      */
-    public <T> T handleResponse(Response response, Class<T> tClass) throws HttpException {
+    protected <T> T handleResponse(Response response, Class<T> tClass) throws HttpException {
         if (response.isSuccessful()) {
             try {
                 if (tClass == null) {
@@ -164,13 +154,26 @@ public class ApiJsonClient extends AbstractHttpRequest {
         return null;
     }
 
-    private JSONObject serialize(Response response) {
+    protected JSONObject serialize(Response response) {
         ResponseBody body = response.body();
         if (body == null) {
             throw new HttpException("response body is null");
         }
         try {
             return JSONObject.parseObject(body.string());
+        } catch (IOException e) {
+
+            throw new HttpException(e);
+        }
+    }
+
+    protected JSONArray serializeList(Response response) {
+        ResponseBody body = response.body();
+        if (body == null) {
+            throw new HttpException("response body is null");
+        }
+        try {
+            return JSON.parseArray(body.string());
         } catch (IOException e) {
 
             throw new HttpException(e);
@@ -210,30 +213,40 @@ public class ApiJsonClient extends AbstractHttpRequest {
 
     public JSONObject get(String path, Pair<?>... queryParams) {
         Response response = get(path, (Map<String, Object>) null, queryParams);
-        return serialize(response);
+        return handleResponse(response, JSONObject.class);
     }
 
     public JSONObject get(String path, Map<String, Object> queryMap) {
         Response response = get(path, queryMap, (Pair<?>[]) null);
-        return serialize(response);
+        return handleResponse(response, JSONObject.class);
+    }
+
+    public JSONArray getList(String path, Pair<?>... queryParams) {
+        Response response = get(path, (Map<String, Object>) null, queryParams);
+        return handleResponse(response, JSONArray.class);
+    }
+
+    public JSONArray getList(String path, Map<String, Object> queryMap) {
+        Response response = get(path, queryMap, (Pair<?>[]) null);
+        return handleResponse(response, JSONArray.class);
     }
 
 
     public JSONObject postForm(String url, Map<String, Object> formParams) {
 
         Response response = post(url, MediaTypeEnum.FORM, null, formParams, null);
-        return serialize(response);
+        return handleResponse(response, JSONObject.class);
     }
 
     public JSONObject postFormData(String url, Map<String, Object> formParams) {
 
         Response response = post(url, MediaTypeEnum.FORM_DATA, null, formParams, null);
-        return serialize(response);
+        return handleResponse(response, JSONObject.class);
     }
 
     public JSONObject post(String url, Object body) {
 
         Response response = post(url, MediaTypeEnum.JSON, body, null, null);
-        return serialize(response);
+        return handleResponse(response, JSONObject.class);
     }
 }

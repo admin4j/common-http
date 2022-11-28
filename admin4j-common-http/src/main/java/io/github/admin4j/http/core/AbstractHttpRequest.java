@@ -2,7 +2,6 @@ package io.github.admin4j.http.core;
 
 import io.github.admin4j.http.exception.HttpException;
 import io.github.admin4j.http.factory.HttpClientFactory;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import okhttp3.internal.http.HttpMethod;
@@ -28,15 +27,33 @@ import java.util.Map;
  */
 @Slf4j
 public abstract class AbstractHttpRequest {
+    /**
+     * 默认的单列OkhttpClient
+     */
     protected static OkHttpClient DEFAULT_HTTP_CLIENT;
-    protected Map<String, String> defaultHeaderMap = new HashMap<String, String>();
-    protected String basePath = null;
+    /**
+     * 请求头
+     */
+    protected Map<String, String> headerMap = new HashMap<String, String>();
+    /**
+     * 基础URL
+     */
+    protected String baseUrl = null;
+    /**
+     * 字符编码格式
+     */
     protected java.nio.charset.Charset charset = StandardCharsets.UTF_8;
-    @Setter
+    /**
+     * 每个实例可以自带的OkHttpClient
+     */
     protected OkHttpClient okHttpClient;
+
 
     protected AbstractHttpRequest() {
         okHttpClient = defaultHttpClient();
+        HttpConfig httpConfig = HttpDefaultConfig.get();
+        headerMap.put(HttpHeaderKey.USER_AGENT, httpConfig.getUserAgent());
+        headerMap.put(HttpHeaderKey.REFERER, httpConfig.getReferer());
     }
 
     private static OkHttpClient defaultHttpClient() {
@@ -53,6 +70,18 @@ public abstract class AbstractHttpRequest {
 
     public OkHttpClient getHttpClient() {
         return okHttpClient;
+    }
+
+    /**
+     * 默认的 MediaTypeEnum
+     *
+     * @return
+     */
+    protected MediaType getMediaType() {
+        if (headerMap.containsKey("Content-Type")) {
+            return MediaType.parse(headerMap.get("Content-Type"));
+        }
+        return null;
     }
 
     /**
@@ -86,14 +115,14 @@ public abstract class AbstractHttpRequest {
     }
 
     public String buildUrl(String path, Pair<?>[] queryParams, Map<String, Object> queryMap) {
-        if (StringUtils.isBlank(basePath) && queryParams == null && queryMap == null) {
+        if (StringUtils.isBlank(baseUrl) && queryParams == null && queryMap == null) {
             return path;
         }
         final StringBuilder url = new StringBuilder();
         if (StringUtils.startsWithIgnoreCase(path, "http")) {
             url.append(path);
         } else {
-            url.append(basePath).append(path);
+            url.append(baseUrl).append(path);
         }
 
         if (queryParams != null && queryParams.length > 0) {
@@ -140,7 +169,7 @@ public abstract class AbstractHttpRequest {
      * @param reqBuilder   Reqeust.Builder
      */
     public void processHeaderParams(Map<String, Object> headerParams, Request.Builder reqBuilder) {
-        for (Map.Entry<String, String> header : defaultHeaderMap.entrySet()) {
+        for (Map.Entry<String, String> header : headerMap.entrySet()) {
             if (headerParams == null || !headerParams.containsKey(header.getKey())) {
                 reqBuilder.header(header.getKey(), parameterToString(header.getValue()));
             }
@@ -199,18 +228,22 @@ public abstract class AbstractHttpRequest {
             reqBody = buildRequestBodyFormEncoding(formParams);
         } else if (MediaTypeEnum.FORM_DATA.equals(mediaType)) {
             reqBody = buildRequestBodyMultipart(formParams);
-        } else if (body == null) {
-            if (Method.DELETE.equals(method)) {
-                // allow calling DELETE without sending a request body
-                reqBody = null;
-            } else {
-                // use an empty request body (for POST, PUT and PATCH)
-                reqBody = RequestBody.create(mediaType.getMediaType(), "");
-            }
         } else {
-            reqBody = serialize(body, mediaType);
-        }
+            MediaType media = getMediaType();
+            media = media == null ? mediaType.getMediaType() : media;
+            if (body == null) {
+                if (Method.DELETE.equals(method)) {
+                    // allow calling DELETE without sending a request body
+                    reqBody = null;
+                } else {
+                    // use an empty request body (for POST, PUT and PATCH)
 
+                    reqBody = RequestBody.create(media, "");
+                }
+            } else {
+                reqBody = serialize(body, media);
+            }
+        }
         return reqBuilder.method(method.name(), reqBody).build();
     }
 
@@ -222,27 +255,28 @@ public abstract class AbstractHttpRequest {
      * @param obj The Java object
      * @return The serialized request body
      */
-    protected RequestBody serialize(Object obj, MediaTypeEnum mediaTypeEnum) {
+    protected RequestBody serialize(Object obj, MediaType mediaType) {
         if (obj instanceof byte[]) {
             // Binary (byte array) body parameter support.
-            return RequestBody.create(mediaTypeEnum.getMediaType(), (byte[]) obj);
+            return RequestBody.create(mediaType, (byte[]) obj);
         } else if (obj instanceof File) {
             // File body parameter support.
-            return RequestBody.create(mediaTypeEnum.getMediaType(), (File) obj);
+            return RequestBody.create(mediaType, (File) obj);
         } else if (obj instanceof String) {
-            return RequestBody.create(mediaTypeEnum.getMediaType(), (String) obj);
-        } else if (MediaTypeEnum.JSON.equals(mediaTypeEnum)) {
+            return RequestBody.create(mediaType, (String) obj);
+        } else {
             String content;
             if (obj != null) {
                 content = serializeJSON(obj);
             } else {
-                content = null;
+                content = "";
             }
-            return RequestBody.create(mediaTypeEnum.getMediaType(), content);
-        } else {
-            log.error("Content type \"" + mediaTypeEnum.getMediaType() + "\" is not supported");
+
+
+            byte[] bytes = content.getBytes(charset);
+            return RequestBody.create(mediaType, bytes);
+            //return RequestBody.create(content, mediaType);
         }
-        return null;
     }
 
     public abstract String serializeJSON(Object obj);

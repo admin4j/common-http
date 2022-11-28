@@ -32,7 +32,7 @@ public class TestProxy {
         OkHttpClient okHttpClient = HttpClientFactory.okHttpClient(httpConfig);
 
         ApiJsonClient apiClient = new ApiJsonClient(httpConfig);
-        apiClient.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36");
+        //    apiClient.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36");
         //JSONObject jsonObject = apiClient.get("https://2022.ip138.com/");
 
         Map<String, Object> formParams = new HashMap<>(16);

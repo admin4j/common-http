@@ -21,8 +21,8 @@ public class EbayClient extends ApiJsonClient {
         //TODO 获取店铺配置
         Map<String, String> config = new HashMap<>();
 
-        basePath = "https://api.ebay.com";
-        defaultHeaderMap.put("Authorization", "Bearer " + config.get("accessToken"));
-        defaultHeaderMap.put("X-EBAY-C-MARKETPLACE-ID", config.get("marketplaceId"));
+        baseUrl = "https://api.ebay.com";
+        headerMap.put("Authorization", "Bearer " + config.get("accessToken"));
+        headerMap.put("X-EBAY-C-MARKETPLACE-ID", config.get("marketplaceId"));
     }
 }

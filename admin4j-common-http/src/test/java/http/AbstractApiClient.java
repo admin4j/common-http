@@ -23,7 +23,7 @@ class AbstractApiClient {
         HttpConfig httpConfig = new HttpConfig();
         httpRequest = new ApiClient(new HttpConfig());
         OkHttpClient httpClient = HttpClientFactory.okHttpClient(httpConfig);
-        httpRequest.setOkHttpClient(httpClient);
+        //httpRequest.setOkHttpClient(httpClient);
     }
 
     @Test
