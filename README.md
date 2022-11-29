@@ -91,7 +91,7 @@ System.out.println("response = " + response);
 
 ```java
 
-# get
+        # get
         Response response=HttpRequest.get("https://search.gitee.com/?skin=rec&type=repository")
         .queryMap("q","admin4j")
         .header(HttpHeaderKey.USER_AGENT,"admin4j")
@@ -141,7 +141,7 @@ post form 日志
 response=Response{protocol=http/1.1,code=200,message=OK,url=http://192.168.1.13:9100/auth/login?q=admin4j}
 ```
 
-# 再 Springboot 中使用
+# 在 Springboot 中使用
 
 maven引入
 
@@ -154,7 +154,7 @@ maven引入
 </dependency>
 ```
 
-最新版查询 [io.github.admin4j:common-http-starter](io.github.admin4j:common-http-starter)
+最新版查询 [io.github.admin4j:common-http-starter](https://search.maven.org/artifact/io.github.admin4j/common-http-starter)
 
 spring 版可以对 OkHttp进行个性化配置
 配置详见
