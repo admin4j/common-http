@@ -95,6 +95,9 @@ public class ApiJsonClient extends AbstractHttpRequest {
      *                       fail to deserialize the response body
      */
     protected <T> T handleResponse(Response response, Class<T> tClass) throws HttpException {
+
+        response = handleResponse(response);
+
         if (response.isSuccessful()) {
             try {
                 if (tClass == null) {
@@ -112,6 +115,7 @@ public class ApiJsonClient extends AbstractHttpRequest {
                 throw new HttpException(response.message(), e, response.code(), response.headers().toMultimap());
             }
         } else {
+
             T o = handleFailResponse(response, tClass);
             if (o != null) {
                 return o;
