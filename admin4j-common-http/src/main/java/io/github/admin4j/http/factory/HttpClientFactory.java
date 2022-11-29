@@ -31,7 +31,8 @@ public class HttpClientFactory {
         logInterceptor.setLevel(httpConfig.getLoggLevel());
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .connectionPool(connectionPool)
-                .followRedirects(httpConfig.isFollowRedirects())
+                //跳转由自己控制
+                .followRedirects(false)
                 .addNetworkInterceptor(logInterceptor)
                 .readTimeout(Duration.ofSeconds(httpConfig.getReadTimeout()))
                 .connectTimeout(Duration.ofSeconds(httpConfig.getReadTimeout()));

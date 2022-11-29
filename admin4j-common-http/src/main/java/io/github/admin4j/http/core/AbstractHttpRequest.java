@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -40,6 +41,10 @@ public abstract class AbstractHttpRequest {
      */
     protected String baseUrl = null;
     /**
+     * 是否自动304 重定向跳转
+     */
+    protected boolean followRedirects = true;
+    /**
      * 字符编码格式
      */
     protected java.nio.charset.Charset charset = StandardCharsets.UTF_8;
@@ -67,6 +72,7 @@ public abstract class AbstractHttpRequest {
 
         DEFAULT_HTTP_CLIENT = okHttpClient;
     }
+
 
     public OkHttpClient getHttpClient() {
         return okHttpClient;
@@ -247,7 +253,6 @@ public abstract class AbstractHttpRequest {
         return reqBuilder.method(method.name(), reqBody).build();
     }
 
-
     /**
      * Serialize the given Java object into request body according to the object's
      * class and the request Content-Type.
@@ -280,7 +285,6 @@ public abstract class AbstractHttpRequest {
     }
 
     public abstract String serializeJSON(Object obj);
-
 
     protected String parameterToString(Object param) {
         if (param == null) {
@@ -406,16 +410,103 @@ public abstract class AbstractHttpRequest {
     // ------------- execute -------------
     public Response execute(Call call) throws HttpException {
         try {
-            return call.execute();
-        } catch (IOException e) {
+            Response response = call.execute();
+            response = handleResponse(response);
+            return response;
+        }
+        //catch (SocketTimeoutException e)
+        catch (IOException e) {
             throw new HttpException(e);
         }
     }
 
-
     public void executeAsync(Call call, final Callback callback) {
 
         call.enqueue(callback);
+    }
+
+    /**
+     * 返回二进制内容，用于下载文件
+     *
+     * @param path
+     * @param method
+     * @param mediaType
+     * @param queryParams
+     * @param queryMap
+     * @param body
+     * @param formParams
+     * @param headerParams
+     * @return
+     */
+    protected InputStream executeByteStream(
+            String path,
+            Method method,
+            MediaTypeEnum mediaType,
+            Pair<?>[] queryParams,
+            Map<String, Object> queryMap,
+            Object body,
+            Map<String, Object> formParams,
+            Map<String, Object> headerParams
+    ) {
+        Response response = null;
+
+        try {
+            Call call = buildCall(path, method, mediaType, queryParams, queryMap, body, formParams, headerParams);
+            response = execute(call);
+            ResponseBody responseBody = response.body();
+            if (!response.isSuccessful()) {
+                log.error("executeByteStream ERROR" + responseBody.string());
+                throw new HttpException(response);
+            } else {
+                return responseBody != null ? responseBody.byteStream() : null;
+            }
+        } catch (IOException var8) {
+            log.error("executeByteStream Exception", var8);
+            throw new HttpException(var8.getMessage());
+        }
+    }
+
+    /**
+     * 重定向请求
+     *
+     * @param response
+     * @return
+     */
+    private Request buildRedirectRequest(Response response) {
+
+        String location = response.header("Location");
+        if (StringUtils.isBlank(location)) {
+            return null;
+        }
+
+        Request request = response.request();
+        HttpUrl url = request.url().resolve(location);
+
+        Request.Builder builder = request.newBuilder();
+        return builder.url(url).build();
+    }
+
+    /**
+     * 回调处理 Response
+     *
+     * @param response
+     * @return
+     */
+    protected Response handleResponse(Response response) {
+
+        if (response.isSuccessful()) {
+            return response;
+        } else if (followRedirects && response.code() <= 399 && response.code() >= 300) {
+            //重定向
+            Request request = buildRedirectRequest(response);
+            if (request == null) {
+                throw new HttpException("not find Redirect url");
+            }
+            Call call = getHttpClient().newCall(request);
+            return execute(call);
+        } else {
+            throw new HttpException(response.message());
+        }
     }
 
     // ======================= GET POST ===============

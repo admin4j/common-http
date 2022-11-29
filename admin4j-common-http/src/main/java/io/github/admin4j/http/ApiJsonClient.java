@@ -30,6 +30,7 @@ public class ApiJsonClient extends AbstractHttpRequest {
         okHttpClient = HttpClientFactory.okHttpClient(config);
         headerMap.put(HttpHeaderKey.USER_AGENT, config.getUserAgent());
         headerMap.put(HttpHeaderKey.REFERER, config.getReferer());
+        this.followRedirects = config.isFollowRedirects();
         init();
     }
 

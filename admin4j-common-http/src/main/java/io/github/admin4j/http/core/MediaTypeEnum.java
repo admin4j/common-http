@@ -16,6 +16,15 @@ public enum MediaTypeEnum {
     FORM(MediaType.parse("application/x-www-form-urlencoded;charset=UTF-8")),
     FORM_DATA(MediaType.parse("multipart/form-data")),
     XML(MediaType.parse("text/xml;charset=UTF-8")),
+    /**
+     * 纯文本格式
+     */
+    PLAIN(MediaType.parse("text/plain;charset=UTF-8")),
+    HTML(MediaType.parse("text/html;charset=UTF-8")),
+    /**
+     * 二进制流数据（如常见的文件下载）
+     */
+    OCTET_STREAM(MediaType.parse("application/octet-stream")),
     OTHER(null);
 
 

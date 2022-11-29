@@ -1,5 +1,7 @@
 package io.github.admin4j.http.exception;
 
+import okhttp3.Response;
+
 import java.util.List;
 import java.util.Map;
 
@@ -44,5 +46,12 @@ public class HttpException extends RuntimeException {
         super(message, throwable);
         this.code = code;
         this.responseHeaders = responseHeaders;
+    }
+
+    public HttpException(Response response) {
+        super(response.message());
+        this.code = 15000 + response.code();
+        this.responseHeaders = response.headers().toMultimap();
+        //this.responseBody = response.body().string();
     }
 }

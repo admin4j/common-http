@@ -3,16 +3,13 @@ package io.github.admin4j.http.util;
 import io.github.admin4j.http.ApiClient;
 import io.github.admin4j.http.core.HttpDefaultConfig;
 import io.github.admin4j.http.core.MediaTypeEnum;
-import io.github.admin4j.http.core.Method;
 import io.github.admin4j.http.core.Pair;
 import lombok.Cleanup;
-import okhttp3.Call;
 import okhttp3.Response;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * HTTP  返回body为json格式的请求工具类
@@ -71,10 +68,8 @@ public class HttpUtil {
     }
 
     public static InputStream down(String url) {
-        ApiClient httpRequest = getClient();
-        Call call = httpRequest.buildCall(url, Method.GET, null, null, null);
-        Response response = httpRequest.execute(call);
-        return Objects.requireNonNull(response.body()).byteStream();
+
+        return getClient().down(url);
     }
 
 

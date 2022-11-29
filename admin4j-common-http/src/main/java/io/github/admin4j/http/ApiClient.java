@@ -7,6 +7,7 @@ import lombok.experimental.Accessors;
 import okhttp3.Callback;
 import okhttp3.Response;
 
+import java.io.InputStream;
 import java.util.Map;
 
 /**
@@ -21,6 +22,7 @@ public class ApiClient extends AbstractHttpRequest {
 
     public ApiClient(HttpConfig httpConfig) {
         okHttpClient = HttpClientFactory.okHttpClient(httpConfig);
+        this.followRedirects = httpConfig.isFollowRedirects();
         headerMap.put(HttpHeaderKey.USER_AGENT, httpConfig.getUserAgent());
         headerMap.put(HttpHeaderKey.REFERER, httpConfig.getReferer());
     }
@@ -69,5 +71,9 @@ public class ApiClient extends AbstractHttpRequest {
     public void asyncPost(String url, Object body, Callback callback) {
 
         asyncPost(url, MediaTypeEnum.JSON, body, null, null, callback);
+    }
+
+    public InputStream down(String url) {
+        return executeByteStream(url, Method.GET, null, null, null, null, null, null);
     }
 }
