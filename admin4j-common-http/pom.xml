@@ -6,7 +6,7 @@
     <parent>
         <artifactId>common-http</artifactId>
         <groupId>io.github.admin4j</groupId>
-        <version>0.4.4</version>
+        <version>0.4.5</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 

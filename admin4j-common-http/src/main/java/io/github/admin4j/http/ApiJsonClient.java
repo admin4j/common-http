@@ -31,12 +31,8 @@ public class ApiJsonClient extends AbstractHttpRequest {
         headerMap.put(HttpHeaderKey.USER_AGENT, config.getUserAgent());
         headerMap.put(HttpHeaderKey.REFERER, config.getReferer());
         this.followRedirects = config.isFollowRedirects();
-        init();
     }
 
-    protected void init() {
-
-    }
 
     @Override
     public String serializeJSON(Object obj) {

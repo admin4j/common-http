@@ -27,11 +27,12 @@ public abstract class AbstractHttpRequest extends AbstractHttpExecute {
     protected OkHttpClient okHttpClient;
 
 
-    protected AbstractHttpRequest() {
+    public AbstractHttpRequest() {
         okHttpClient = defaultHttpClient();
         HttpConfig httpConfig = HttpDefaultConfig.get();
         headerMap.put(HttpHeaderKey.USER_AGENT, httpConfig.getUserAgent());
         headerMap.put(HttpHeaderKey.REFERER, httpConfig.getReferer());
+        init();
     }
 
     private static OkHttpClient defaultHttpClient() {
@@ -44,6 +45,13 @@ public abstract class AbstractHttpRequest extends AbstractHttpExecute {
     private static void setDefaultHttpClient(OkHttpClient okHttpClient) {
 
         DEFAULT_HTTP_CLIENT = okHttpClient;
+    }
+
+    /**
+     * 初始化数据 baseUrl 等
+     */
+    protected void init() {
+
     }
 
     @Override
