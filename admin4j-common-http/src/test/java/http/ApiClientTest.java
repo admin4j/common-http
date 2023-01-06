@@ -48,9 +48,9 @@ class ApiClientTest {
 
     @Test
     void post() {
-        //JSONObject post = HttpJsonUtil.post("https://oapi.dingtalk.com/robot/send?access_token=37f5954ab60ea8b2e431ae9101b1289c138e85aa6eb6e3940c35ee13ff8b6335",
-        //        "{\"msgtype\": \"text\",\"text\": {\"content\":\"【反馈提醒】我就是我, 是不一样的烟火\"}}");
-        //System.out.println("post = " + post);
+        JSONObject post = HttpJsonUtil.post("https://oapi.dingtalk.com/robot/send?access_token=37f5954ab60ea8b2e431ae9101b1289c138e85aa6eb6e3940c35ee13ff8b6335",
+                "{\"msgtype\": \"text\",\"text\": {\"content\":\"【反馈提醒】我就是我, 是不一样的烟火\"}}");
+        System.out.println("post = " + post);
     }
 
     @Test

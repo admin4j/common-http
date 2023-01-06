@@ -1,6 +1,5 @@
 package io.github.admin4j.http.core;
 
-import io.github.admin4j.http.factory.HttpClientFactory;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -15,10 +14,6 @@ import java.util.Map;
  */
 @Slf4j
 public abstract class AbstractHttpRequest extends AbstractHttpExecute {
-    /**
-     * 默认的单列OkhttpClient
-     */
-    protected static OkHttpClient DEFAULT_HTTP_CLIENT;
 
 
     /**
@@ -28,24 +23,13 @@ public abstract class AbstractHttpRequest extends AbstractHttpExecute {
 
 
     public AbstractHttpRequest() {
-        okHttpClient = defaultHttpClient();
+
         HttpConfig httpConfig = HttpDefaultConfig.get();
         headerMap.put(HttpHeaderKey.USER_AGENT, httpConfig.getUserAgent());
         headerMap.put(HttpHeaderKey.REFERER, httpConfig.getReferer());
         init();
     }
 
-    private static OkHttpClient defaultHttpClient() {
-        if (DEFAULT_HTTP_CLIENT == null) {
-            DEFAULT_HTTP_CLIENT = HttpClientFactory.okHttpClient(HttpDefaultConfig.get());
-        }
-        return DEFAULT_HTTP_CLIENT;
-    }
-
-    private static void setDefaultHttpClient(OkHttpClient okHttpClient) {
-
-        DEFAULT_HTTP_CLIENT = okHttpClient;
-    }
 
     /**
      * 初始化数据 baseUrl 等
@@ -56,7 +40,7 @@ public abstract class AbstractHttpRequest extends AbstractHttpExecute {
 
     @Override
     public OkHttpClient getHttpClient() {
-        return okHttpClient;
+        return okHttpClient == null ? HttpDefaultConfig.getClient() : okHttpClient;
     }
 
     // ======================= GET POST ===============

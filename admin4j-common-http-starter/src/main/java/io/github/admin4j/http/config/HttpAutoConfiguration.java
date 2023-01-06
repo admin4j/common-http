@@ -26,6 +26,7 @@ public class HttpAutoConfiguration implements InitializingBean {
     @PostConstruct
     public void initHttpClient() {
 
+        HttpDefaultConfig.set(httpConfig);
         ApiClient apiClient = new ApiClient(httpConfig);
         HttpUtil.setClient(apiClient);
         ApiJsonClient apiJsonClient = new ApiJsonClient(httpConfig);

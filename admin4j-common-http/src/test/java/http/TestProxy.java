@@ -24,7 +24,7 @@ public class TestProxy {
 
         HttpConfig.ProxyConfig proxyConfig = new HttpConfig.ProxyConfig();
         proxyConfig.setHost("119.8.115.201");
-        proxyConfig.setPort(9898);
+        proxyConfig.setPort(9892);
         proxyConfig.setUserName("ces");
         proxyConfig.setPassword("iIl1o0O");
         httpConfig.setProxy(proxyConfig);
@@ -38,7 +38,7 @@ public class TestProxy {
         Map<String, Object> formParams = new HashMap<>(16);
         formParams.put("username", "admin");
         formParams.put("password", "admin123");
-        JSONObject object = apiClient.postForm("http://127.0.0.1:30443/auth/login",
+        JSONObject object = apiClient.postForm("https://www.baidu.com/?/auth/login",
                 formParams
         );
         System.out.println("post = " + object);
