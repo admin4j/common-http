@@ -320,3 +320,29 @@ public class EbayOrderClient extends EbayClient {
 ```
 
 库存相关的使用`EbayInventoryClient`,订单相关的使用`EbayOrderClient`,是不是很清晰
+
+# JSON 适配器
+
+项目默认使用 fastjson 解析json，如果想用其他json框架.排除`admin4j-json-fastjson`,重新导入其他包参考如下
+
+```xml
+
+<dependency>
+    <groupId>io.github.admin4j</groupId>
+    <artifactId>http</artifactId>
+    <version>0.5.0</version>
+    <exclusions>
+        <exclusion>
+            <groupId>com.admin4j.json</groupId>
+            <artifactId>admin4j-json-fastjson</artifactId>
+        </exclusion>
+    </exclusions>
+    <dependency>
+        <groupId>com.admin4j.json</groupId>
+        <artifactId>admin4j-json-jackson</artifactId>
+        <version>0.2.0</version>
+    </dependency>
+</dependency>
+```
+
+JSON 适配工具类参考 [https://github.com/admin4j/admin4j-json](https://github.com/admin4j/admin4j-json)
