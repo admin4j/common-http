@@ -1,6 +1,6 @@
 package io.github.admin4j.http;
 
-import com.alibaba.fastjson.JSON;
+import com.admin4j.json.JSONUtil;
 import io.github.admin4j.http.core.*;
 import io.github.admin4j.http.factory.HttpClientFactory;
 import lombok.experimental.Accessors;
@@ -29,7 +29,7 @@ public class ApiClient extends AbstractHttpRequest {
 
     @Override
     public String serializeJSON(Object obj) {
-        return JSON.toJSONString(obj);
+        return JSONUtil.toJSONString(obj);
     }
 
 

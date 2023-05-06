@@ -1,19 +1,17 @@
 package io.github.admin4j.http;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.admin4j.json.JSONUtil;
 import io.github.admin4j.http.core.*;
 import io.github.admin4j.http.exception.HttpException;
 import io.github.admin4j.http.factory.HttpClientFactory;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,11 +34,20 @@ public class ApiJsonClient extends AbstractHttpRequest {
 
     @Override
     public String serializeJSON(Object obj) {
-        return JSON.toJSONString(obj);
+        return JSONUtil.toJSONString(obj);
     }
 
-    public <T> T deserializeJSON(InputStream in, Class<T> tClass) throws IOException {
-        return JSON.parseObject(in, charset, tClass);
+    protected <T> T deserializeJSON(InputStream in, Class<T> tClass, boolean isList) throws IOException {
+
+        if (isList) {
+            return (T) JSONUtil.parseList(in, tClass);
+        }
+
+        //if (tClass.equals(Map.class)) {
+        //    return (T) JSONUtil.parseMap(in);
+        //}
+
+        return JSONUtil.parseObject(in, charset, tClass);
     }
 
     public <T> T execute(Call call, Class<T> tClass) throws HttpException {
@@ -90,7 +97,12 @@ public class ApiJsonClient extends AbstractHttpRequest {
      * @throws HttpException If the response has a unsuccessful status code or
      *                       fail to deserialize the response body
      */
+
     protected <T> T handleResponse(Response response, Class<T> tClass) throws HttpException {
+        return handleResponse(response, tClass, false);
+    }
+
+    protected <T> T handleResponse(Response response, Class<T> tClass, boolean isList) throws HttpException {
 
         response = handleResponse(response);
 
@@ -105,7 +117,7 @@ public class ApiJsonClient extends AbstractHttpRequest {
                     }
                     return null;
                 } else {
-                    return handleSuccessResponse(response, tClass);
+                    return handleSuccessResponse(response, tClass, isList);
                 }
             } catch (IOException e) {
                 throw new HttpException(response.message(), e, response.code(), response.headers().toMultimap());
@@ -138,8 +150,8 @@ public class ApiJsonClient extends AbstractHttpRequest {
      * @return
      * @throws IOException
      */
-    protected <T> T handleSuccessResponse(Response response, Class<T> tClass) throws IOException {
-        return deserializeJSON(response.body().byteStream(), tClass);
+    protected <T> T handleSuccessResponse(Response response, Class<T> tClass, boolean isList) throws IOException {
+        return deserializeJSON(response.body().byteStream(), tClass, isList);
     }
 
     /**
@@ -155,31 +167,31 @@ public class ApiJsonClient extends AbstractHttpRequest {
         return null;
     }
 
-    protected JSONObject serialize(Response response) {
-        ResponseBody body = response.body();
-        if (body == null) {
-            throw new HttpException("response body is null");
-        }
-        try {
-            return JSONObject.parseObject(body.string());
-        } catch (IOException e) {
+    //protected JSONObject serialize(Response response) {
+    //    ResponseBody body = response.body();
+    //    if (body == null) {
+    //        throw new HttpException("response body is null");
+    //    }
+    //    try {
+    //        return JSONObject.parseObject(body.string());
+    //    } catch (IOException e) {
+    //
+    //        throw new HttpException(e);
+    //    }
+    //}
 
-            throw new HttpException(e);
-        }
-    }
-
-    protected JSONArray serializeList(Response response) {
-        ResponseBody body = response.body();
-        if (body == null) {
-            throw new HttpException("response body is null");
-        }
-        try {
-            return JSON.parseArray(body.string());
-        } catch (IOException e) {
-
-            throw new HttpException(e);
-        }
-    }
+    //protected JSONArray serializeList(Response response) {
+    //    ResponseBody body = response.body();
+    //    if (body == null) {
+    //        throw new HttpException("response body is null");
+    //    }
+    //    try {
+    //        return JSON.parseArray(body.string());
+    //    } catch (IOException e) {
+    //
+    //        throw new HttpException(e);
+    //    }
+    //}
 
     //=============== request ===============
     public <T> T get(String path, Class<T> tClass, Pair<?>... queryParams) {
@@ -212,42 +224,43 @@ public class ApiJsonClient extends AbstractHttpRequest {
     }
 
 
-    public JSONObject get(String path, Pair<?>... queryParams) {
+    public Map<String, Object> get(String path, Pair<?>... queryParams) {
         Response response = get(path, (Map<String, Object>) null, queryParams);
-        return handleResponse(response, JSONObject.class);
+        return handleResponse(response, Map.class);
     }
 
-    public JSONObject get(String path, Map<String, Object> queryMap) {
+    public Map<String, Object> get(String path, Map<String, Object> queryMap) {
         Response response = get(path, queryMap, (Pair<?>[]) null);
-        return handleResponse(response, JSONObject.class);
+        return handleResponse(response, Map.class);
     }
 
-    public JSONArray getList(String path, Pair<?>... queryParams) {
+    public <T> List<T> getList(String path, Class<T> tClass, Pair<?>... queryParams) {
         Response response = get(path, (Map<String, Object>) null, queryParams);
-        return handleResponse(response, JSONArray.class);
+
+        return (List<T>) handleResponse(response, tClass, true);
     }
 
-    public JSONArray getList(String path, Map<String, Object> queryMap) {
+    public <T> List<T> getList(String path, Map<String, Object> queryMap, Class<T> tClass) {
         Response response = get(path, queryMap, (Pair<?>[]) null);
-        return handleResponse(response, JSONArray.class);
+        return (List<T>) handleResponse(response, tClass, true);
     }
 
 
-    public JSONObject postForm(String url, Map<String, Object> formParams) {
+    public Map<String, Object> postForm(String url, Map<String, Object> formParams) {
 
         Response response = post(url, MediaTypeEnum.FORM, null, formParams, null);
-        return handleResponse(response, JSONObject.class);
+        return handleResponse(response, Map.class);
     }
 
-    public JSONObject postFormData(String url, Map<String, Object> formParams) {
+    public Map<String, Object> postFormData(String url, Map<String, Object> formParams) {
 
         Response response = post(url, MediaTypeEnum.FORM_DATA, null, formParams, null);
-        return handleResponse(response, JSONObject.class);
+        return handleResponse(response, Map.class);
     }
 
-    public JSONObject post(String url, Object body) {
+    public Map<String, Object> post(String url, Object body) {
 
         Response response = post(url, MediaTypeEnum.JSON, body, null, null);
-        return handleResponse(response, JSONObject.class);
+        return handleResponse(response, Map.class);
     }
 }

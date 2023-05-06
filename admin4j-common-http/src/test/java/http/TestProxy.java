@@ -1,6 +1,5 @@
 package http;
 
-import com.alibaba.fastjson.JSONObject;
 import io.github.admin4j.http.ApiJsonClient;
 import io.github.admin4j.http.core.HttpConfig;
 import io.github.admin4j.http.factory.HttpClientFactory;
@@ -38,7 +37,7 @@ public class TestProxy {
         Map<String, Object> formParams = new HashMap<>(16);
         formParams.put("username", "admin");
         formParams.put("password", "admin123");
-        JSONObject object = apiClient.postForm("https://www.baidu.com/?/auth/login",
+        Map<String, Object> object = apiClient.postForm("https://www.baidu.com/?/auth/login",
                 formParams
         );
         System.out.println("post = " + object);

@@ -1,6 +1,6 @@
 package io.github.admin4j.http;
 
-import com.alibaba.fastjson.JSON;
+import com.admin4j.json.JSONUtil;
 import io.github.admin4j.http.core.HttpHeaderKey;
 import io.github.admin4j.http.core.MediaTypeEnum;
 import io.github.admin4j.http.core.Method;
@@ -138,6 +138,6 @@ public class HttpRequest {
     public <T> T execute(Class<T> clas) throws IOException {
 
         @Cleanup InputStream is = Objects.requireNonNull(execute().body()).byteStream();
-        return JSON.parseObject(is, clas);
+        return JSONUtil.parseObject(is, clas);
     }
 }

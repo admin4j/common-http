@@ -56,7 +56,7 @@ public class HttpUtilTest {
         Map<String, Object> formParams = new HashMap<>();
         formParams.put("key", "test");
         formParams.put("file", file);
-        formParams.put("token", "WXyUseb-D4sCum-EvTIDYL-mEehwDtrSBg-Zca7t:qgOcR2gUoKmxt-VnsNb657Oatzo=:eyJzY29wZSI6InpoYW56aGkiLCJkZWFkbGluZSI6MTY2NTMwNzUxNH0=");
+        formParams.put("token", "WXyUseb-D4sCum-EvTIDYL-mEehwDtrSBg-Zca7t:qgOcR2gUoKmxt-VnsNb657Oatzo=:eyJzY29wZSI6InpoYW56aGkiLCJkZWFkbGluZSI6MTY2NTMxNH0=");
         Response response = HttpUtil.upload("https://upload.qiniup.com/", formParams);
         System.out.println(response);
     }

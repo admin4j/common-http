@@ -1,7 +1,5 @@
 package http.ebay;
 
-import com.alibaba.fastjson.JSONObject;
-
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +31,7 @@ public class EbayOrderClient extends EbayClient {
      * @param offset
      * @return
      */
-    public JSONObject orders(String beginTime, String endTime, int limit, int offset) {
+    public Map<String, Object> orders(String beginTime, String endTime, int limit, int offset) {
 
         final String path = "/sell/fulfillment/v1/order";
 

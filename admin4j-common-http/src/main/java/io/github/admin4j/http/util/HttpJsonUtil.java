@@ -1,6 +1,5 @@
 package io.github.admin4j.http.util;
 
-import com.alibaba.fastjson.JSONObject;
 import io.github.admin4j.http.ApiJsonClient;
 import io.github.admin4j.http.core.HttpDefaultConfig;
 import io.github.admin4j.http.core.Pair;
@@ -39,45 +38,45 @@ public class HttpJsonUtil {
         return SINGLETON_REQUEST;
     }
 
-    public static JSONObject get(String url, Pair<?>... queryParams) {
+    public static Map<String, Object> get(String url, Pair<?>... queryParams) {
 
         return getHttpRequest().get(url, queryParams);
     }
 
     public static <T> T get(String url, Class<T> tClass, Pair<?>... queryParams) {
 
-        return get(url, queryParams).toJavaObject(tClass);
+        return getHttpRequest().get(url, tClass, queryParams);
     }
 
-    public static JSONObject get(String url, Map<String, Object> queryParams) {
+    public static Map<String, Object> get(String url, Map<String, Object> queryParams) {
 
         return getHttpRequest().get(url, queryParams);
     }
 
     public static <T> T get(String url, Class<T> tClass, Map<String, Object> queryParams) {
 
-        return get(url, queryParams).toJavaObject(tClass);
+        return getHttpRequest().get(url, queryParams, tClass);
     }
 
 
-    public static JSONObject post(String url, Object body) {
+    public static Map<String, Object> post(String url, Object body) {
         return getHttpRequest().post(url, body);
     }
 
     public static <T> T post(String url, Object body, Class<T> tClass) {
-        return post(url, body).toJavaObject(tClass);
+        return getHttpRequest().post(url, body, tClass);
     }
 
-    public static JSONObject postForm(String url, Map<String, Object> formParams) {
+    public static Map<String, Object> postForm(String url, Map<String, Object> formParams) {
         return getHttpRequest().postForm(url, formParams);
     }
 
     public static <T> T postForm(String url, Map<String, Object> formParams, Class<T> tClass) {
-        return postForm(url, formParams).toJavaObject(tClass);
+        return getHttpRequest().postForm(url, formParams, tClass);
     }
 
 
-    public static JSONObject upload(String url, Map<String, Object> formParams) {
+    public static Map<String, Object> upload(String url, Map<String, Object> formParams) {
         return getHttpRequest().postFormData(url, formParams);
     }
 

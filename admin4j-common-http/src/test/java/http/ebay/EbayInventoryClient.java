@@ -1,7 +1,5 @@
 package http.ebay;
 
-import com.alibaba.fastjson.JSONObject;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +29,7 @@ public class EbayInventoryClient extends EbayClient {
      * @return
      * @throws IOException
      */
-    public JSONObject inventoryItem(Integer limit, Integer offset) throws IOException {
+    public Map<String, Object> inventoryItem(Integer limit, Integer offset) throws IOException {
 
         Map<String, Object> queryMap = new HashMap(2);
         queryMap.put("limit", limit);

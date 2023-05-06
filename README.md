@@ -26,7 +26,7 @@ maven引入
 <dependency>
     <groupId>io.github.admin4j</groupId>
     <artifactId>http</artifactId>
-    <version>0.4.6</version>
+    <version>0.5.0</version>
 </dependency>
 ```
 
@@ -150,7 +150,7 @@ maven引入
 <dependency>
     <groupId>io.github.admin4j</groupId>
     <artifactId>common-http-starter</artifactId>
-    <version>0.4.6</version>
+    <version>0.5.0</version>
 </dependency>
 ```
 
