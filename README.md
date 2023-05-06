@@ -63,7 +63,7 @@ System.out.println("response = " + response);
 返回格式为JSON的 可以使用 HttpJsonUtil 自动返回JsonObject
 
 ```java
-        JSONObject object=HttpJsonUtil.get("https://github.com/search",
+        Map<String, Object>  object=HttpJsonUtil.get("https://github.com/search",
         Pair.of("q","http"),
         Pair.of("username","agonie201218"));
         System.out.println("object = "+object);
@@ -91,7 +91,7 @@ System.out.println("response = " + response);
 
 ```java
 
-        # get
+# get
         Response response=HttpRequest.get("https://search.gitee.com/?skin=rec&type=repository")
         .queryMap("q","admin4j")
         .header(HttpHeaderKey.USER_AGENT,"admin4j")
@@ -237,10 +237,6 @@ public class EbayClient extends ApiJsonClient {
 EbayClient 封装ebay api请求 基础类
 
 ```java
-/**
- * ebay 库存相关api
- * @author andanyang
- */
 public class EbayInventoryClient extends EbayClient {
 
     /**
@@ -260,7 +256,7 @@ public class EbayInventoryClient extends EbayClient {
      * @return
      * @throws IOException
      */
-    public JSONObject inventoryItem(Integer limit, Integer offset) throws IOException {
+    public Map<String, Object> inventoryItem(Integer limit, Integer offset) throws IOException {
 
         Map<String, Object> queryMap = new HashMap(2);
         queryMap.put("limit", limit);
@@ -275,14 +271,15 @@ EbayInventoryClient 封装ebay 库存 api请求
 
 ```java
         EbayInventoryClient ebayInventoryClient=new EbayInventoryClient(1L);
-        JSONObject jsonObject=ebayInventoryClient.inventoryItem(0,10);
+        Map<String, Object> jsonObject=ebayInventoryClient.inventoryItem(0,10);
 ```
 
 ```java
-
 /**
  * 订单相关api
+ *
  * @author andanyang
+ * @since 2022/11/8 17:34
  */
 public class EbayOrderClient extends EbayClient {
 
@@ -305,7 +302,7 @@ public class EbayOrderClient extends EbayClient {
      * @param offset
      * @return
      */
-    public JSONObject orders(String beginTime, String endTime, int limit, int offset) {
+    public Map<String, Object> orders(String beginTime, String endTime, int limit, int offset) {
 
         final String path = "/sell/fulfillment/v1/order";
 
