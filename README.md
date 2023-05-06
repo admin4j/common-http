@@ -30,7 +30,7 @@ maven引入
 </dependency>
 ```
 
-最新版查询 [https://search.maven.org/artifact/io.github.admin4j/http](https://search.maven.org/artifact/io.github.admin4j/http)
+最新版查询 [https://central.sonatype.com/artifact/io.github.admin4j/http](https://central.sonatype.com/artifact/io.github.admin4j/http)
 
 ## GET
 
@@ -325,8 +325,7 @@ public class EbayOrderClient extends EbayClient {
 
 项目默认使用 fastjson 解析json，如果想用其他json框架.排除`admin4j-json-fastjson`,重新导入其他包参考如下
 
-```xml
-
+```
 <dependency>
     <groupId>io.github.admin4j</groupId>
     <artifactId>http</artifactId>
@@ -339,9 +338,9 @@ public class EbayOrderClient extends EbayClient {
     </exclusions>
 </dependency>
 <dependency>
-<groupId>com.admin4j.json</groupId>
-<artifactId>admin4j-json-jackson</artifactId>
-<version>0.2.0</version>
+    <groupId>com.admin4j.json</groupId>
+    <artifactId>admin4j-json-jackson</artifactId>
+    <version>0.2.0</version>
 </dependency>
 ```
 
