@@ -337,11 +337,11 @@ public class EbayOrderClient extends EbayClient {
             <artifactId>admin4j-json-fastjson</artifactId>
         </exclusion>
     </exclusions>
-    <dependency>
-        <groupId>com.admin4j.json</groupId>
-        <artifactId>admin4j-json-jackson</artifactId>
-        <version>0.2.0</version>
-    </dependency>
+</dependency>
+<dependency>
+<groupId>com.admin4j.json</groupId>
+<artifactId>admin4j-json-jackson</artifactId>
+<version>0.2.0</version>
 </dependency>
 ```
 
