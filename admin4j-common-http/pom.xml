@@ -6,7 +6,7 @@
     <parent>
         <artifactId>common-http</artifactId>
         <groupId>io.github.admin4j</groupId>
-        <version>0.5.3</version>
+        <version>0.6.0</version>
     </parent>
 
     <packaging>jar</packaging>

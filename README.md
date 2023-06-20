@@ -26,7 +26,7 @@ maven引入
 <dependency>
     <groupId>io.github.admin4j</groupId>
     <artifactId>http</artifactId>
-    <version>0.5.2</version>
+    <version>0.6.0</version>
 </dependency>
 ```
 
@@ -150,7 +150,7 @@ maven引入
 <dependency>
     <groupId>io.github.admin4j</groupId>
     <artifactId>common-http-starter</artifactId>
-    <version>0.5.2</version>
+    <version>0.6.0</version>
 </dependency>
 ```
 
@@ -329,7 +329,7 @@ public class EbayOrderClient extends EbayClient {
 <dependency>
     <groupId>io.github.admin4j</groupId>
     <artifactId>http</artifactId>
-    <version>0.5.2</version>
+    <version>0.6.0</version>
     <exclusions>
         <exclusion>
             <groupId>com.admin4j.json</groupId>
@@ -340,7 +340,7 @@ public class EbayOrderClient extends EbayClient {
 <dependency>
     <groupId>com.admin4j.json</groupId>
     <artifactId>admin4j-json-jackson</artifactId>
-    <version>0.5.2</version>
+    <version>0.6.0</version>
 </dependency>
 ```
 
