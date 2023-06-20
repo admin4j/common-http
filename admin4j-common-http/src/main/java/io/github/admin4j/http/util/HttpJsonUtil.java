@@ -1,5 +1,6 @@
 package io.github.admin4j.http.util;
 
+import com.admin4j.json.mapper.JSONMapper;
 import io.github.admin4j.http.ApiJsonClient;
 import io.github.admin4j.http.core.HttpDefaultConfig;
 import io.github.admin4j.http.core.Pair;
@@ -38,7 +39,7 @@ public class HttpJsonUtil {
         return SINGLETON_REQUEST;
     }
 
-    public static Map<String, Object> get(String url, Pair<?>... queryParams) {
+    public static JSONMapper get(String url, Pair<?>... queryParams) {
 
         return getHttpRequest().get(url, queryParams);
     }
@@ -48,7 +49,7 @@ public class HttpJsonUtil {
         return getHttpRequest().get(url, tClass, queryParams);
     }
 
-    public static Map<String, Object> get(String url, Map<String, Object> queryParams) {
+    public static JSONMapper get(String url, Map<String, Object> queryParams) {
 
         return getHttpRequest().get(url, queryParams);
     }
@@ -59,7 +60,7 @@ public class HttpJsonUtil {
     }
 
 
-    public static Map<String, Object> post(String url, Object body) {
+    public static JSONMapper post(String url, Object body) {
         return getHttpRequest().post(url, body);
     }
 
@@ -67,7 +68,7 @@ public class HttpJsonUtil {
         return getHttpRequest().post(url, body, tClass);
     }
 
-    public static Map<String, Object> postForm(String url, Map<String, Object> formParams) {
+    public static JSONMapper postForm(String url, Map<String, Object> formParams) {
         return getHttpRequest().postForm(url, formParams);
     }
 
@@ -76,7 +77,7 @@ public class HttpJsonUtil {
     }
 
 
-    public static Map<String, Object> upload(String url, Map<String, Object> formParams) {
+    public static JSONMapper upload(String url, Map<String, Object> formParams) {
         return getHttpRequest().postFormData(url, formParams);
     }
 

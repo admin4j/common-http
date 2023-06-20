@@ -1,5 +1,6 @@
 package http;
 
+import com.admin4j.json.mapper.JSONMapper;
 import http.entity.R;
 import io.github.admin4j.http.ApiClient;
 import io.github.admin4j.http.core.HttpConfig;
@@ -34,7 +35,7 @@ class ApiClientTest {
     @Test
     void get() throws IOException {
 
-        Map<String, Object> object = HttpJsonUtil.get("https://search.gitee.com/search/kit/lang",
+        JSONMapper object = HttpJsonUtil.get("https://search.gitee.com/search/kit/lang",
                 Pair.of("q", "admin4j"),
                 Pair.of("type", "repository"),
                 Pair.of("username", "agonie201218"));
@@ -49,7 +50,7 @@ class ApiClientTest {
 
     @Test
     void post() {
-        Map<String, Object> post = HttpJsonUtil.post("https://oapi.dingtalk.com/robot/send?access_token=37f5954ab60ea8b2e431ae9101b1289c138e85aa6eb6e3940c35ee13ff8b6335",
+        JSONMapper post = HttpJsonUtil.post("https://oapi.dingtalk.com/robot/send?access_token=37f5954ab60ea8b2e431ae9101b1289c138e85aa6eb6e3940c35ee13ff8b6335",
                 "{\"msgtype\": \"text\",\"text\": {\"content\":\"【反馈提醒】我就是我, 是不一样的烟火\"}}");
         System.out.println("post = " + post);
     }
@@ -60,7 +61,7 @@ class ApiClientTest {
         Map<String, Object> formParams = new HashMap<>(16);
         formParams.put("username", "admin");
         formParams.put("password", "admin123");
-        Map<String, Object> object = HttpJsonUtil.postForm("http://192.168.1.13:9100/auth/login",
+        JSONMapper object = HttpJsonUtil.postForm("http://192.168.1.13:9100/auth/login",
                 formParams
         );
         System.out.println("post = " + object);
@@ -112,7 +113,7 @@ class ApiClientTest {
         formParams.put("key", "test");
         formParams.put("file", "file");
         formParams.put("token", "WXyUseb-D4sCum-EvTIDYL-mEehwDtrSBg-Zca7t:qgOcR2gUoKmxt-VnsNb657Oatzo=:eyJzY29wZSI6InpoYW56aGkiLCJkZWFkbGluZSI6MTY2NTMwNzUxNH0=");
-        Map<String, Object> xx = HttpJsonUtil.upload("https://upload.qiniup.com/", formParams);
+        JSONMapper xx = HttpJsonUtil.upload("https://upload.qiniup.com/", formParams);
         System.out.println(xx);
     }
 

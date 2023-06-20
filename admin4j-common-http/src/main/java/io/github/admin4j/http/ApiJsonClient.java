@@ -1,6 +1,7 @@
 package io.github.admin4j.http;
 
 import com.admin4j.json.JSONUtil;
+import com.admin4j.json.mapper.JSONMapper;
 import io.github.admin4j.http.core.*;
 import io.github.admin4j.http.exception.HttpException;
 import io.github.admin4j.http.factory.HttpClientFactory;
@@ -43,9 +44,9 @@ public class ApiJsonClient extends AbstractHttpRequest {
             return (T) JSONUtil.parseList(in, tClass);
         }
 
-        //if (tClass.equals(Map.class)) {
-        //    return (T) JSONUtil.parseMap(in);
-        //}
+        if (tClass.equals(JSONMapper.class)) {
+            return (T) JSONUtil.parseMapper(in);
+        }
 
         return JSONUtil.parseObject(in, charset, tClass);
     }
@@ -224,14 +225,14 @@ public class ApiJsonClient extends AbstractHttpRequest {
     }
 
 
-    public Map<String, Object> get(String path, Pair<?>... queryParams) {
+    public JSONMapper get(String path, Pair<?>... queryParams) {
         Response response = get(path, (Map<String, Object>) null, queryParams);
-        return handleResponse(response, Map.class);
+        return handleResponse(response, JSONMapper.class);
     }
 
-    public Map<String, Object> get(String path, Map<String, Object> queryMap) {
+    public JSONMapper get(String path, Map<String, Object> queryMap) {
         Response response = get(path, queryMap, (Pair<?>[]) null);
-        return handleResponse(response, Map.class);
+        return handleResponse(response, JSONMapper.class);
     }
 
     public <T> List<T> getList(String path, Class<T> tClass, Pair<?>... queryParams) {
@@ -246,21 +247,21 @@ public class ApiJsonClient extends AbstractHttpRequest {
     }
 
 
-    public Map<String, Object> postForm(String url, Map<String, Object> formParams) {
+    public JSONMapper postForm(String url, Map<String, Object> formParams) {
 
         Response response = post(url, MediaTypeEnum.FORM, null, formParams, null);
-        return handleResponse(response, Map.class);
+        return handleResponse(response, JSONMapper.class);
     }
 
-    public Map<String, Object> postFormData(String url, Map<String, Object> formParams) {
+    public JSONMapper postFormData(String url, Map<String, Object> formParams) {
 
         Response response = post(url, MediaTypeEnum.FORM_DATA, null, formParams, null);
-        return handleResponse(response, Map.class);
+        return handleResponse(response, JSONMapper.class);
     }
 
-    public Map<String, Object> post(String url, Object body) {
+    public JSONMapper post(String url, Object body) {
 
         Response response = post(url, MediaTypeEnum.JSON, body, null, null);
-        return handleResponse(response, Map.class);
+        return handleResponse(response, JSONMapper.class);
     }
 }

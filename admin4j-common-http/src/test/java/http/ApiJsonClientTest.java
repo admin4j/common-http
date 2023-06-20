@@ -1,5 +1,6 @@
 package http;
 
+import com.admin4j.json.mapper.JSONMapper;
 import http.entity.R;
 import io.github.admin4j.http.ApiJsonClient;
 import io.github.admin4j.http.core.HttpConfig;
@@ -8,7 +9,6 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author andanyang
@@ -26,9 +26,9 @@ class ApiJsonClientTest {
 
     @Test
     void get() throws IOException {
-        Map<String, Object> stringObjectMap = httpRequest.get("https://gitee.com/o0w0o_1/mock/raw/master/Map");
+        JSONMapper stringObjectMap = httpRequest.get("https://gitee.com/o0w0o_1/mock/raw/master/Map");
         System.out.println("stringObjectMap = " + stringObjectMap);
-        System.out.println("stringObjectMap = " + stringObjectMap.get("code"));
+        System.out.println("code = " + stringObjectMap.getInteger("code"));
     }
 
     @Test

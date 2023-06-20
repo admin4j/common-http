@@ -1,5 +1,6 @@
 package http;
 
+import com.admin4j.json.mapper.JSONMapper;
 import io.github.admin4j.http.ApiJsonClient;
 import io.github.admin4j.http.core.HttpConfig;
 import io.github.admin4j.http.factory.HttpClientFactory;
@@ -37,7 +38,7 @@ public class TestProxy {
         Map<String, Object> formParams = new HashMap<>(16);
         formParams.put("username", "admin");
         formParams.put("password", "admin123");
-        Map<String, Object> object = apiClient.postForm("https://www.baidu.com/?/auth/login",
+        JSONMapper object = apiClient.postForm("https://www.baidu.com/?/auth/login",
                 formParams
         );
         System.out.println("post = " + object);
