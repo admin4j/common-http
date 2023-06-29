@@ -264,4 +264,51 @@ public class ApiJsonClient extends AbstractHttpRequest {
         Response response = post(url, MediaTypeEnum.JSON, body, null, null);
         return handleResponse(response, JSONMapper.class);
     }
+
+    public JSONMapper put(String url, Object body) {
+
+        Response response = put(url, MediaTypeEnum.JSON, body, null, null);
+        return handleResponse(response, JSONMapper.class);
+    }
+
+    public <T> T put(String url, Object body, Class<T> tClass) {
+
+        Response response = put(url, MediaTypeEnum.JSON, body, null, null);
+        return handleResponse(response, tClass);
+    }
+
+    public JSONMapper putForm(String url, Map<String, Object> formParams) {
+
+        Response response = put(url, MediaTypeEnum.FORM, null, formParams, null);
+        return handleResponse(response, JSONMapper.class);
+    }
+
+    public <T> T putForm(String url, Map<String, Object> formParams, Class<T> tClass) {
+
+        Response response = put(url, MediaTypeEnum.FORM, null, formParams, null);
+        return handleResponse(response, tClass);
+    }
+
+    public JSONMapper putFormData(String url, Map<String, Object> formParams) {
+
+        Response response = put(url, MediaTypeEnum.FORM_DATA, null, formParams, null);
+        return handleResponse(response, JSONMapper.class);
+    }
+
+    public <T> T delete(String url,
+                        Object body,
+                        Map<String, Object> formParams,
+                        Class<T> tClass) {
+
+        Response response = delete(url, body == null ? MediaTypeEnum.FORM : MediaTypeEnum.JSON, body, formParams, (Map<String, Object>) null);
+        return handleResponse(response, tClass);
+    }
+
+    public JSONMapper delete(String url,
+                             Object body,
+                             Map<String, Object> formParams) {
+
+        Response response = delete(url, body == null ? MediaTypeEnum.FORM : MediaTypeEnum.JSON, body, formParams, (Map<String, Object>) null);
+        return handleResponse(response, JSONMapper.class);
+    }
 }

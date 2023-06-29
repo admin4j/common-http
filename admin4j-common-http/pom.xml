@@ -6,7 +6,7 @@
     <parent>
         <artifactId>common-http</artifactId>
         <groupId>io.github.admin4j</groupId>
-        <version>0.6.0</version>
+        <version>0.6.1</version>
     </parent>
 
     <packaging>jar</packaging>
@@ -20,7 +20,7 @@
         <dependency>
             <groupId>com.admin4j.json</groupId>
             <artifactId>admin4j-json-fastjson2</artifactId>
-            <version>0.6.0</version>
+            <version>0.6.1</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>

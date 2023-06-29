@@ -63,6 +63,22 @@ public class HttpUtil {
         return getClient().post(url, MediaTypeEnum.FORM, null, formParams, (Map<String, Object>) null);
     }
 
+    public static Response put(String url, Object body) {
+        return getClient().put(url, MediaTypeEnum.JSON, body, (Map<String, Object>) null, (Map<String, Object>) null);
+    }
+
+    public static Response putForm(String url, Map<String, Object> formParams) {
+        return getClient().put(url, MediaTypeEnum.FORM, null, formParams, (Map<String, Object>) null);
+    }
+
+    public static Response delete(String url, Object body) {
+        return getClient().delete(url, MediaTypeEnum.JSON, body, (Map<String, Object>) null, (Map<String, Object>) null);
+    }
+
+    public static Response deleteForm(String url, Map<String, Object> formParams) {
+        return getClient().delete(url, MediaTypeEnum.FORM, null, formParams, (Map<String, Object>) null);
+    }
+
     public static Response upload(String url, Map<String, Object> formParams) {
         return getClient().post(url, MediaTypeEnum.FORM_DATA, null, formParams, (Map<String, Object>) null);
     }

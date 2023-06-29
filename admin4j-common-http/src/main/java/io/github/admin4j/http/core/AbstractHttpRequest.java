@@ -60,6 +60,26 @@ public abstract class AbstractHttpRequest extends AbstractHttpExecute {
         return execute(call);
     }
 
+    public Response put(String url,
+                        MediaTypeEnum mediaTypeEnum,
+                        Object body,
+                        Map<String, Object> formParams,
+                        Map<String, Object> headerParams) {
+
+        Call call = buildPut(url, mediaTypeEnum, body, formParams, headerParams);
+        return execute(call);
+    }
+
+    public Response delete(String url,
+                           MediaTypeEnum mediaTypeEnum,
+                           Object body,
+                           Map<String, Object> formParams,
+                           Map<String, Object> headerParams) {
+
+        Call call = buildDelete(url, mediaTypeEnum, body, formParams, headerParams);
+        return execute(call);
+    }
+
     public void asyncPost(String url,
                           MediaTypeEnum mediaTypeEnum,
                           Object body,

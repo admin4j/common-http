@@ -76,9 +76,67 @@ public class HttpJsonUtil {
         return getHttpRequest().postForm(url, formParams, tClass);
     }
 
+    //===================  Put =================
+    public static JSONMapper put(String url, Object body) {
+        return getHttpRequest().put(url, body);
+    }
+
+    public static <T> T put(String url, Object body, Class<T> tClass) {
+        return getHttpRequest().put(url, body, tClass);
+    }
+
+    public static JSONMapper putForm(String url, Map<String, Object> formParams) {
+        return getHttpRequest().putForm(url, formParams);
+    }
+
+    public static <T> T putForm(String url, Map<String, Object> formParams, Class<T> tClass) {
+        return getHttpRequest().putForm(url, formParams, tClass);
+    }
+
 
     public static JSONMapper upload(String url, Map<String, Object> formParams) {
         return getHttpRequest().postFormData(url, formParams);
+    }
+
+    /**
+     * 使用 put 方法上传
+     *
+     * @param url
+     * @param formParams
+     * @return
+     */
+    public static JSONMapper uploadPut(String url, Map<String, Object> formParams) {
+        return getHttpRequest().putFormData(url, formParams);
+    }
+
+    // ============= delete =======
+
+    /**
+     * 删除
+     *
+     * @param url        url
+     * @param body       如果不为空 以 JSON 格式发送
+     * @param formParams 如果不为空 以 form 格式发送
+     * @return JSONMapper
+     */
+    public static JSONMapper delete(String url,
+                                    Object body,
+                                    Map<String, Object> formParams) {
+        return getHttpRequest().delete(url, body, formParams);
+    }
+
+    /**
+     * 删除
+     *
+     * @param url        url
+     * @param body       如果不为空 以 JSON 格式发送
+     * @param formParams 如果不为空 以 form 格式发送
+     * @return class
+     */
+    public static <T> T delete(String url,
+                               Object body,
+                               Map<String, Object> formParams, Class<T> tClass) {
+        return getHttpRequest().delete(url, body, formParams, tClass);
     }
 
 }

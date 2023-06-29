@@ -411,4 +411,26 @@ public abstract class AbstractHttpBuildCall {
 
         return getHttpClient().newCall(request);
     }
+
+    protected Call buildPut(String url,
+                            MediaTypeEnum mediaTypeEnum,
+                            Object body,
+                            Map<String, Object> formParams,
+                            Map<String, Object> headerParams) {
+
+        Request request = buildRequest(url, Method.PUT, mediaTypeEnum, body, formParams, headerParams);
+
+        return getHttpClient().newCall(request);
+    }
+
+    protected Call buildDelete(String url,
+                               MediaTypeEnum mediaTypeEnum,
+                               Object body,
+                               Map<String, Object> formParams,
+                               Map<String, Object> headerParams) {
+
+        Request request = buildRequest(url, Method.DELETE, mediaTypeEnum, body, formParams, headerParams);
+
+        return getHttpClient().newCall(request);
+    }
 }
