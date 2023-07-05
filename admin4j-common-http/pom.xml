@@ -100,7 +100,7 @@
             <dependency>
                 <groupId>com.admin4j.json</groupId>
                 <artifactId>admin4j-json-fastjson2</artifactId>
-                <version>0.6.1</version>
+                <version>0.7.0</version>
             </dependency>
             <dependency>
                 <groupId>com.squareup.okio</groupId>
