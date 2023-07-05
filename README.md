@@ -26,7 +26,7 @@ maven引入
 <dependency>
     <groupId>io.github.admin4j</groupId>
     <artifactId>http</artifactId>
-    <version>0.6.0</version>
+    <version>0.7.3</version>
 </dependency>
 ```
 
@@ -150,7 +150,7 @@ maven引入
 <dependency>
     <groupId>io.github.admin4j</groupId>
     <artifactId>common-http-starter</artifactId>
-    <version>0.6.0</version>
+    <version>0.7.3</version>
 </dependency>
 ```
 
@@ -329,7 +329,7 @@ public class EbayOrderClient extends EbayClient {
 <dependency>
     <groupId>io.github.admin4j</groupId>
     <artifactId>http</artifactId>
-    <version>0.6.0</version>
+    <version>0.7.3</version>
     <exclusions>
         <exclusion>
             <groupId>com.admin4j.json</groupId>
@@ -340,8 +340,28 @@ public class EbayOrderClient extends EbayClient {
 <dependency>
     <groupId>com.admin4j.json</groupId>
     <artifactId>admin4j-json-jackson</artifactId>
-    <version>0.6.0</version>
+    <version>0.6.1</version>
 </dependency>
 ```
 
 JSON 适配工具类参考 [https://github.com/admin4j/admin4j-json](https://github.com/admin4j/admin4j-json)
+
+# Error 报错踩坑
+
+```
+
+java.lang.NoClassDefFoundError: okio.Buffer
+
+	at okhttp3.ResponseBody$Companion.create(ResponseBody.kt:248)
+	at okhttp3.ResponseBody$Companion.create$default(ResponseBody.kt:247)
+	at okhttp3.internal.Util.<clinit>(Util.kt:65)
+	at okhttp3.HttpUrl$Builder.parse$okhttp(HttpUrl.kt:1239)
+	at okhttp3.HttpUrl$Companion.get(HttpUrl.kt:1634)
+	at okhttp3.Request$Builder.url(Request.kt:184)
+	at io.github.admin4j.http.core.AbstractHttpBuildCall.buildRequest(AbstractHttpBuildCall.java:182)
+	at io.github.admin4j.http.core.AbstractHttpBuildCall.buildPost(AbstractHttpBuildCall.java:410)
+	at io.github.admin4j.http.core.AbstractHttpRequest.post(AbstractHttpRequest.java:59)
+```
+
+由于 okio 版本号问题
+具体参考 [记录Maven 依赖包版本号奇奇怪怪的问题 - okhttp3、okio 版本指定无效](https://blog.csdn.net/agonie201218/article/details/131552134)
