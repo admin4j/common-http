@@ -4,8 +4,10 @@ import com.admin4j.json.JSONUtil;
 import io.github.admin4j.http.core.*;
 import io.github.admin4j.http.factory.HttpClientFactory;
 import lombok.experimental.Accessors;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.Callback;
 import okhttp3.Response;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.InputStream;
 import java.util.Map;
@@ -15,16 +17,25 @@ import java.util.Map;
  * @since 2022/4/21 11:27
  */
 @Accessors
+@Slf4j
 public class ApiClient extends AbstractHttpRequest {
     public ApiClient() {
         super();
     }
 
     public ApiClient(HttpConfig httpConfig) {
+
+        if (StringUtils.isBlank(httpConfig.getLogName())) {
+            httpConfig.setLogName(loggerName());
+        }
         okHttpClient = HttpClientFactory.okHttpClient(httpConfig);
         this.followRedirects = httpConfig.isFollowRedirects();
         headerMap.put(HttpHeaderKey.USER_AGENT, httpConfig.getUserAgent());
         headerMap.put(HttpHeaderKey.REFERER, httpConfig.getReferer());
+    }
+
+    protected String loggerName() {
+        return this.getClass().getName();
     }
 
     @Override

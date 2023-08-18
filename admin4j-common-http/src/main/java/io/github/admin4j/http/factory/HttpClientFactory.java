@@ -1,6 +1,7 @@
 package io.github.admin4j.http.factory;
 
 import io.github.admin4j.http.core.HttpConfig;
+import io.github.admin4j.http.core.HttpDefaultConfig;
 import io.github.admin4j.http.core.HttpLogger;
 import okhttp3.ConnectionPool;
 import okhttp3.Credentials;
@@ -23,16 +24,42 @@ import static java.net.CookiePolicy.ACCEPT_ORIGINAL_SERVER;
  */
 public class HttpClientFactory {
 
+    private HttpClientFactory() {
+    }
+
+    /**
+     * 创建 OkHttpClient
+     *
+     * @param httpConfig
+     * @return
+     */
     public static OkHttpClient okHttpClient(HttpConfig httpConfig) {
+        return okHttpClient(httpConfig, httpConfig.isCommonConnectionPool());
+    }
 
-        ConnectionPool connectionPool = new ConnectionPool(httpConfig.getMaxIdleConnections(), httpConfig.getKeepAliveDuration(), TimeUnit.SECONDS);
 
-        HttpLoggingInterceptor logInterceptor = new HttpLoggingInterceptor(new HttpLogger());
+    /**
+     * 创建 OkHttpClient
+     *
+     * @param httpConfig
+     * @param commonConnectionPool 是否公用连接池
+     * @return
+     */
+    public static OkHttpClient okHttpClient(HttpConfig httpConfig, boolean commonConnectionPool) {
+
+        ConnectionPool connectionPool;
+        if (commonConnectionPool) {
+            connectionPool = HttpDefaultConfig.getConnectionPool();
+        } else {
+            connectionPool = new ConnectionPool(httpConfig.getMaxIdleConnections(), httpConfig.getKeepAliveDuration(), TimeUnit.SECONDS);
+        }
+
+        HttpLoggingInterceptor logInterceptor = new HttpLoggingInterceptor(new HttpLogger(httpConfig.getLogName()));
         logInterceptor.setLevel(httpConfig.getLoggLevel());
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .connectionPool(connectionPool)
                 //跳转由自己控制
-                .followRedirects(false)
+                .followRedirects(httpConfig.isFollowRedirects())
                 .addNetworkInterceptor(logInterceptor)
                 .readTimeout(Duration.ofSeconds(httpConfig.getReadTimeout()))
                 .connectTimeout(Duration.ofSeconds(httpConfig.getReadTimeout()));

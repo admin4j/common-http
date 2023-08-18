@@ -17,6 +17,10 @@ public class HttpConfig {
      * 日志等级
      */
     private HttpLoggingInterceptor.Level loggLevel = HttpLoggingInterceptor.Level.BODY;
+    /**
+     * 日志名称
+     */
+    private String logName = "";
 
     /**
      * 读取超时时间，秒
@@ -45,6 +49,10 @@ public class HttpConfig {
      * 是否支持cookie
      */
     private boolean cookie = false;
+    /**
+     * 是否共用连接池
+     */
+    private boolean commonConnectionPool = true;
     private ProxyConfig proxy;
 
 
