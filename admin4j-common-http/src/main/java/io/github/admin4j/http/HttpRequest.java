@@ -39,6 +39,14 @@ public class HttpRequest {
     @Accessors
     private Object body;
 
+    public static HttpRequest get(String url) {
+
+        HttpRequest httpRequest = new HttpRequest();
+        httpRequest.url = url;
+        httpRequest.method = Method.GET;
+        return httpRequest;
+    }
+
     public static HttpRequest post(String url) {
 
         HttpRequest httpRequest = new HttpRequest();
@@ -47,12 +55,39 @@ public class HttpRequest {
         return httpRequest;
     }
 
-    public static HttpRequest get(String url) {
+    public static HttpRequest put(String url) {
 
         HttpRequest httpRequest = new HttpRequest();
         httpRequest.url = url;
-        httpRequest.method = Method.GET;
+        httpRequest.method = Method.PUT;
         return httpRequest;
+    }
+
+    public static HttpRequest delete(String url) {
+
+        HttpRequest httpRequest = new HttpRequest();
+        httpRequest.url = url;
+        httpRequest.method = Method.DELETE;
+        return httpRequest;
+    }
+
+    public static HttpRequest patch(String url) {
+
+        HttpRequest httpRequest = new HttpRequest();
+        httpRequest.url = url;
+        httpRequest.method = Method.PATCH;
+        return httpRequest;
+    }
+
+    /**
+     * 设置请求方法
+     *
+     * @param method
+     * @return
+     */
+    public HttpRequest method(Method method) {
+        this.method = method;
+        return this;
     }
 
     public HttpRequest userAgent(String userAgent) {
