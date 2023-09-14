@@ -365,3 +365,6 @@ java.lang.NoClassDefFoundError: okio.Buffer
 
 由于 okio 版本号问题
 具体参考 [记录Maven 依赖包版本号奇奇怪怪的问题 - okhttp3、okio 版本指定无效](https://blog.csdn.net/agonie201218/article/details/131552134)
+
+# 鸣谢
+![IntelliJ IDEA logo](https://resources.jetbrains.com/storage/products/company/brand/logos/IntelliJ_IDEA.png)
