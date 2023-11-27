@@ -168,7 +168,7 @@ public class ApiJsonClient extends AbstractHttpRequest {
         return null;
     }
 
-    //protected JSONObject serialize(Response response) {
+    // protected JSONObject serialize(Response response) {
     //    ResponseBody body = response.body();
     //    if (body == null) {
     //        throw new HttpException("response body is null");
@@ -181,7 +181,7 @@ public class ApiJsonClient extends AbstractHttpRequest {
     //    }
     //}
 
-    //protected JSONArray serializeList(Response response) {
+    // protected JSONArray serializeList(Response response) {
     //    ResponseBody body = response.body();
     //    if (body == null) {
     //        throw new HttpException("response body is null");
@@ -206,25 +206,6 @@ public class ApiJsonClient extends AbstractHttpRequest {
     }
 
 
-    public <T> T postForm(String url, Map<String, Object> formParams, Class<T> tClass) {
-
-        Response response = post(url, MediaTypeEnum.FORM, null, formParams, null);
-        return handleResponse(response, tClass);
-    }
-
-    public <T> T postFormData(String url, Map<String, Object> formParams, Class<T> tClass) {
-
-        Response response = post(url, MediaTypeEnum.FORM_DATA, null, formParams, null);
-        return handleResponse(response, tClass);
-    }
-
-    public <T> T post(String url, Object body, Class<T> tClass) {
-
-        Response response = post(url, MediaTypeEnum.JSON, body, null, null);
-        return handleResponse(response, tClass);
-    }
-
-
     public JSONMapper get(String path, Pair<?>... queryParams) {
         Response response = get(path, (Map<String, Object>) null, queryParams);
         return handleResponse(response, JSONMapper.class);
@@ -246,10 +227,52 @@ public class ApiJsonClient extends AbstractHttpRequest {
         return (List<T>) handleResponse(response, tClass, true);
     }
 
+    public <T> T postForm(String url, Map<String, Object> formParams, Class<T> tClass) {
+
+        Response response = post(url, MediaTypeEnum.FORM, null, formParams, null);
+        return handleResponse(response, tClass);
+    }
+
+    public <T> T postForm(String url, Map<String, Object> formParams, Map<String, Object> headerParams, Class<T> tClass) {
+
+        Response response = post(url, MediaTypeEnum.FORM, null, formParams, headerParams);
+        return handleResponse(response, tClass);
+    }
+
+    public <T> T postFormData(String url, Map<String, Object> formParams, Class<T> tClass) {
+
+        Response response = post(url, MediaTypeEnum.FORM_DATA, null, formParams, null);
+        return handleResponse(response, tClass);
+    }
+
+    public <T> T postFormData(String url, Map<String, Object> formParams, Map<String, Object> headerParams, Class<T> tClass) {
+
+        Response response = post(url, MediaTypeEnum.FORM_DATA, null, formParams, headerParams);
+        return handleResponse(response, tClass);
+    }
+
+    public <T> T post(String url, Object body, Class<T> tClass) {
+
+        Response response = post(url, MediaTypeEnum.JSON, body, null, null);
+        return handleResponse(response, tClass);
+    }
+
+    public <T> T post(String url, Object body, Map<String, Object> headerParams, Class<T> tClass) {
+
+        Response response = post(url, MediaTypeEnum.JSON, body, null, headerParams);
+        return handleResponse(response, tClass);
+    }
+
 
     public JSONMapper postForm(String url, Map<String, Object> formParams) {
 
         Response response = post(url, MediaTypeEnum.FORM, null, formParams, null);
+        return handleResponse(response, JSONMapper.class);
+    }
+
+    public JSONMapper postForm(String url, Map<String, Object> formParams, Map<String, Object> headerParams) {
+
+        Response response = post(url, MediaTypeEnum.FORM, null, formParams, headerParams);
         return handleResponse(response, JSONMapper.class);
     }
 
@@ -259,9 +282,21 @@ public class ApiJsonClient extends AbstractHttpRequest {
         return handleResponse(response, JSONMapper.class);
     }
 
+    public JSONMapper postFormData(String url, Map<String, Object> formParams, Map<String, Object> headerParams) {
+
+        Response response = post(url, MediaTypeEnum.FORM_DATA, null, formParams, headerParams);
+        return handleResponse(response, JSONMapper.class);
+    }
+
     public JSONMapper post(String url, Object body) {
 
         Response response = post(url, MediaTypeEnum.JSON, body, null, null);
+        return handleResponse(response, JSONMapper.class);
+    }
+
+    public JSONMapper post(String url, Object body, Map<String, Object> headerParams) {
+
+        Response response = post(url, MediaTypeEnum.JSON, body, null, headerParams);
         return handleResponse(response, JSONMapper.class);
     }
 
@@ -271,9 +306,21 @@ public class ApiJsonClient extends AbstractHttpRequest {
         return handleResponse(response, JSONMapper.class);
     }
 
+    public JSONMapper put(String url, Object body, Map<String, Object> headerParams) {
+
+        Response response = put(url, MediaTypeEnum.JSON, body, null, headerParams);
+        return handleResponse(response, JSONMapper.class);
+    }
+
     public <T> T put(String url, Object body, Class<T> tClass) {
 
         Response response = put(url, MediaTypeEnum.JSON, body, null, null);
+        return handleResponse(response, tClass);
+    }
+
+    public <T> T put(String url, Object body, Map<String, Object> headerParams, Class<T> tClass) {
+
+        Response response = put(url, MediaTypeEnum.JSON, body, null, headerParams);
         return handleResponse(response, tClass);
     }
 
@@ -283,15 +330,33 @@ public class ApiJsonClient extends AbstractHttpRequest {
         return handleResponse(response, JSONMapper.class);
     }
 
+    public JSONMapper putForm(String url, Map<String, Object> formParams, Map<String, Object> headerParams) {
+
+        Response response = put(url, MediaTypeEnum.FORM, null, formParams, headerParams);
+        return handleResponse(response, JSONMapper.class);
+    }
+
     public <T> T putForm(String url, Map<String, Object> formParams, Class<T> tClass) {
 
         Response response = put(url, MediaTypeEnum.FORM, null, formParams, null);
         return handleResponse(response, tClass);
     }
 
+    public <T> T putForm(String url, Map<String, Object> formParams, Map<String, Object> headerParams, Class<T> tClass) {
+
+        Response response = put(url, MediaTypeEnum.FORM, null, formParams, headerParams);
+        return handleResponse(response, tClass);
+    }
+
     public JSONMapper putFormData(String url, Map<String, Object> formParams) {
 
         Response response = put(url, MediaTypeEnum.FORM_DATA, null, formParams, null);
+        return handleResponse(response, JSONMapper.class);
+    }
+
+    public JSONMapper putFormData(String url, Map<String, Object> formParams, Map<String, Object> headerParams) {
+
+        Response response = put(url, MediaTypeEnum.FORM_DATA, null, formParams, headerParams);
         return handleResponse(response, JSONMapper.class);
     }
 
@@ -304,11 +369,30 @@ public class ApiJsonClient extends AbstractHttpRequest {
         return handleResponse(response, tClass);
     }
 
+    public <T> T delete(String url,
+                        Object body,
+                        Map<String, Object> formParams,
+                        Map<String, Object> headerParams,
+                        Class<T> tClass) {
+
+        Response response = delete(url, body == null ? MediaTypeEnum.FORM : MediaTypeEnum.JSON, body, formParams, headerParams);
+        return handleResponse(response, tClass);
+    }
+
     public JSONMapper delete(String url,
                              Object body,
                              Map<String, Object> formParams) {
 
         Response response = delete(url, body == null ? MediaTypeEnum.FORM : MediaTypeEnum.JSON, body, formParams, (Map<String, Object>) null);
+        return handleResponse(response, JSONMapper.class);
+    }
+
+    public JSONMapper delete(String url,
+                             Object body,
+                             Map<String, Object> formParams
+            , Map<String, Object> headerParams) {
+
+        Response response = delete(url, body == null ? MediaTypeEnum.FORM : MediaTypeEnum.JSON, body, formParams, headerParams);
         return handleResponse(response, JSONMapper.class);
     }
 }

@@ -64,16 +64,32 @@ public class HttpJsonUtil {
         return getHttpRequest().post(url, body);
     }
 
+    public static JSONMapper post(String url, Object body, Map<String, Object> headerParams) {
+        return getHttpRequest().post(url, body, headerParams);
+    }
+
     public static <T> T post(String url, Object body, Class<T> tClass) {
         return getHttpRequest().post(url, body, tClass);
+    }
+
+    public static <T> T post(String url, Object body, Map<String, Object> headerParams, Class<T> tClass) {
+        return getHttpRequest().post(url, body, headerParams, tClass);
     }
 
     public static JSONMapper postForm(String url, Map<String, Object> formParams) {
         return getHttpRequest().postForm(url, formParams);
     }
 
+    public static JSONMapper postForm(String url, Map<String, Object> formParams, Map<String, Object> headerParams) {
+        return getHttpRequest().postForm(url, formParams, headerParams);
+    }
+
     public static <T> T postForm(String url, Map<String, Object> formParams, Class<T> tClass) {
         return getHttpRequest().postForm(url, formParams, tClass);
+    }
+
+    public static <T> T postForm(String url, Map<String, Object> formParams, Map<String, Object> headerParams, Class<T> tClass) {
+        return getHttpRequest().postForm(url, formParams, headerParams, tClass);
     }
 
     //===================  Put =================
@@ -81,21 +97,41 @@ public class HttpJsonUtil {
         return getHttpRequest().put(url, body);
     }
 
+    public static JSONMapper put(String url, Object body, Map<String, Object> headerParams) {
+        return getHttpRequest().put(url, body, headerParams);
+    }
+
     public static <T> T put(String url, Object body, Class<T> tClass) {
         return getHttpRequest().put(url, body, tClass);
+    }
+
+    public static <T> T put(String url, Object body, Map<String, Object> headerParams, Class<T> tClass) {
+        return getHttpRequest().put(url, body, headerParams, tClass);
     }
 
     public static JSONMapper putForm(String url, Map<String, Object> formParams) {
         return getHttpRequest().putForm(url, formParams);
     }
 
+    public static JSONMapper putForm(String url, Map<String, Object> formParams, Map<String, Object> headerParams) {
+        return getHttpRequest().putForm(url, formParams, headerParams);
+    }
+
     public static <T> T putForm(String url, Map<String, Object> formParams, Class<T> tClass) {
         return getHttpRequest().putForm(url, formParams, tClass);
+    }
+
+    public static <T> T putForm(String url, Map<String, Object> formParams, Map<String, Object> headerParams, Class<T> tClass) {
+        return getHttpRequest().putForm(url, formParams, headerParams, tClass);
     }
 
 
     public static JSONMapper upload(String url, Map<String, Object> formParams) {
         return getHttpRequest().postFormData(url, formParams);
+    }
+
+    public static JSONMapper upload(String url, Map<String, Object> formParams, Map<String, Object> headerParams) {
+        return getHttpRequest().postFormData(url, formParams, headerParams);
     }
 
     /**
@@ -107,6 +143,10 @@ public class HttpJsonUtil {
      */
     public static JSONMapper uploadPut(String url, Map<String, Object> formParams) {
         return getHttpRequest().putFormData(url, formParams);
+    }
+
+    public static JSONMapper uploadPut(String url, Map<String, Object> formParams, Map<String, Object> headerParams) {
+        return getHttpRequest().putFormData(url, formParams, headerParams);
     }
 
     // ============= delete =======
@@ -125,6 +165,12 @@ public class HttpJsonUtil {
         return getHttpRequest().delete(url, body, formParams);
     }
 
+    public static JSONMapper delete(String url,
+                                    Object body,
+                                    Map<String, Object> formParams, Map<String, Object> headerParams) {
+        return getHttpRequest().delete(url, body, formParams, headerParams);
+    }
+
     /**
      * 删除
      *
@@ -137,6 +183,12 @@ public class HttpJsonUtil {
                                Object body,
                                Map<String, Object> formParams, Class<T> tClass) {
         return getHttpRequest().delete(url, body, formParams, tClass);
+    }
+
+    public static <T> T delete(String url,
+                               Object body,
+                               Map<String, Object> formParams, Map<String, Object> headerParams, Class<T> tClass) {
+        return getHttpRequest().delete(url, body, formParams, headerParams, tClass);
     }
 
 }

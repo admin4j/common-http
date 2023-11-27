@@ -59,28 +59,56 @@ public class HttpUtil {
         return getClient().post(url, MediaTypeEnum.JSON, body, (Map<String, Object>) null, (Map<String, Object>) null);
     }
 
+    public static Response post(String url, Object body, Map<String, Object> header) {
+        return getClient().post(url, MediaTypeEnum.JSON, body, (Map<String, Object>) null, header);
+    }
+
     public static Response postForm(String url, Map<String, Object> formParams) {
         return getClient().post(url, MediaTypeEnum.FORM, null, formParams, (Map<String, Object>) null);
+    }
+
+    public static Response postForm(String url, Map<String, Object> formParams, Map<String, Object> header) {
+        return getClient().post(url, MediaTypeEnum.FORM, null, formParams, header);
     }
 
     public static Response put(String url, Object body) {
         return getClient().put(url, MediaTypeEnum.JSON, body, (Map<String, Object>) null, (Map<String, Object>) null);
     }
 
+    public static Response put(String url, Object body, Map<String, Object> header) {
+        return getClient().put(url, MediaTypeEnum.JSON, body, (Map<String, Object>) null, header);
+    }
+
     public static Response putForm(String url, Map<String, Object> formParams) {
         return getClient().put(url, MediaTypeEnum.FORM, null, formParams, (Map<String, Object>) null);
+    }
+
+    public static Response putForm(String url, Map<String, Object> formParams, Map<String, Object> header) {
+        return getClient().put(url, MediaTypeEnum.FORM, null, formParams, header);
     }
 
     public static Response delete(String url, Object body) {
         return getClient().delete(url, MediaTypeEnum.JSON, body, (Map<String, Object>) null, (Map<String, Object>) null);
     }
 
+    public static Response delete(String url, Object body, Map<String, Object> header) {
+        return getClient().delete(url, MediaTypeEnum.JSON, body, (Map<String, Object>) null, header);
+    }
+
     public static Response deleteForm(String url, Map<String, Object> formParams) {
         return getClient().delete(url, MediaTypeEnum.FORM, null, formParams, (Map<String, Object>) null);
     }
 
+    public static Response deleteForm(String url, Map<String, Object> formParams, Map<String, Object> header) {
+        return getClient().delete(url, MediaTypeEnum.FORM, null, formParams, header);
+    }
+
     public static Response upload(String url, Map<String, Object> formParams) {
         return getClient().post(url, MediaTypeEnum.FORM_DATA, null, formParams, (Map<String, Object>) null);
+    }
+
+    public static Response upload(String url, Map<String, Object> formParams, Map<String, Object> header) {
+        return getClient().post(url, MediaTypeEnum.FORM_DATA, null, formParams, header);
     }
 
     public static InputStream down(String url) {
