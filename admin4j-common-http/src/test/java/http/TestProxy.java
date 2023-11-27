@@ -23,7 +23,7 @@ public class TestProxy {
         HttpConfig httpConfig = new HttpConfig();
 
         HttpConfig.ProxyConfig proxyConfig = new HttpConfig.ProxyConfig();
-        proxyConfig.setHost("119.8.115.201");
+        proxyConfig.setHost("192.168.0.1");
         proxyConfig.setPort(9898);
         proxyConfig.setUserName("ces_order");
         proxyConfig.setPassword("23451Order");
