@@ -90,6 +90,11 @@ public class HttpRequest {
         return this;
     }
 
+    public HttpRequest mediaType(MediaTypeEnum mediaType) {
+        this.mediaType = mediaType;
+        return this;
+    }
+
     public HttpRequest userAgent(String userAgent) {
         if (headers == null) {
             headers = new HashMap<>(8);

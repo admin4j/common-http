@@ -24,21 +24,21 @@ public class TestProxy {
 
         HttpConfig.ProxyConfig proxyConfig = new HttpConfig.ProxyConfig();
         proxyConfig.setHost("119.8.115.201");
-        proxyConfig.setPort(9892);
-        proxyConfig.setUserName("ces");
-        proxyConfig.setPassword("iIl1o0O");
+        proxyConfig.setPort(9898);
+        proxyConfig.setUserName("ces_order");
+        proxyConfig.setPassword("23451Order");
         httpConfig.setProxy(proxyConfig);
 
         OkHttpClient okHttpClient = HttpClientFactory.okHttpClient(httpConfig);
 
         ApiJsonClient apiClient = new ApiJsonClient(httpConfig);
         //    apiClient.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36");
-        //JSONObject jsonObject = apiClient.get("https://2022.ip138.com/");
+        // JSONObject jsonObject = apiClient.get("https://2022.ip138.com/");
 
         Map<String, Object> formParams = new HashMap<>(16);
         formParams.put("username", "admin");
         formParams.put("password", "admin123");
-        JSONMapper object = apiClient.postForm("https://www.baidu.com/?/auth/login",
+        JSONMapper object = apiClient.get("https://api.onbuy.com/v2/auth/request-token",
                 formParams
         );
         System.out.println("post = " + object);
