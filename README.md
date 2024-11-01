@@ -26,7 +26,7 @@ maven引入
 <dependency>
     <groupId>io.github.admin4j</groupId>
     <artifactId>http</artifactId>
-    <version>0.9.1</version>
+    <version>0.9.2</version>
 </dependency>
 ```
 
