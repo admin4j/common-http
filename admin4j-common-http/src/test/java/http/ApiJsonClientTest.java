@@ -4,11 +4,15 @@ import com.admin4j.json.mapper.JSONMapper;
 import http.entity.R;
 import io.github.admin4j.http.ApiJsonClient;
 import io.github.admin4j.http.core.HttpConfig;
+import io.github.admin4j.http.exception.HttpException;
+import io.github.admin4j.http.util.HttpJsonUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author andanyang
@@ -61,5 +65,23 @@ class ApiJsonClientTest {
         }
     }
 
+
+    @Test
+    void postFormError() {
+
+        try {
+            Map<String, Object> formParams = new HashMap<>(16);
+            formParams.put("username", "admin");
+            formParams.put("password", "admin123");
+            JSONMapper object = httpRequest.postForm("https://uatservice-etax.one.th/etaxbatchweb/etaxsignbatc",
+                    formParams
+            );
+            System.out.println("post = " + object);
+        }catch (HttpException e){
+            System.out.println("e = " + e);
+            e.printStackTrace();
+        }
+
+    }
 
 }

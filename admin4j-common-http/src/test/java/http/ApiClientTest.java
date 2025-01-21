@@ -6,6 +6,7 @@ import io.github.admin4j.http.ApiClient;
 import io.github.admin4j.http.core.HttpConfig;
 import io.github.admin4j.http.core.Method;
 import io.github.admin4j.http.core.Pair;
+import io.github.admin4j.http.exception.HttpException;
 import io.github.admin4j.http.util.HttpJsonUtil;
 import io.github.admin4j.http.util.HttpUtil;
 import lombok.SneakyThrows;
@@ -117,5 +118,21 @@ class ApiClientTest {
         System.out.println(xx);
     }
 
+    @Test
+    void postFormError() {
 
+        try {
+            Map<String, Object> formParams = new HashMap<>(16);
+            formParams.put("username", "admin");
+            formParams.put("password", "admin123");
+           httpRequest.postForm("https://uatservice-etax.one.th/etaxbatchweb/etaxsignbatc",
+                    formParams
+            );
+            //System.out.println("post = " + object);
+        }catch (HttpException e){
+            System.out.println("e = " + e.getMessage());
+            e.printStackTrace();
+        }
+   
+    }
 }
