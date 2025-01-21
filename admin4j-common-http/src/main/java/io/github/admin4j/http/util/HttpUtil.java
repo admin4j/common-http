@@ -196,6 +196,21 @@ public class HttpUtil {
      * @param formParams
      * @return
      */
+    public static Response postFormData(String url, Map<String, Object> formParams) {
+        return getClient().post(url, MediaTypeEnum.FORM_DATA, null, formParams, (Map<String, Object>) null);
+    }
+
+    public static Response postFormData(String url, Map<String, Object> formParams, Map<String, Object> header) {
+        return getClient().post(url, MediaTypeEnum.FORM_DATA, null, formParams, header);
+    }
+
+    
+    /**
+     * form-data（multipart/form-data） 格式的 post 请求
+     * @param url
+     * @param formParams
+     * @return
+     */
     public static Response upload(String url, Map<String, Object> formParams) {
         return getClient().post(url, MediaTypeEnum.FORM_DATA, null, formParams, (Map<String, Object>) null);
     }
