@@ -54,9 +54,28 @@ public class HttpJsonUtil {
         return getHttpRequest().get(url, queryParams);
     }
 
+    public static JSONMapper get(String url, Map<String, Object> queryParams, Map<String, Object> headerMap) {
+
+        return getHttpRequest().get(url, queryParams,headerMap);
+    }
+
     public static <T> T get(String url, Class<T> tClass, Map<String, Object> queryParams) {
 
         return getHttpRequest().get(url, queryParams, tClass);
+    }
+
+    /**
+     * 发送GET 请求
+     * @param url 地址
+     * @param tClass 需要JSON解析的model
+     * @param queryParams   查询参数
+     * @param headerMap      header 参数
+     * @return      返回结果 model
+     * @param <T>
+     */
+    public static <T> T get(String url, Class<T> tClass, Map<String, Object> queryParams, Map<String, Object> headerMap) {
+
+        return getHttpRequest().get(url, queryParams,headerMap, tClass);
     }
 
 

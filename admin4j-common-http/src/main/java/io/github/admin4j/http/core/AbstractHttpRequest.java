@@ -45,8 +45,12 @@ public abstract class AbstractHttpRequest extends AbstractHttpExecute {
 
     // ======================= GET POST ===============
     public Response get(String path, Map<String, Object> queryMap, Pair<?>... queryParams) {
+        return get(path, queryMap,null, queryParams);
+    }
 
-        Call call = buildGet(path, queryMap, queryParams);
+    public Response get(String path, Map<String, Object> queryMap, Map<String, Object> headerMap, Pair<?>... queryParams) {
+
+        Call call = buildGet(path, queryMap,headerMap, queryParams);
         return execute(call);
     }
 

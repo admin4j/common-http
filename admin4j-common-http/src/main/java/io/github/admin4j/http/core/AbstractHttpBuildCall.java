@@ -399,6 +399,11 @@ public abstract class AbstractHttpBuildCall {
         return buildCall(path, Method.GET, null, queryParams, queryMap, null, null, null);
     }
 
+    public Call buildGet(String path, Map<String, Object> queryMap,Map<String, Object> headerMap, Pair<?>... queryParams) {
+
+        return buildCall(path, Method.GET, null, queryParams, queryMap, null, null, headerMap);
+    }
+
     // ======================= build GET POST ===============
 
     protected Call buildPost(String url,

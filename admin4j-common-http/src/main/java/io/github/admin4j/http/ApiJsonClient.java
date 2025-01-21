@@ -51,6 +51,14 @@ public class ApiJsonClient extends AbstractHttpRequest {
         return JSONUtil.parseObject(in, charset, tClass);
     }
 
+    /**
+     * 执行请求，并返回 json反序列化之后的实体数据
+     * @param call  请求数据
+     * @param tClass 实体模型
+     * @return
+     * @param <T>
+     * @throws HttpException
+     */
     public <T> T execute(Call call, Class<T> tClass) throws HttpException {
         try {
             Response response = call.execute();
@@ -205,14 +213,24 @@ public class ApiJsonClient extends AbstractHttpRequest {
         return execute(call, tClass);
     }
 
+    public <T> T get(String path, Map<String, Object> queryMap,Map<String, Object> headerMap, Class<T> tClass) {
+        Call call = buildGet(path, queryMap,headerMap, (Pair<?>) null);
+        return execute(call, tClass);
+    }
+
 
     public JSONMapper get(String path, Pair<?>... queryParams) {
-        Response response = get(path, (Map<String, Object>) null, queryParams);
+        Response response = get(path, (Map<String, Object>) null,null, queryParams);
         return handleResponse(response, JSONMapper.class);
     }
 
     public JSONMapper get(String path, Map<String, Object> queryMap) {
         Response response = get(path, queryMap, (Pair<?>[]) null);
+        return handleResponse(response, JSONMapper.class);
+    }
+
+    public JSONMapper get(String path, Map<String, Object> queryMap, Map<String, Object> headerMap) {
+        Response response = get(path, queryMap, headerMap, (Pair<?>[]) null);
         return handleResponse(response, JSONMapper.class);
     }
 
@@ -224,6 +242,11 @@ public class ApiJsonClient extends AbstractHttpRequest {
 
     public <T> List<T> getList(String path, Map<String, Object> queryMap, Class<T> tClass) {
         Response response = get(path, queryMap, (Pair<?>[]) null);
+        return (List<T>) handleResponse(response, tClass, true);
+    }
+
+    public <T> List<T> getList(String path, Map<String, Object> queryMap,  Map<String, Object> headerMap, Class<T> tClass) {
+        Response response = get(path, queryMap, headerMap, (Pair<?>[]) null);
         return (List<T>) handleResponse(response, tClass, true);
     }
 
