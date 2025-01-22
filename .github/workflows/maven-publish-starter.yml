@@ -25,6 +25,11 @@ jobs:
           server-password: MAVEN_PASSWORD
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
+          key: maven
+          path: |
+            /home/runner/.m2
+          restore-keys: |
+            maven
 
       - name: Build with Maven
         run: mvn -B clean package -Dmaven.test.skip=true --file admin4j-common-http-starter/pom.xml
