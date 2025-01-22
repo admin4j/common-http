@@ -32,9 +32,8 @@ public abstract class AbstractHttpExecute extends AbstractHttpBuildCall {
             response = function.apply(response);
             return response;
         }
-        //catch (SocketTimeoutException e)
         catch (IOException e) {
-            throw new HttpException(e);
+            throw new HttpException(e.getMessage(),e);
         }
     }
 
