@@ -83,6 +83,12 @@ public class HttpClientFactory {
                 });
             }
         }
+
+        // http protocols
+        if (httpConfig.getProtocols() != null && !httpConfig.getProtocols().isEmpty()) {
+            builder.protocols(httpConfig.getProtocols());
+        }
+
         return builder.build();
     }
 }
