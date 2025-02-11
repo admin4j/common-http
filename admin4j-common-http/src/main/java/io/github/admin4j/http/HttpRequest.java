@@ -13,7 +13,6 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -161,6 +160,8 @@ public class HttpRequest {
         return this;
     }
 
+    //============= 发送http 请求 =================
+
     public Response execute() {
 
         ApiClient apiClient = HttpUtil.getClient();
@@ -175,7 +176,7 @@ public class HttpRequest {
         apiClient.executeAsync(call, callback);
     }
 
-    public <T> T execute(Class<T> clas) throws IOException {
+    public <T> T execute(Class<T> clas) {
 
         @Cleanup InputStream is = Objects.requireNonNull(execute().body()).byteStream();
         return JSONUtil.parseObject(is, clas);
