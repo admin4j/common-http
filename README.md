@@ -17,6 +17,12 @@ OkHttpUtil做了一层封装，使Http请求变得无比简单。
 - 支持springboot 配置文件
 - 极简的封装调用
 
+# TODO
+
+- HttpUtil 支持 HttpRequest `HttpUtil.send(HttpRequest)` ok
+- HttpJsonUtil 支持 HttpRequest
+- HttpRequest remove send
+
 # OKHttpUtil使用
 
 maven引入
@@ -26,7 +32,7 @@ maven引入
 <dependency>
     <groupId>io.github.admin4j</groupId>
     <artifactId>http</artifactId>
-    <version>0.9.1</version>
+    <version>0.9.5</version>
 </dependency>
 ```
 
@@ -62,7 +68,7 @@ System.out.println("response = " + response);
 
 返回格式为JSON的 可以使用 HttpJsonUtil 自动返回JsonObject
 
-```java
+```
         Map<String, Object>  object=HttpJsonUtil.get("https://github.com/search",
         Pair.of("q","http"),
         Pair.of("username","agonie201218"));
@@ -71,7 +77,7 @@ System.out.println("response = " + response);
 
 ## 文件上传
 
-```java
+```
         File file=new File("C:\\Users\\andanyang\\Downloads\\Sql.txt");
         Map<String, Object> formParams=new HashMap<>();
         formParams.put("key","test");
@@ -83,15 +89,15 @@ System.out.println("response = " + response);
 
 ## 下载文件
 
-```java
+```
    HttpUtil.down("https://gitee.com/admin4j/common-http","path/");
 ```
 
 ## HttpRequest 链式请求
 
-```java
+```
 
-# get
+        # get
         Response response=HttpRequest.get("https://search.gitee.com/?skin=rec&type=repository")
         .queryMap("q","admin4j")
         .header(HttpHeaderKey.USER_AGENT,"admin4j")
@@ -150,7 +156,7 @@ maven引入
 <dependency>
     <groupId>io.github.admin4j</groupId>
     <artifactId>common-http-starter</artifactId>
-    <version>0.9.1</version>
+    <version>0.9.5</version>
 </dependency>
 ```
 
@@ -329,7 +335,7 @@ public class EbayOrderClient extends EbayClient {
 <dependency>
     <groupId>io.github.admin4j</groupId>
     <artifactId>http</artifactId>
-    <version>0.9.1</version>
+    <version>0.9.5</version>
     <exclusions>
         <exclusion>
             <groupId>com.admin4j.json</groupId>
