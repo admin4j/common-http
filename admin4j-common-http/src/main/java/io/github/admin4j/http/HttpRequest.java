@@ -7,6 +7,7 @@ import io.github.admin4j.http.core.Method;
 import io.github.admin4j.http.core.Pair;
 import io.github.admin4j.http.util.HttpUtil;
 import lombok.Cleanup;
+import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import okhttp3.Call;
@@ -22,6 +23,7 @@ import java.util.Objects;
  * @author andanyang
  * @since 2022/10/14 15:43
  */
+@Getter
 public class HttpRequest {
 
     private Method method;
