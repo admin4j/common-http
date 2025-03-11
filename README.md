@@ -17,12 +17,6 @@ OkHttpUtil做了一层封装，使Http请求变得无比简单。
 - 支持springboot 配置文件
 - 极简的封装调用
 
-# TODO
-
-- HttpUtil 支持 HttpRequest `HttpUtil.send(HttpRequest)` ok
-- HttpJsonUtil 支持 HttpRequest
-- HttpRequest remove send
-
 # OKHttpUtil使用
 
 maven引入
@@ -69,33 +63,22 @@ System.out.println("response = " + response);
 返回格式为JSON的 可以使用 HttpJsonUtil 自动返回JsonObject
 
 ```java
-        Map<String, Object> object = HttpJsonUtil.get("https://github.com/search",
-        Pair.of("q", "http"),
-        Pair.of("username", "agonie201218"));
-        System.out.
-
-println("object = "+object);
+        Map<String, Object>  object=HttpJsonUtil.get("https://github.com/search",
+        Pair.of("q","http"),
+        Pair.of("username","agonie201218"));
+        System.out.println("object = "+object);
 ```
 
 ## 文件上传
 
 ```java
-        File file = new File("C:\\Users\\andanyang\\Downloads\\Sql.txt");
-Map<String, Object> formParams = new HashMap<>();
-        formParams.
-
-put("key","test");
-        formParams.
-
-put("file",file);
-        formParams.
-
-put("token","WXyUseb-D4sCum-EvTIDYL-mEehwDtrSBg-Zca7t:qgOcR2gUoKmxt-VnsNb657Oatzo=:eyJzY29wZSI6InpoYW56aGkiLCJkZWFkbGluZSI6MTY2NTMwNzUxNH0=");
-
-Response response = HttpUtil.upload("https://upload.qiniup.com/", formParams);
-        System.out.
-
-println(response);
+        File file=new File("C:\\Users\\andanyang\\Downloads\\Sql.txt");
+        Map<String, Object> formParams=new HashMap<>();
+        formParams.put("key","test");
+        formParams.put("file",file);
+        formParams.put("token","WXyUseb-D4sCum-EvTIDYL-mEehwDtrSBg-Zca7t:qgOcR2gUoKmxt-VnsNb657Oatzo=:eyJzY29wZSI6InpoYW56aGkiLCJkZWFkbGluZSI6MTY2NTMwNzUxNH0=");
+        Response response=HttpUtil.upload("https://upload.qiniup.com/",formParams);
+        System.out.println(response);
 ```
 
 ## 下载文件
@@ -108,26 +91,21 @@ println(response);
 
 ```java
 
-#get
-Response response = HttpRequest.get("https://search.gitee.com/?skin=rec&type=repository")
-        .queryMap("q", "admin4j")
-        .header(HttpHeaderKey.USER_AGENT, "admin4j")
+# get
+        Response response=HttpRequest.get("https://search.gitee.com/?skin=rec&type=repository")
+        .queryMap("q","admin4j")
+        .header(HttpHeaderKey.USER_AGENT,"admin4j")
         .execute();
-        System.out.
+        System.out.println("response = "+response);
 
-println("response = "+response);
-
-        #
-post form
-Response response = HttpRequest.get("http://192.168.1.13:9100/auth/login")
-        .queryMap("q", "admin4j")
-        .header(HttpHeaderKey.USER_AGENT, "admin4j")
-        .form("username", "admin")
-        .form("password", "admin123")
+        # post form
+        Response response=HttpRequest.get("http://192.168.1.13:9100/auth/login")
+        .queryMap("q","admin4j")
+        .header(HttpHeaderKey.USER_AGENT,"admin4j")
+        .form("username","admin")
+        .form("password","admin123")
         .execute();
-        System.out.
-
-println("response = "+response);
+        System.out.println("response = "+response);
 ```
 
 ### 开启日志
@@ -292,8 +270,8 @@ EbayInventoryClient 封装ebay 库存 api请求
 使用
 
 ```java
-        EbayInventoryClient ebayInventoryClient = new EbayInventoryClient(1L);
-Map<String, Object> jsonObject = ebayInventoryClient.inventoryItem(0, 10);
+        EbayInventoryClient ebayInventoryClient=new EbayInventoryClient(1L);
+        Map<String, Object> jsonObject=ebayInventoryClient.inventoryItem(0,10);
 ```
 
 ```java
@@ -389,5 +367,4 @@ java.lang.NoClassDefFoundError: okio.Buffer
 具体参考 [记录Maven 依赖包版本号奇奇怪怪的问题 - okhttp3、okio 版本指定无效](https://blog.csdn.net/agonie201218/article/details/131552134)
 
 # 鸣谢
-
 ![IntelliJ IDEA logo](https://resources.jetbrains.com/storage/products/company/brand/logos/IntelliJ_IDEA.png)
