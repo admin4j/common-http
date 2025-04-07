@@ -271,6 +271,13 @@ public class HttpUtil {
     }
 
     //============= 发送http 请求 =================
+
+    /**
+     * 同步执行
+     *
+     * @param httpRequest
+     * @return
+     */
     public static Response send(HttpRequest httpRequest) {
         ApiClient apiClient = HttpUtil.getClient();
         Call call = apiClient.buildCall(httpRequest.getUrl(), httpRequest.getMethod(), httpRequest.getMediaType(),

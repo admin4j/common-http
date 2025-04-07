@@ -32,21 +32,21 @@ public interface HttpCallback<T> {
      */
     void onSuccess(T result, int statusCode, Map<String, List<String>> responseHeaders);
 
-    /**
-     * This is called when the API upload processing.
-     *
-     * @param bytesWritten  bytes Written
-     * @param contentLength content length of request body
-     * @param done          write end
-     */
-    void onUploadProgress(long bytesWritten, long contentLength, boolean done);
-
-    /**
-     * This is called when the API downlond processing.
-     *
-     * @param bytesRead     bytes Read
-     * @param contentLength content lenngth of the response
-     * @param done          Read end
-     */
-    void onDownloadProgress(long bytesRead, long contentLength, boolean done);
+    ///**
+    // * This is called when the API upload processing.
+    // *
+    // * @param bytesWritten  bytes Written
+    // * @param contentLength content length of request body
+    // * @param done          write end
+    // */
+    //void onUploadProgress(long bytesWritten, long contentLength, boolean done);
+    //
+    ///**
+    // * This is called when the API downlond processing.
+    // *
+    // * @param bytesRead     bytes Read
+    // * @param contentLength content lenngth of the response
+    // * @param done          Read end
+    // */
+    //void onDownloadProgress(long bytesRead, long contentLength, boolean done);
 }

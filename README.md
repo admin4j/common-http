@@ -20,7 +20,7 @@ OkHttpUtil做了一层封装，使Http请求变得无比简单。
 # TODO
 
 - HttpUtil 支持 HttpRequest `HttpUtil.send(HttpRequest)` ok
-- HttpJsonUtil 支持 HttpRequest
+- HttpJsonUtil 支持 HttpRequest ok
 - HttpRequest remove send
 
 # OKHttpUtil使用
