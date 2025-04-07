@@ -14,6 +14,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -178,7 +179,7 @@ public class HttpRequest {
         apiClient.executeAsync(call, callback);
     }
 
-    public <T> T execute(Class<T> clas) {
+    public <T> T execute(Class<T> clas) throws IOException {
 
         @Cleanup InputStream is = Objects.requireNonNull(execute().body()).byteStream();
         return JSONUtil.parseObject(is, clas);

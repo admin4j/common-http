@@ -194,6 +194,7 @@
                             <publishingServerId>ossrh</publishingServerId>
                             <autoPublish>true</autoPublish>
                             <waitUntil>published</waitUntil>
+                            <ignorePublishedComponents>true</ignorePublishedComponents>
                         </configuration>
                     </plugin>
                     <!-- GPG 签名-->
