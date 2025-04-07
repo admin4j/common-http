@@ -5,7 +5,7 @@ name: deployment all
 
 on:
   release:
-    types: [created]
+    types: [ created ]
   workflow_dispatch:
 
 jobs:
@@ -17,7 +17,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Set up JDK 8
+      - name: Set up JDK 8 env
         uses: actions/setup-java@v4
         with:
           java-version: 8
@@ -28,10 +28,10 @@ jobs:
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
 
-      - name: Build with Maven
+      - name: Package with Maven
         run: mvn -B clean package -Dmaven.test.skip=true --file pom.xml
 
-      - name: Set up Apache Maven Central
+      - name: Deploy Apache Maven Central
         run: mvn deploy -Dmaven.test.skip=true -Possrh --file pom.xml
         env:
           MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSWORD }}
