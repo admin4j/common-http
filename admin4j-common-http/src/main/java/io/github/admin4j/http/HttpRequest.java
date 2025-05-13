@@ -1,24 +1,15 @@
 package io.github.admin4j.http;
 
-import com.admin4j.json.JSONUtil;
 import io.github.admin4j.http.core.HttpHeaderKey;
 import io.github.admin4j.http.core.MediaTypeEnum;
 import io.github.admin4j.http.core.Method;
 import io.github.admin4j.http.core.Pair;
-import io.github.admin4j.http.util.HttpUtil;
-import lombok.Cleanup;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * @author andanyang
@@ -163,25 +154,25 @@ public class HttpRequest {
         return this;
     }
 
-    //============= 发送http 请求 =================
-
-    public Response execute() {
-
-        ApiClient apiClient = HttpUtil.getClient();
-        Call call = apiClient.buildCall(url, method, mediaType, queryParams, queryMap, body, form, headers);
-        return apiClient.execute(call);
-    }
-
-    public void asyncExecute(Callback callback) {
-
-        ApiClient apiClient = HttpUtil.getClient();
-        Call call = apiClient.buildCall(url, method, mediaType, queryParams, queryMap, body, form, headers);
-        apiClient.executeAsync(call, callback);
-    }
-
-    public <T> T execute(Class<T> clas) throws IOException {
-
-        @Cleanup InputStream is = Objects.requireNonNull(execute().body()).byteStream();
-        return JSONUtil.parseObject(is, clas);
-    }
+    ////============= 发送http 请求 =================
+    //
+    //public Response execute() {
+    //
+    //    ApiClient apiClient = HttpUtil.getClient();
+    //    Call call = apiClient.buildCall(url, method, mediaType, queryParams, queryMap, body, form, headers);
+    //    return apiClient.execute(call);
+    //}
+    //
+    //public void asyncExecute(Callback callback) {
+    //
+    //    ApiClient apiClient = HttpUtil.getClient();
+    //    Call call = apiClient.buildCall(url, method, mediaType, queryParams, queryMap, body, form, headers);
+    //    apiClient.executeAsync(call, callback);
+    //}
+    //
+    //public <T> T execute(Class<T> clas) throws IOException {
+    //
+    //    @Cleanup InputStream is = Objects.requireNonNull(execute().body()).byteStream();
+    //    return JSONUtil.parseObject(is, clas);
+    //}
 }
