@@ -17,12 +17,6 @@ OkHttpUtil做了一层封装，使Http请求变得无比简单。
 - 支持springboot 配置文件
 - 极简的封装调用
 
-# TODO
-
-- HttpUtil 支持 HttpRequest `HttpUtil.send(HttpRequest)` ok
-- HttpJsonUtil 支持 HttpRequest ok
-- HttpRequest remove send ok
-
 # OKHttpUtil使用
 
 maven引入
