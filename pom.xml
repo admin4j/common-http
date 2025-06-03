@@ -18,7 +18,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
-        <revision>0.9.5</revision>
+        <revision>0.9.6</revision>
     </properties>
 
     <build>
@@ -103,18 +103,18 @@
     </developers>
 
     <!-- 发布项目到 sonatype -->
-<!--    <distributionManagement>-->
-<!--&lt;!&ndash;        <repository>&ndash;&gt;-->
-<!--&lt;!&ndash;            <id>${repository.releases.id}</id>&ndash;&gt;-->
-<!--&lt;!&ndash;            <name>nexus-releases</name>&ndash;&gt;-->
-<!--&lt;!&ndash;            <url>${repository.releases.url}</url>&ndash;&gt;-->
-<!--&lt;!&ndash;        </repository>&ndash;&gt;-->
-<!--&lt;!&ndash;        <snapshotRepository>&ndash;&gt;-->
-<!--&lt;!&ndash;            <id>${repository.releases.id}</id>&ndash;&gt;-->
-<!--&lt;!&ndash;            <name>nexus-snapshot</name>&ndash;&gt;-->
-<!--&lt;!&ndash;            <url>${repository.snapshots.url}</url>&ndash;&gt;-->
-<!--&lt;!&ndash;        </snapshotRepository>&ndash;&gt;-->
-<!--    </distributionManagement>-->
+    <!--    <distributionManagement>-->
+    <!--&lt;!&ndash;        <repository>&ndash;&gt;-->
+    <!--&lt;!&ndash;            <id>${repository.releases.id}</id>&ndash;&gt;-->
+    <!--&lt;!&ndash;            <name>nexus-releases</name>&ndash;&gt;-->
+    <!--&lt;!&ndash;            <url>${repository.releases.url}</url>&ndash;&gt;-->
+    <!--&lt;!&ndash;        </repository>&ndash;&gt;-->
+    <!--&lt;!&ndash;        <snapshotRepository>&ndash;&gt;-->
+    <!--&lt;!&ndash;            <id>${repository.releases.id}</id>&ndash;&gt;-->
+    <!--&lt;!&ndash;            <name>nexus-snapshot</name>&ndash;&gt;-->
+    <!--&lt;!&ndash;            <url>${repository.snapshots.url}</url>&ndash;&gt;-->
+    <!--&lt;!&ndash;        </snapshotRepository>&ndash;&gt;-->
+    <!--    </distributionManagement>-->
 
     <profiles>
         <profile>
@@ -194,6 +194,7 @@
                             <publishingServerId>ossrh</publishingServerId>
                             <autoPublish>true</autoPublish>
                             <waitUntil>published</waitUntil>
+                            <ignorePublishedComponents>true</ignorePublishedComponents>
                         </configuration>
                     </plugin>
                     <!-- GPG 签名-->

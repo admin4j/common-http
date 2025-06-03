@@ -1,10 +1,13 @@
 package io.github.admin4j.http.util;
 
 import io.github.admin4j.http.ApiClient;
+import io.github.admin4j.http.HttpRequest;
 import io.github.admin4j.http.core.HttpDefaultConfig;
 import io.github.admin4j.http.core.MediaTypeEnum;
 import io.github.admin4j.http.core.Pair;
 import lombok.Cleanup;
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.Response;
 import org.apache.commons.lang3.StringUtils;
 
@@ -45,6 +48,7 @@ public class HttpUtil {
 
     /**
      * get 请求
+     *
      * @param url
      * @param queryParams 查询参数
      * @return
@@ -57,6 +61,7 @@ public class HttpUtil {
 
     /**
      * get 请求
+     *
      * @param url
      * @param queryParams 查询参数
      * @return
@@ -69,6 +74,7 @@ public class HttpUtil {
 
     /**
      * post 请求
+     *
      * @param url
      * @param body post body 体
      * @return
@@ -79,8 +85,9 @@ public class HttpUtil {
 
     /**
      * post（application/json;） 请求
+     *
      * @param url
-     * @param body  post body 体
+     * @param body   post body 体
      * @param header header 头
      * @return
      */
@@ -89,7 +96,8 @@ public class HttpUtil {
     }
 
     /**
-     *  form（x-www-form-urlencoded） 格式的 post 请求
+     * form（x-www-form-urlencoded） 格式的 post 请求
+     *
      * @param url
      * @param formParams
      * @return
@@ -100,6 +108,7 @@ public class HttpUtil {
 
     /**
      * form（x-www-form-urlencoded） 格式的 post 请求
+     *
      * @param url
      * @param formParams
      * @param header
@@ -111,6 +120,7 @@ public class HttpUtil {
 
     /**
      * put 请求
+     *
      * @param url
      * @param body
      * @return
@@ -121,6 +131,7 @@ public class HttpUtil {
 
     /**
      * put 请求
+     *
      * @param url
      * @param body
      * @param header
@@ -132,6 +143,7 @@ public class HttpUtil {
 
     /**
      * form（x-www-form-urlencoded） 格式的 put 请求
+     *
      * @param url
      * @param formParams
      * @return
@@ -142,6 +154,7 @@ public class HttpUtil {
 
     /**
      * form（x-www-form-urlencoded） 格式的 put 请求
+     *
      * @param url
      * @param formParams
      * @return
@@ -152,6 +165,7 @@ public class HttpUtil {
 
     /**
      * delete 请求
+     *
      * @param url
      * @param body
      * @return
@@ -162,6 +176,7 @@ public class HttpUtil {
 
     /**
      * delete 请求
+     *
      * @param url
      * @param body
      * @return
@@ -172,6 +187,7 @@ public class HttpUtil {
 
     /**
      * form（x-www-form-urlencoded） 格式的 delete 请求
+     *
      * @param url
      * @param formParams
      * @return
@@ -182,6 +198,7 @@ public class HttpUtil {
 
     /**
      * form（x-www-form-urlencoded） 格式的 delete 请求
+     *
      * @param url
      * @param formParams
      * @return
@@ -192,6 +209,7 @@ public class HttpUtil {
 
     /**
      * form-data（multipart/form-data） 格式的 post 请求
+     *
      * @param url
      * @param formParams
      * @return
@@ -204,9 +222,10 @@ public class HttpUtil {
         return getClient().post(url, MediaTypeEnum.FORM_DATA, null, formParams, header);
     }
 
-    
+
     /**
      * form-data（multipart/form-data） 格式的 post 请求
+     *
      * @param url
      * @param formParams
      * @return
@@ -249,5 +268,37 @@ public class HttpUtil {
             // 写入数据
             fileOutputStream.write(b);
         }
+    }
+
+    //============= 发送http 请求 =================
+
+    /**
+     * 同步执行
+     *
+     * @param httpRequest
+     * @return
+     */
+    public static Response send(HttpRequest httpRequest) {
+        ApiClient apiClient = HttpUtil.getClient();
+        Call call = apiClient.buildCall(httpRequest.getUrl(), httpRequest.getMethod(), httpRequest.getMediaType(),
+                httpRequest.getQueryParams(), httpRequest.getQueryMap(), httpRequest.getBody(), httpRequest.getForm(),
+                httpRequest.getHeaders());
+        return apiClient.execute(call);
+    }
+
+
+    /**
+     * 异步执行
+     *
+     * @param httpRequest
+     * @param callback
+     */
+    public static void asyncExecute(HttpRequest httpRequest, Callback callback) {
+
+        ApiClient apiClient = HttpUtil.getClient();
+        Call call = apiClient.buildCall(httpRequest.getUrl(), httpRequest.getMethod(), httpRequest.getMediaType(),
+                httpRequest.getQueryParams(), httpRequest.getQueryMap(), httpRequest.getBody(), httpRequest.getForm(),
+                httpRequest.getHeaders());
+        apiClient.executeAsync(call, callback);
     }
 }

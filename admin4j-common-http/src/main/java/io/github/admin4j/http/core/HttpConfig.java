@@ -1,9 +1,11 @@
 package io.github.admin4j.http.core;
 
 import lombok.Data;
+import okhttp3.Protocol;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 import java.net.Proxy;
+import java.util.List;
 
 /**
  * @author andanyang
@@ -53,9 +55,27 @@ public class HttpConfig {
      * 是否共用连接池
      */
     private boolean commonConnectionPool = true;
+
+    /**
+     * 代理配置
+     */
     private ProxyConfig proxy;
 
+    /**
+     * 请求协议
+     * - HTTP_1_0: HTTP/1.0
+     * - HTTP_1_1: HTTP/1.1
+     * - HTTP_2: HTTP/2
+     * <p>
+     * 按优先顺序排列。如果列表包含 Protocol.H2_PRIOR_KNOWLEDGE ，则该协议必须是唯一的协议，并且不支持 HTTPS URL。
+     * 否则，列表必须包含 Protocol. HTTP_1_1。该列表不得包含 null 或 Protocol. HTTP_1_0
+     */
+    private List<Protocol> protocols;
 
+
+    /**
+     * 代理配置
+     */
     @Data
     public static class ProxyConfig {
 

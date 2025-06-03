@@ -2,8 +2,11 @@ package io.github.admin4j.http.util;
 
 import com.admin4j.json.mapper.JSONMapper;
 import io.github.admin4j.http.ApiJsonClient;
+import io.github.admin4j.http.HttpRequest;
+import io.github.admin4j.http.core.HttpCallback;
 import io.github.admin4j.http.core.HttpDefaultConfig;
 import io.github.admin4j.http.core.Pair;
+import okhttp3.Call;
 
 import java.util.Map;
 
@@ -56,7 +59,7 @@ public class HttpJsonUtil {
 
     public static JSONMapper get(String url, Map<String, Object> queryParams, Map<String, Object> headerMap) {
 
-        return getHttpRequest().get(url, queryParams,headerMap);
+        return getHttpRequest().get(url, queryParams, headerMap);
     }
 
     public static <T> T get(String url, Class<T> tClass, Map<String, Object> queryParams) {
@@ -66,16 +69,17 @@ public class HttpJsonUtil {
 
     /**
      * 发送GET 请求
-     * @param url 地址
-     * @param tClass 需要JSON解析的model
-     * @param queryParams   查询参数
-     * @param headerMap      header 参数
-     * @return      返回结果 model
+     *
+     * @param url         地址
+     * @param tClass      需要JSON解析的model
+     * @param queryParams 查询参数
+     * @param headerMap   header 参数
      * @param <T>
+     * @return 返回结果 model
      */
     public static <T> T get(String url, Class<T> tClass, Map<String, Object> queryParams, Map<String, Object> headerMap) {
 
-        return getHttpRequest().get(url, queryParams,headerMap, tClass);
+        return getHttpRequest().get(url, queryParams, headerMap, tClass);
     }
 
 
@@ -208,6 +212,38 @@ public class HttpJsonUtil {
                                Object body,
                                Map<String, Object> formParams, Map<String, Object> headerParams, Class<T> tClass) {
         return getHttpRequest().delete(url, body, formParams, headerParams, tClass);
+    }
+
+
+    /**
+     * 同步执行
+     *
+     * @param httpRequest
+     * @return
+     */
+    public static <T> T send(HttpRequest httpRequest, Class<T> tClass) {
+
+        ApiJsonClient apiJsonClient = HttpJsonUtil.getHttpRequest();
+        Call call = apiJsonClient.buildCall(httpRequest.getUrl(), httpRequest.getMethod(), httpRequest.getMediaType(),
+                httpRequest.getQueryParams(), httpRequest.getQueryMap(), httpRequest.getBody(), httpRequest.getForm(),
+                httpRequest.getHeaders());
+        return apiJsonClient.execute(call, tClass);
+    }
+
+
+    /**
+     * 异步执行
+     *
+     * @param httpRequest
+     * @param httpCallback
+     */
+    public static <T> void asyncExecute(HttpRequest httpRequest, Class<T> tClass, HttpCallback httpCallback) {
+
+        ApiJsonClient apiJsonClient = HttpJsonUtil.getHttpRequest();
+        Call call = apiJsonClient.buildCall(httpRequest.getUrl(), httpRequest.getMethod(), httpRequest.getMediaType(),
+                httpRequest.getQueryParams(), httpRequest.getQueryMap(), httpRequest.getBody(), httpRequest.getForm(),
+                httpRequest.getHeaders());
+        apiJsonClient.executeAsync(call, tClass, httpCallback);
     }
 
 }

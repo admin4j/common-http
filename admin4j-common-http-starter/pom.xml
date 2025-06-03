@@ -13,6 +13,7 @@
     <artifactId>common-http-starter</artifactId>
     <url>https://github.com/andanyoung</url>
     <packaging>jar</packaging>
+    <description>common http spring starter</description>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -123,7 +124,6 @@
             <timezone>+8</timezone>
         </developer>
     </developers>
-
 
 
 </project>
