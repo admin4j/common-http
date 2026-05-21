@@ -2,8 +2,8 @@ package http.util;
 
 import com.admin4j.json.mapper.JSONMapper;
 import http.entity.CsdnR;
-import io.github.admin4j.http.core.Pair;
 import io.github.admin4j.http.util.HttpJsonUtil;
+import io.github.admin4j.http.util.core.Pair;
 import org.junit.jupiter.api.Test;
 
 /**

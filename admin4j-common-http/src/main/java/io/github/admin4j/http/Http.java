@@ -1,8 +1,9 @@
-package io.github.admin4j.common.http;
+package io.github.admin4j.http;
 
-import io.github.admin4j.http.core.HttpConfig;
-import io.github.admin4j.http.core.HttpDefaultConfig;
-import io.github.admin4j.http.core.Method;
+import io.github.admin4j.http.curl.CurlParser;
+import io.github.admin4j.http.util.core.HttpConfig;
+import io.github.admin4j.http.util.core.HttpDefaultConfig;
+import io.github.admin4j.http.util.core.Method;
 
 import java.util.function.Consumer;
 
@@ -121,6 +122,23 @@ public final class Http {
      */
     public static HttpRequest request(String url, Method method) {
         return new HttpRequest(url, method);
+    }
+
+    /**
+     * 由 curl 命令字符串构建 HttpRequest。
+     * <p>支持的 curl 选项详见 {@link CurlParser}。</p>
+     *
+     * <pre>{@code
+     * HttpResponse resp = Http.curl("curl -X POST 'https://api.example.com' " +
+     *         "-H 'Content-Type: application/json' " +
+     *         "-d '{\"name\":\"admin\"}'").execute();
+     * }</pre>
+     *
+     * @param curlCommand curl 命令行字符串
+     * @return HttpRequest 构建器实例
+     */
+    public static HttpRequest curl(String curlCommand) {
+        return CurlParser.parse(curlCommand);
     }
 
     // ======================== Global Configuration ========================

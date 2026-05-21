@@ -1,6 +1,6 @@
-package io.github.admin4j.common.http;
+package io.github.admin4j.http;
 
-import io.github.admin4j.http.core.HttpConfig;
+import io.github.admin4j.http.util.core.HttpConfig;
 import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;

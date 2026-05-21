@@ -1,4 +1,4 @@
-package io.github.admin4j.http.core;
+package io.github.admin4j.http.util.core;
 
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Call;
@@ -45,12 +45,12 @@ public abstract class AbstractHttpRequest extends AbstractHttpExecute {
 
     // ======================= GET POST ===============
     public Response get(String path, Map<String, Object> queryMap, Pair<?>... queryParams) {
-        return get(path, queryMap,null, queryParams);
+        return get(path, queryMap, null, queryParams);
     }
 
     public Response get(String path, Map<String, Object> queryMap, Map<String, Object> headerMap, Pair<?>... queryParams) {
 
-        Call call = buildGet(path, queryMap,headerMap, queryParams);
+        Call call = buildGet(path, queryMap, headerMap, queryParams);
         return execute(call);
     }
 

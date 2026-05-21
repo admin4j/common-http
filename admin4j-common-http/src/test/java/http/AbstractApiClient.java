@@ -1,10 +1,10 @@
 package http;
 
-import io.github.admin4j.http.ApiClient;
-import io.github.admin4j.http.core.HttpConfig;
-import io.github.admin4j.http.core.MediaTypeEnum;
-import io.github.admin4j.http.core.Pair;
 import io.github.admin4j.http.factory.HttpClientFactory;
+import io.github.admin4j.http.util.ApiClient;
+import io.github.admin4j.http.util.core.HttpConfig;
+import io.github.admin4j.http.util.core.MediaTypeEnum;
+import io.github.admin4j.http.util.core.Pair;
 import okhttp3.OkHttpClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

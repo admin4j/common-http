@@ -1,5 +1,6 @@
 package io.github.admin4j.http;
 
+import io.github.admin4j.http.util.core.HttpConfig;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -7,7 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @since 2022/11/3 16:14
  */
 @ConfigurationProperties(prefix = "admin4j.http")
-public class HttpPropsConfiguration extends io.github.admin4j.http.core.HttpConfig {
+public class HttpPropsConfiguration extends HttpConfig {
     /**
      * 是否启用
      */

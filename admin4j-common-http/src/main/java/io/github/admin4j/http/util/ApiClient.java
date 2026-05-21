@@ -1,8 +1,8 @@
-package io.github.admin4j.http;
+package io.github.admin4j.http.util;
 
 import com.admin4j.json.JSONUtil;
-import io.github.admin4j.http.core.*;
 import io.github.admin4j.http.factory.HttpClientFactory;
+import io.github.admin4j.http.util.core.*;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Callback;

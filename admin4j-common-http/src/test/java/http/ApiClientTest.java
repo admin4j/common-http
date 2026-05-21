@@ -2,13 +2,13 @@ package http;
 
 import com.admin4j.json.mapper.JSONMapper;
 import http.entity.R;
-import io.github.admin4j.http.ApiClient;
-import io.github.admin4j.http.core.HttpConfig;
-import io.github.admin4j.http.core.Method;
-import io.github.admin4j.http.core.Pair;
 import io.github.admin4j.http.exception.HttpException;
+import io.github.admin4j.http.util.ApiClient;
 import io.github.admin4j.http.util.HttpJsonUtil;
 import io.github.admin4j.http.util.HttpUtil;
+import io.github.admin4j.http.util.core.HttpConfig;
+import io.github.admin4j.http.util.core.Method;
+import io.github.admin4j.http.util.core.Pair;
 import lombok.SneakyThrows;
 import okhttp3.Call;
 import org.junit.jupiter.api.BeforeEach;
@@ -125,14 +125,14 @@ class ApiClientTest {
             Map<String, Object> formParams = new HashMap<>(16);
             formParams.put("username", "admin");
             formParams.put("password", "admin123");
-           httpRequest.postForm("https://uatservice-etax.one.th/etaxbatchweb/etaxsignbatc",
+            httpRequest.postForm("https://uatservice-etax.one.th/etaxbatchweb/etaxsignbatc",
                     formParams
             );
             //System.out.println("post = " + object);
-        }catch (HttpException e){
+        } catch (HttpException e) {
             System.out.println("e = " + e.getMessage());
             e.printStackTrace();
         }
-   
+
     }
 }
