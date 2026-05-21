@@ -1,12 +1,8 @@
 package io.github.admin4j.http.util;
 
 import com.admin4j.json.mapper.JSONMapper;
-import io.github.admin4j.http.ApiJsonClient;
-import io.github.admin4j.http.HttpRequest;
-import io.github.admin4j.http.core.HttpCallback;
-import io.github.admin4j.http.core.HttpDefaultConfig;
-import io.github.admin4j.http.core.Pair;
-import okhttp3.Call;
+import io.github.admin4j.http.util.core.HttpDefaultConfig;
+import io.github.admin4j.http.util.core.Pair;
 
 import java.util.Map;
 
@@ -214,36 +210,5 @@ public class HttpJsonUtil {
         return getHttpRequest().delete(url, body, formParams, headerParams, tClass);
     }
 
-
-    /**
-     * 同步执行
-     *
-     * @param httpRequest
-     * @return
-     */
-    public static <T> T send(HttpRequest httpRequest, Class<T> tClass) {
-
-        ApiJsonClient apiJsonClient = HttpJsonUtil.getHttpRequest();
-        Call call = apiJsonClient.buildCall(httpRequest.getUrl(), httpRequest.getMethod(), httpRequest.getMediaType(),
-                httpRequest.getQueryParams(), httpRequest.getQueryMap(), httpRequest.getBody(), httpRequest.getForm(),
-                httpRequest.getHeaders());
-        return apiJsonClient.execute(call, tClass);
-    }
-
-
-    /**
-     * 异步执行
-     *
-     * @param httpRequest
-     * @param httpCallback
-     */
-    public static <T> void asyncExecute(HttpRequest httpRequest, Class<T> tClass, HttpCallback httpCallback) {
-
-        ApiJsonClient apiJsonClient = HttpJsonUtil.getHttpRequest();
-        Call call = apiJsonClient.buildCall(httpRequest.getUrl(), httpRequest.getMethod(), httpRequest.getMediaType(),
-                httpRequest.getQueryParams(), httpRequest.getQueryMap(), httpRequest.getBody(), httpRequest.getForm(),
-                httpRequest.getHeaders());
-        apiJsonClient.executeAsync(call, tClass, httpCallback);
-    }
 
 }

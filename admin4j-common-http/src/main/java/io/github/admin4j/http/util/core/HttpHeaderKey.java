@@ -1,4 +1,4 @@
-package io.github.admin4j.http.core;
+package io.github.admin4j.http.util.core;
 
 /**
  * @author andanyang

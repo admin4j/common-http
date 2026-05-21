@@ -17,6 +17,7 @@ OkHttpUtil做了一层封装，使Http请求变得无比简单。
 - 支持springboot 配置文件
 - 极简的封装调用
 - 支持链式调用、工具方法调用
+- 支持CURL解析调用
 
 # OKHttpUtil使用
 
@@ -27,7 +28,7 @@ maven引入
 <dependency>
     <groupId>io.github.admin4j</groupId>
     <artifactId>http</artifactId>
-    <version>0.9.7</version>
+    <version>0.10.0</version>
 </dependency>
 ```
 
@@ -46,6 +47,39 @@ maven引入
         assertTrue(body.contains("test"));
         assertTrue(body.contains("page"));
 ```
+
+## 支持CURL解析调用
+### 支持的 curl 选项
+| 选项                                       | 行为                                                       |
+| :----------------------------------------- | :--------------------------------------------------------- |
+| `-X / --request`                           | 显式 method                                                |
+| `-H / --header`                            | 添加 header（自动识别 Content-Type）                       |
+| `-d / --data / --data-raw / --data-binary` | 多个 -d 按 `&` 拼接为 body；`{` 或 `[` 开头自动判定为 JSON |
+| `--data-urlencode`                         | URL 编码后并入 body                                        |
+| `-F / --form`                              | multipart；`@/path` 转 `File` 上传                         |
+| `-G / --get`                               | -d 数据自动转 query                                        |
+| `-u / --user`                              | 生成 `Authorization: Basic <base64>`                       |
+| `-A / -e / -b`                             | User-Agent / Referer / Cookie                              |
+| `--url`                                    | 显式 URL                                                   |
+| `-L/-k/-s/-v/-i/-I/--compressed` 等        | 安全忽略                                                   |
+| 未识别选项                                 | WARN 日志 + 跳过                                           |
+
+
+### 用法
+```
+/ 直接执行 curl 命令
+HttpResponse resp = Http.curl(
+    "curl -X POST 'https://api.example.com/users' " +
+    "-H 'Content-Type: application/json' " +
+    "-d '{\"name\":\"admin\"}'"
+).execute();
+
+User user = resp.asBean(User.class);
+
+// 也可在拿到 HttpRequest 后继续链式调整
+Http.curl("curl https://api.example.com").timeout(10).header("X-Trace", id).execute();
+```
+
 
 ## 工具方法调用
 ## GET
@@ -166,7 +200,7 @@ maven引入
 <dependency>
     <groupId>io.github.admin4j</groupId>
     <artifactId>common-http-starter</artifactId>
-    <version>0.9.7</version>
+    <version>0.10.0</version>
 </dependency>
 ```
 

@@ -1,4 +1,4 @@
-package io.github.admin4j.common.http;
+package io.github.admin4j.http;
 
 import com.admin4j.json.JSONUtil;
 import io.github.admin4j.http.exception.HttpException;

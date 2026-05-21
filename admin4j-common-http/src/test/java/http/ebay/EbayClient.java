@@ -1,6 +1,6 @@
 package http.ebay;
 
-import io.github.admin4j.http.ApiJsonClient;
+import io.github.admin4j.http.util.ApiJsonClient;
 
 import java.util.HashMap;
 import java.util.Map;

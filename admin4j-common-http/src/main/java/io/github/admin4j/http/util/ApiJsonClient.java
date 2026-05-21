@@ -1,10 +1,10 @@
-package io.github.admin4j.http;
+package io.github.admin4j.http.util;
 
 import com.admin4j.json.JSONUtil;
 import com.admin4j.json.mapper.JSONMapper;
-import io.github.admin4j.http.core.*;
 import io.github.admin4j.http.exception.HttpException;
 import io.github.admin4j.http.factory.HttpClientFactory;
+import io.github.admin4j.http.util.core.*;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -53,10 +53,11 @@ public class ApiJsonClient extends AbstractHttpRequest {
 
     /**
      * 执行请求，并返回 json反序列化之后的实体数据
-     * @param call  请求数据
+     *
+     * @param call   请求数据
      * @param tClass 实体模型
-     * @return
      * @param <T>
+     * @return
      * @throws HttpException
      */
     public <T> T execute(Call call, Class<T> tClass) throws HttpException {
@@ -64,7 +65,7 @@ public class ApiJsonClient extends AbstractHttpRequest {
             Response response = call.execute();
             return handleResponse(response, tClass);
         } catch (IOException e) {
-            throw new HttpException(e.getMessage(),e);
+            throw new HttpException(e.getMessage(), e);
         }
     }
 
@@ -213,14 +214,14 @@ public class ApiJsonClient extends AbstractHttpRequest {
         return execute(call, tClass);
     }
 
-    public <T> T get(String path, Map<String, Object> queryMap,Map<String, Object> headerMap, Class<T> tClass) {
-        Call call = buildGet(path, queryMap,headerMap, (Pair<?>) null);
+    public <T> T get(String path, Map<String, Object> queryMap, Map<String, Object> headerMap, Class<T> tClass) {
+        Call call = buildGet(path, queryMap, headerMap, (Pair<?>) null);
         return execute(call, tClass);
     }
 
 
     public JSONMapper get(String path, Pair<?>... queryParams) {
-        Response response = get(path, (Map<String, Object>) null,null, queryParams);
+        Response response = get(path, (Map<String, Object>) null, null, queryParams);
         return handleResponse(response, JSONMapper.class);
     }
 
@@ -245,7 +246,7 @@ public class ApiJsonClient extends AbstractHttpRequest {
         return (List<T>) handleResponse(response, tClass, true);
     }
 
-    public <T> List<T> getList(String path, Map<String, Object> queryMap,  Map<String, Object> headerMap, Class<T> tClass) {
+    public <T> List<T> getList(String path, Map<String, Object> queryMap, Map<String, Object> headerMap, Class<T> tClass) {
         Response response = get(path, queryMap, headerMap, (Pair<?>[]) null);
         return (List<T>) handleResponse(response, tClass, true);
     }

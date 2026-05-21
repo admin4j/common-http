@@ -11,6 +11,7 @@ import java.util.Map;
  */
 public class HttpException extends RuntimeException {
 
+    private static final long serialVersionUID = 6962672754149738953L;
     private int code = 0;
     private Map<String, List<String>> responseHeaders = null;
     private String responseBody = null;
@@ -23,8 +24,8 @@ public class HttpException extends RuntimeException {
         super(message);
     }
 
-    public HttpException(String message,Throwable throwable) {
-        super(message,throwable);
+    public HttpException(String message, Throwable throwable) {
+        super(message, throwable);
     }
 
     public HttpException(String message, int code) {

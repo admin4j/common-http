@@ -1,13 +1,9 @@
 package io.github.admin4j.http.util;
 
-import io.github.admin4j.http.ApiClient;
-import io.github.admin4j.http.HttpRequest;
-import io.github.admin4j.http.core.HttpDefaultConfig;
-import io.github.admin4j.http.core.MediaTypeEnum;
-import io.github.admin4j.http.core.Pair;
+import io.github.admin4j.http.util.core.HttpDefaultConfig;
+import io.github.admin4j.http.util.core.MediaTypeEnum;
+import io.github.admin4j.http.util.core.Pair;
 import lombok.Cleanup;
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.Response;
 import org.apache.commons.lang3.StringUtils;
 
@@ -270,35 +266,5 @@ public class HttpUtil {
         }
     }
 
-    //============= 发送http 请求 =================
 
-    /**
-     * 同步执行
-     *
-     * @param httpRequest
-     * @return
-     */
-    public static Response send(HttpRequest httpRequest) {
-        ApiClient apiClient = HttpUtil.getClient();
-        Call call = apiClient.buildCall(httpRequest.getUrl(), httpRequest.getMethod(), httpRequest.getMediaType(),
-                httpRequest.getQueryParams(), httpRequest.getQueryMap(), httpRequest.getBody(), httpRequest.getForm(),
-                httpRequest.getHeaders());
-        return apiClient.execute(call);
-    }
-
-
-    /**
-     * 异步执行
-     *
-     * @param httpRequest
-     * @param callback
-     */
-    public static void asyncExecute(HttpRequest httpRequest, Callback callback) {
-
-        ApiClient apiClient = HttpUtil.getClient();
-        Call call = apiClient.buildCall(httpRequest.getUrl(), httpRequest.getMethod(), httpRequest.getMediaType(),
-                httpRequest.getQueryParams(), httpRequest.getQueryMap(), httpRequest.getBody(), httpRequest.getForm(),
-                httpRequest.getHeaders());
-        apiClient.executeAsync(call, callback);
-    }
 }

@@ -1,9 +1,9 @@
 package http;
 
 import com.admin4j.json.mapper.JSONMapper;
-import io.github.admin4j.http.ApiJsonClient;
-import io.github.admin4j.http.core.HttpConfig;
 import io.github.admin4j.http.factory.HttpClientFactory;
+import io.github.admin4j.http.util.ApiJsonClient;
+import io.github.admin4j.http.util.core.HttpConfig;
 import okhttp3.OkHttpClient;
 import org.junit.jupiter.api.Test;
 

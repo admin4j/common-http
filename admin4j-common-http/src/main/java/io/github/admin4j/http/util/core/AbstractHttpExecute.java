@@ -1,4 +1,4 @@
-package io.github.admin4j.http.core;
+package io.github.admin4j.http.util.core;
 
 import io.github.admin4j.http.exception.HttpException;
 import lombok.extern.slf4j.Slf4j;
@@ -31,9 +31,8 @@ public abstract class AbstractHttpExecute extends AbstractHttpBuildCall {
             Response response = call.execute();
             response = function.apply(response);
             return response;
-        }
-        catch (IOException e) {
-            throw new HttpException(e.getMessage(),e);
+        } catch (IOException e) {
+            throw new HttpException(e.getMessage(), e);
         }
     }
 

@@ -1,7 +1,7 @@
 package http.util;
 
-import io.github.admin4j.http.core.Pair;
 import io.github.admin4j.http.util.HttpUtil;
+import io.github.admin4j.http.util.core.Pair;
 import okhttp3.Response;
 import org.junit.jupiter.api.Test;
 

@@ -1,4 +1,4 @@
-package io.github.admin4j.http.core;
+package io.github.admin4j.http.util.core;
 
 import okhttp3.logging.HttpLoggingInterceptor;
 import org.apache.commons.lang3.StringUtils;

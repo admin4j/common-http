@@ -1,12 +1,12 @@
 package io.github.admin4j.http.config;
 
-import io.github.admin4j.common.http.Http;
-import io.github.admin4j.http.ApiClient;
-import io.github.admin4j.http.ApiJsonClient;
+import io.github.admin4j.http.Http;
 import io.github.admin4j.http.HttpPropsConfiguration;
-import io.github.admin4j.http.core.HttpDefaultConfig;
+import io.github.admin4j.http.util.ApiClient;
+import io.github.admin4j.http.util.ApiJsonClient;
 import io.github.admin4j.http.util.HttpJsonUtil;
 import io.github.admin4j.http.util.HttpUtil;
+import io.github.admin4j.http.util.core.HttpDefaultConfig;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

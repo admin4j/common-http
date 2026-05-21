@@ -1,8 +1,8 @@
 package io.github.admin4j.http.factory;
 
-import io.github.admin4j.http.core.HttpConfig;
-import io.github.admin4j.http.core.HttpDefaultConfig;
-import io.github.admin4j.http.core.HttpLogger;
+import io.github.admin4j.http.util.core.HttpConfig;
+import io.github.admin4j.http.util.core.HttpDefaultConfig;
+import io.github.admin4j.http.util.core.HttpLogger;
 import okhttp3.ConnectionPool;
 import okhttp3.Credentials;
 import okhttp3.JavaNetCookieJar;

@@ -1,4 +1,4 @@
-package io.github.admin4j.http.core;
+package io.github.admin4j.http.util.core;
 
 import io.github.admin4j.http.factory.HttpClientFactory;
 import okhttp3.ConnectionPool;

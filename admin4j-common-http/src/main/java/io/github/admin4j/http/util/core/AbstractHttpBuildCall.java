@@ -1,4 +1,4 @@
-package io.github.admin4j.http.core;
+package io.github.admin4j.http.util.core;
 
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
@@ -95,7 +95,7 @@ public abstract class AbstractHttpBuildCall {
             // support (constant) query string in `path`, e.g. "/posts?draft=1"
             String prefix = path.contains("?") ? "&" : "?";
             for (Pair param : queryParams) {
-                if (param.getValue() != null) {
+                if (null != param && param.getValue() != null) {
                     if (prefix != null) {
                         url.append(prefix);
                         prefix = null;
@@ -399,7 +399,7 @@ public abstract class AbstractHttpBuildCall {
         return buildCall(path, Method.GET, null, queryParams, queryMap, null, null, null);
     }
 
-    public Call buildGet(String path, Map<String, Object> queryMap,Map<String, Object> headerMap, Pair<?>... queryParams) {
+    public Call buildGet(String path, Map<String, Object> queryMap, Map<String, Object> headerMap, Pair<?>... queryParams) {
 
         return buildCall(path, Method.GET, null, queryParams, queryMap, null, null, headerMap);
     }
