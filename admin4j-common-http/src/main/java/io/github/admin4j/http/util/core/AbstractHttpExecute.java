@@ -21,17 +21,47 @@ public abstract class AbstractHttpExecute extends AbstractHttpBuildCall {
      */
     protected boolean followRedirects = true;
 
+    /**
+     * 获取 HttpConfig
+     *
+     * @return
+     */
+    protected HttpConfig getHttpConfig() {
+
+        return HttpDefaultConfig.get();
+    }
+
     // ------------- execute -------------
     public Response execute(Call call) throws HttpException {
         return execute(call, this::handleResponse);
     }
 
     public Response execute(Call call, UnaryOperator<Response> function) throws HttpException {
+
+        HttpConfig config = getHttpConfig();
+        Request okRequest = call.request();
+
+        // 请求日志
+        HttpLogger.logRequest(config, okRequest);
+
+        long startTime = System.currentTimeMillis();
         try {
             Response response = call.execute();
             response = function.apply(response);
+
+            long duration = System.currentTimeMillis() - startTime;
+            // 响应日志
+            HttpLogger.logResponse(config, okRequest, response, duration);
+
+            // 非 2xx 响应失败日志
+            if (!response.isSuccessful()) {
+                HttpLogger.logFailureResponse(config, okRequest, response);
+            }
+
             return response;
         } catch (IOException e) {
+            // 失败日志
+            HttpLogger.logFailure(config, okRequest, e);
             throw new HttpException(e.getMessage(), e);
         }
     }
@@ -43,8 +73,21 @@ public abstract class AbstractHttpExecute extends AbstractHttpBuildCall {
      * @param callback
      */
     public void executeAsync(Call call, final Callback callback) {
+        HttpConfig config = HttpDefaultConfig.get();
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onFailure(call, e);
+            }
 
-        call.enqueue(callback);
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    HttpLogger.logFailureResponse(config, call.request(), response);
+                }
+                callback.onResponse(call, response);
+            }
+        });
     }
 
     /**
@@ -77,6 +120,7 @@ public abstract class AbstractHttpExecute extends AbstractHttpBuildCall {
             response = execute(call);
             ResponseBody responseBody = response.body();
             if (!response.isSuccessful()) {
+                HttpLogger.logFailureResponse(HttpDefaultConfig.get(), call.request(), response);
                 log.error("executeByteStream ERROR" + responseBody.string());
                 throw new HttpException(response);
             } else {

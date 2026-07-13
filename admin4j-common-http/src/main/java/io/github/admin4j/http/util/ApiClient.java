@@ -28,6 +28,7 @@ public class ApiClient extends AbstractHttpRequest {
         if (StringUtils.isBlank(httpConfig.getLogName())) {
             httpConfig.setLogName(loggerName());
         }
+        super.httpConfig = httpConfig;
         okHttpClient = HttpClientFactory.okHttpClient(httpConfig);
         this.followRedirects = httpConfig.isFollowRedirects();
         headerMap.put(HttpHeaderKey.USER_AGENT, httpConfig.getUserAgent());

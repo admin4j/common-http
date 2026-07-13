@@ -21,10 +21,16 @@ public abstract class AbstractHttpRequest extends AbstractHttpExecute {
      */
     protected OkHttpClient okHttpClient;
 
+    protected HttpConfig httpConfig = HttpDefaultConfig.get();
+
+    @Override
+    public HttpConfig getHttpConfig() {
+        return httpConfig;
+    }
 
     public AbstractHttpRequest() {
 
-        HttpConfig httpConfig = HttpDefaultConfig.get();
+        HttpConfig httpConfig = getHttpConfig();
         headerMap.put(HttpHeaderKey.USER_AGENT, httpConfig.getUserAgent());
         headerMap.put(HttpHeaderKey.REFERER, httpConfig.getReferer());
         init();

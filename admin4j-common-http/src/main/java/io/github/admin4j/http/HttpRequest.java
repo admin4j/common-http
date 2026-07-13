@@ -375,11 +375,31 @@ public class HttpRequest {
      * @throws HttpException 如果请求执行过程中发生异常
      */
     public HttpResponse execute() {
+        HttpConfig config = HttpDefaultConfig.get();
+        Request okRequest = buildOkHttpRequest();
+        OkHttpClient client = getClient();
+
+        // 请求日志
+        HttpLogger.logRequest(config, okRequest);
+
+        long startTime = System.currentTimeMillis();
         try {
-            Call call = buildCall();
-            Response response = call.execute();
-            return new HttpResponse(response);
+            Response response = client.newCall(okRequest).execute();
+            long duration = System.currentTimeMillis() - startTime;
+            HttpResponse httpResponse = new HttpResponse(response);
+
+            // 响应日志
+            HttpLogger.logResponse(config, okRequest, response, duration);
+
+            // 非 2xx 响应失败日志
+            if (!response.isSuccessful()) {
+                HttpLogger.logFailureResponse(config, okRequest, response);
+            }
+
+            return httpResponse;
         } catch (IOException e) {
+            // 失败日志
+            HttpLogger.logFailure(config, okRequest, e);
             throw new HttpException("Failed to execute HTTP request: " + e.getMessage(), e);
         }
     }
@@ -394,15 +414,31 @@ public class HttpRequest {
      * @throws HttpException 如果请求失败或响应状态非 2xx
      */
     public InputStream download() {
+        HttpConfig config = HttpDefaultConfig.get();
+        Request okRequest = buildOkHttpRequest();
+        OkHttpClient client = getClient();
+
+        // 请求日志
+        HttpLogger.logRequest(config, okRequest);
+
+        long startTime = System.currentTimeMillis();
         try {
-            Call call = buildCall();
-            Response response = call.execute();
+            Response response = client.newCall(okRequest).execute();
+            long duration = System.currentTimeMillis() - startTime;
+
             if (!response.isSuccessful()) {
+                HttpLogger.logFailureResponse(config, okRequest, response);
+                HttpLogger.logFailure(config, okRequest,
+                        new HttpException("Download failed with status " + response.code()));
                 ResponseBody errorBody = response.body();
                 String errorMsg = errorBody != null ? errorBody.string() : "unknown error";
                 response.close();
                 throw new HttpException("Download failed with status " + response.code() + ": " + errorMsg);
             }
+
+            // 响应日志
+            HttpLogger.logResponse(config, okRequest, response, duration);
+
             ResponseBody body = response.body();
             if (body == null) {
                 response.close();
@@ -410,6 +446,7 @@ public class HttpRequest {
             }
             return body.byteStream();
         } catch (IOException e) {
+            HttpLogger.logFailure(config, okRequest, e);
             throw new HttpException("Failed to download: " + e.getMessage(), e);
         }
     }
@@ -450,15 +487,29 @@ public class HttpRequest {
      * @param onError   called on failure (network error, timeout, etc.)
      */
     public void executeAsync(Consumer<HttpResponse> onSuccess, Consumer<HttpException> onError) {
-        Call call = buildCall();
-        call.enqueue(new Callback() {
+        HttpConfig config = HttpDefaultConfig.get();
+        Request okRequest = buildOkHttpRequest();
+        OkHttpClient client = getClient();
+
+        // 请求日志
+        HttpLogger.logRequest(config, okRequest);
+
+        long startTime = System.currentTimeMillis();
+        client.newCall(okRequest).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                HttpLogger.logFailure(config, okRequest, e);
                 onError.accept(new HttpException("Async request failed: " + e.getMessage(), e));
             }
 
             @Override
             public void onResponse(Call call, Response response) {
+                long duration = System.currentTimeMillis() - startTime;
+                HttpLogger.logResponse(config, okRequest, response, duration);
+                // 非 2xx 响应失败日志
+                if (!response.isSuccessful()) {
+                    HttpLogger.logFailureResponse(config, okRequest, response);
+                }
                 HttpResponse httpResponse = new HttpResponse(response);
                 onSuccess.accept(httpResponse);
             }
@@ -472,8 +523,27 @@ public class HttpRequest {
      * @throws HttpException 如果构建请求时发生异常
      */
     public void executeAsync(Callback callback) {
-        Call call = buildCall();
-        call.enqueue(callback);
+        HttpConfig config = HttpDefaultConfig.get();
+        Request okRequest = buildOkHttpRequest();
+        OkHttpClient client = getClient();
+
+        // 请求日志
+        HttpLogger.logRequest(config, okRequest);
+
+        client.newCall(okRequest).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onFailure(call, e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    HttpLogger.logFailureResponse(config, call.request(), response);
+                }
+                callback.onResponse(call, response);
+            }
+        });
     }
 
     // ======================== Internal Helpers ========================

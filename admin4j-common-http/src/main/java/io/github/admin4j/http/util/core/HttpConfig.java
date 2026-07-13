@@ -72,6 +72,36 @@ public class HttpConfig {
      */
     private List<Protocol> protocols;
 
+    // ======================== Request Log Configuration ========================
+
+    /**
+     * 是否开启请求日志
+     */
+    private boolean logEnabled = false;
+    /**
+     * 是否打印请求头
+     */
+    private boolean logRequestHeaders = false;
+    /**
+     * 是否打印请求URL
+     */
+    private boolean logRequestUrl = true;
+    /**
+     * 是否打印请求参数（query params 和 body）
+     */
+    private boolean logRequestParams = true;
+    /**
+     * 是否打印返回参数
+     */
+    private boolean logResponseBody = true;
+    /**
+     * 是否打印返回header
+     */
+    private boolean logResponseHeaders = false;
+    /**
+     * 失败时是否打印日志
+     */
+    private boolean logOnFailure = true;
 
     /**
      * 代理配置
