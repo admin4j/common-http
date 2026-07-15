@@ -7,6 +7,9 @@ on:
   release:
     types: [ created ]
   workflow_dispatch:
+  push:
+    branches:
+      - master
 
 jobs:
   build:
@@ -27,9 +30,6 @@ jobs:
           server-password: MAVEN_PASSWORD
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
-
-      - name: Package with Maven
-        run: mvn -B clean package -Dmaven.test.skip=true --file pom.xml
 
       - name: Deploy Apache Maven Central
         run: mvn deploy -Dmaven.test.skip=true -Possrh --file pom.xml
