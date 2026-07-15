@@ -22,12 +22,12 @@ public class TestProxy {
     void getStr() throws IOException {
         HttpConfig httpConfig = new HttpConfig();
 
-        HttpConfig.ProxyConfig proxyConfig = new HttpConfig.ProxyConfig();
-        proxyConfig.setHost("192.168.0.1");
-        proxyConfig.setPort(9898);
-        proxyConfig.setUserName("ces_order");
-        proxyConfig.setPassword("23451Order");
-        httpConfig.setProxy(proxyConfig);
+        HttpConfig.HttpProxyConfig httpProxyConfig = new HttpConfig.HttpProxyConfig();
+        httpProxyConfig.setHost("192.168.0.1");
+        httpProxyConfig.setPort(9898);
+        httpProxyConfig.setUserName("ces_order");
+        httpProxyConfig.setPassword("23451Order");
+        httpConfig.setProxy(httpProxyConfig);
 
         OkHttpClient okHttpClient = HttpClientFactory.okHttpClient(httpConfig);
 

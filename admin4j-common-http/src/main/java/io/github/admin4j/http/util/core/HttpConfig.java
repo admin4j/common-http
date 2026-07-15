@@ -5,6 +5,7 @@ import okhttp3.Protocol;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 import java.net.Proxy;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -59,7 +60,7 @@ public class HttpConfig {
     /**
      * 代理配置
      */
-    private ProxyConfig proxy;
+    private HttpProxyConfig proxy;
 
     /**
      * 请求协议
@@ -72,47 +73,57 @@ public class HttpConfig {
      */
     private List<Protocol> protocols;
 
-    // ======================== Request Log Configuration ========================
+    /**
+     * 日志配置
+     */
+    private HttpLogConfig logConfig = new HttpLogConfig();
 
-    /**
-     * 是否开启请求日志
-     */
-    private boolean logEnabled = false;
-    /**
-     * 是否打印请求头
-     */
-    private boolean logRequestHeaders = false;
-    /**
-     * 是否打印请求URL
-     */
-    private boolean logRequestUrl = true;
-    /**
-     * 是否打印请求参数（query params 和 body）
-     */
-    private boolean logRequestParams = true;
-    /**
-     * 是否打印返回参数
-     */
-    private boolean logResponseBody = true;
-    /**
-     * 是否打印返回header
-     */
-    private boolean logResponseHeaders = false;
-    /**
-     * 失败时是否打印日志
-     */
-    private boolean logOnFailure = true;
+    // IMPORTANT: 新增字段时必须同步更新此方法
+    public HttpConfig copy() {
+        HttpConfig copy = new HttpConfig();
+        copy.loggLevel = this.loggLevel;
+        copy.logName = this.logName;
+        copy.readTimeout = this.readTimeout;
+        copy.connectTimeout = this.connectTimeout;
+        copy.followRedirects = this.followRedirects;
+        copy.maxIdleConnections = this.maxIdleConnections;
+        copy.keepAliveDuration = this.keepAliveDuration;
+        copy.userAgent = this.userAgent;
+        copy.referer = this.referer;
+        copy.cookie = this.cookie;
+        copy.commonConnectionPool = this.commonConnectionPool;
+        copy.proxy = this.proxy != null ? this.proxy.copy() : null;
+        copy.protocols = this.protocols != null ? new ArrayList<>(this.protocols) : null;
+        copy.logConfig = this.logConfig != null ? this.logConfig.copy() : null;
+        return copy;
+    }
 
     /**
      * 代理配置
      */
     @Data
-    public static class ProxyConfig {
+    public static class HttpProxyConfig {
 
         private Proxy.Type type = Proxy.Type.HTTP;
         private String host;
         private Integer port = 80;
         private String userName;
         private String password;
+
+        /**
+         * 创建当前代理配置的副本。
+         *
+         * @return 新的 HttpProxyConfig 实例
+         */
+        public HttpProxyConfig copy() {
+            HttpProxyConfig copy = new HttpProxyConfig();
+            copy.setType(this.type);
+            copy.setHost(this.host);
+            copy.setPort(this.port);
+            copy.setUserName(this.userName);
+            copy.setPassword(this.password);
+            return copy;
+        }
+
     }
 }

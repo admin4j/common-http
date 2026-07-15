@@ -3,6 +3,7 @@ package io.github.admin4j.http;
 import com.admin4j.json.JSONUtil;
 import io.github.admin4j.http.curl.CurlParser;
 import io.github.admin4j.http.exception.HttpException;
+import io.github.admin4j.http.factory.HttpClientFactory;
 import io.github.admin4j.http.util.core.*;
 import okhttp3.*;
 import okhttp3.internal.http.HttpMethod;
@@ -22,7 +23,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 /**
@@ -70,6 +70,8 @@ public class HttpRequest {
     private MediaTypeEnum mediaType;
     private long readTimeoutSeconds = -1;
     private long connectTimeoutSeconds = -1;
+
+    private HttpConfig httpConfig = HttpDefaultConfig.get();
 
     /**
      * 包内构造器，通过 URL 和 HTTP 方法创建请求构建器。
@@ -501,18 +503,9 @@ public class HttpRequest {
      * 获取 OkHttpClient 实例，如有自定义超时则基于默认 client 派生。
      */
     private OkHttpClient getClient() {
-        OkHttpClient defaultClient = HttpDefaultConfig.getClient();
-        if (readTimeoutSeconds < 0 && connectTimeoutSeconds < 0) {
-            return defaultClient;
-        }
-        OkHttpClient.Builder builder = defaultClient.newBuilder();
-        if (readTimeoutSeconds >= 0) {
-            builder.readTimeout(readTimeoutSeconds, TimeUnit.SECONDS);
-        }
-        if (connectTimeoutSeconds >= 0) {
-            builder.connectTimeout(connectTimeoutSeconds, TimeUnit.SECONDS);
-        }
-        return builder.build();
+
+        OkHttpClient okHttpClient = HttpClientFactory.okHttpClient(httpConfig);
+        return okHttpClient;
     }
 
     /**
@@ -523,14 +516,13 @@ public class HttpRequest {
         Request.Builder reqBuilder = new Request.Builder().url(fullUrl);
 
         // 设置默认 headers (User-Agent, Referer)
-        HttpConfig defaultConfig = HttpDefaultConfig.get();
         if (!headerParams.containsKey(HttpHeaderKey.USER_AGENT)) {
-            reqBuilder.header(HttpHeaderKey.USER_AGENT, defaultConfig.getUserAgent());
+            reqBuilder.header(HttpHeaderKey.USER_AGENT, httpConfig.getUserAgent());
         }
         if (!headerParams.containsKey(HttpHeaderKey.REFERER)
-                && defaultConfig.getReferer() != null
-                && !defaultConfig.getReferer().isEmpty()) {
-            reqBuilder.header(HttpHeaderKey.REFERER, defaultConfig.getReferer());
+                && httpConfig.getReferer() != null
+                && !httpConfig.getReferer().isEmpty()) {
+            reqBuilder.header(HttpHeaderKey.REFERER, httpConfig.getReferer());
         }
 
         // 设置自定义 headers

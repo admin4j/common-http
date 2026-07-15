@@ -13,4 +13,19 @@ public class HttpPropsConfiguration extends HttpConfig {
      * 是否启用
      */
     private boolean enabled = true;
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    @Override
+    public HttpPropsConfiguration copy() {
+        HttpPropsConfiguration copy = (HttpPropsConfiguration) super.copy();
+        copy.setEnabled(this.enabled);
+        return copy;
+    }
 }

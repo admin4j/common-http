@@ -49,15 +49,15 @@ public class HttpLogger {
      * @param request OkHttp 请求对象
      */
     public static void logRequest(HttpConfig config, Request request) {
-        if (config == null || !config.isLogEnabled() || request == null) {
+        if (config == null || !config.getLogConfig().isLogEnabled() || request == null) {
             return;
         }
         StringBuilder sb = new StringBuilder("HTTP Request ");
         appendMethodAndUrl(sb, config, request);
-        if (config.isLogRequestHeaders()) {
+        if (config.getLogConfig().isLogRequestHeaders()) {
             sb.append("\n- Headers -\n").append(request.headers());
         }
-        if (config.isLogRequestParams()) {
+        if (config.getLogConfig().isLogRequestParams()) {
             RequestBody body = request.body();
             if (body != null) {
                 appendRequestBody(sb, body);
@@ -75,16 +75,16 @@ public class HttpLogger {
      * @param durationMs 请求耗时（毫秒）
      */
     public static void logResponse(HttpConfig config, Request request, Response response, long durationMs) {
-        if (config == null || !config.isLogEnabled() || request == null || response == null) {
+        if (config == null || !config.getLogConfig().isLogEnabled() || request == null || response == null) {
             return;
         }
         StringBuilder sb = new StringBuilder("HTTP Response ");
         appendMethodAndUrl(sb, config, request);
         sb.append(" -> ").append(response.code()).append(" (").append(durationMs).append("ms)");
-        if (config.isLogResponseHeaders()) {
+        if (config.getLogConfig().isLogResponseHeaders()) {
             sb.append("\n  Headers: ").append(response.headers());
         }
-        if (config.isLogResponseBody()) {
+        if (config.getLogConfig().isLogResponseBody()) {
             try {
                 ResponseBody body = response.peekBody(MAX_BODY_PEEK_BYTES);
                 String bodyStr = body.string();
@@ -107,13 +107,13 @@ public class HttpLogger {
      * @param response OkHttp 响应对象
      */
     public static void logFailureResponse(HttpConfig config, Request request, Response response, long durationMs) {
-        if (config == null || !config.isLogEnabled() || !config.isLogOnFailure()) {
+        if (config == null || !config.getLogConfig().isLogEnabled() || !config.getLogConfig().isLogOnFailure()) {
             return;
         }
         StringBuilder sb = new StringBuilder("HTTP Response Failed ");
         appendMethodAndUrl(sb, config, request);
         sb.append(" -> ").append(response.code()).append(" (").append(durationMs).append("ms)");
-        if (config.isLogResponseBody()) {
+        if (config.getLogConfig().isLogResponseBody()) {
             try {
                 ResponseBody body = response.peekBody(MAX_BODY_PEEK_BYTES);
                 String bodyStr = body.string();
@@ -136,7 +136,7 @@ public class HttpLogger {
      * @param e       异常
      */
     public static void logFailure(HttpConfig config, Request request, Exception e) {
-        if (config == null || !config.isLogEnabled() || !config.isLogOnFailure() || request == null) {
+        if (config == null || !config.getLogConfig().isLogEnabled() || !config.getLogConfig().isLogOnFailure() || request == null) {
             return;
         }
         StringBuilder sb = new StringBuilder("HTTP Request Failed ");
@@ -263,7 +263,7 @@ public class HttpLogger {
      * 当 logRequestUrl=true 时输出 [METHOD URL]，否则仅输出 [METHOD]。
      */
     private static void appendMethodAndUrl(StringBuilder sb, HttpConfig config, Request request) {
-        if (config.isLogRequestUrl()) {
+        if (config.getLogConfig().isLogRequestUrl()) {
             sb.append("[").append(request.method()).append(" ").append(request.url()).append("]");
         } else {
             sb.append("[").append(request.method()).append("]");

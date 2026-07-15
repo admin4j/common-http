@@ -3,7 +3,6 @@ package io.github.admin4j.http.factory;
 import io.github.admin4j.http.util.core.HttpConfig;
 import io.github.admin4j.http.util.core.HttpDefaultConfig;
 import io.github.admin4j.http.util.core.HttpLogInterceptor;
-import okhttp3.ConnectionPool;
 import okhttp3.Credentials;
 import okhttp3.JavaNetCookieJar;
 import okhttp3.OkHttpClient;
@@ -13,7 +12,6 @@ import java.net.CookieManager;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.time.Duration;
-import java.util.concurrent.TimeUnit;
 
 import static java.net.CookiePolicy.ACCEPT_ORIGINAL_SERVER;
 
@@ -46,17 +44,26 @@ public class HttpClientFactory {
      */
     public static OkHttpClient okHttpClient(HttpConfig httpConfig, boolean commonConnectionPool) {
 
-        ConnectionPool connectionPool;
-        if (commonConnectionPool) {
-            connectionPool = HttpDefaultConfig.getConnectionPool();
-        } else {
-            connectionPool = new ConnectionPool(httpConfig.getMaxIdleConnections(), httpConfig.getKeepAliveDuration(), TimeUnit.SECONDS);
-        }
+        return okHttpClientBuilder(httpConfig, commonConnectionPool).build();
+    }
 
-        //HttpLoggingInterceptor logInterceptor = new HttpLoggingInterceptor(new HttpLogger(httpConfig.getLogName()));
-        //logInterceptor.setLevel(httpConfig.getLoggLevel());
-        OkHttpClient.Builder builder = new OkHttpClient.Builder()
-                .connectionPool(connectionPool)
+
+    /**
+     * 创建 OkHttpClient
+     *
+     * @param httpConfig
+     * @param commonConnectionPool 是否公用连接池
+     * @return
+     */
+    public static OkHttpClient.Builder okHttpClientBuilder(HttpConfig httpConfig, boolean commonConnectionPool) {
+
+        OkHttpClient.Builder builder;
+        if (commonConnectionPool && HttpDefaultConfig.get().equals(httpConfig)) {
+            builder = HttpDefaultConfig.getClient().newBuilder();
+        } else {
+            builder = new OkHttpClient.Builder();
+        }
+        builder
                 //跳转由自己控制
                 .followRedirects(httpConfig.isFollowRedirects())
                 .addInterceptor(new HttpLogInterceptor())
@@ -89,6 +96,6 @@ public class HttpClientFactory {
             builder.protocols(httpConfig.getProtocols());
         }
 
-        return builder.build();
+        return builder;
     }
 }

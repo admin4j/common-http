@@ -21,7 +21,7 @@ public class HttpLogInterceptor implements Interceptor {
         HttpConfig config = HttpDefaultConfig.get();
         Request request = chain.request();
 
-        if (config == null || !config.isLogEnabled()) {
+        if (config == null || !config.getLogConfig().isLogEnabled()) {
             return chain.proceed(request);
         }
 
