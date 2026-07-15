@@ -55,7 +55,7 @@ public class HttpLogger {
         StringBuilder sb = new StringBuilder("HTTP Request ");
         appendMethodAndUrl(sb, config, request);
         if (config.isLogRequestHeaders()) {
-            sb.append("\n  Headers: ").append(request.headers());
+            sb.append("\n- Headers -\n").append(request.headers());
         }
         if (config.isLogRequestParams()) {
             RequestBody body = request.body();
@@ -91,9 +91,9 @@ public class HttpLogger {
                 if (body.contentLength() > MAX_BODY_PEEK_BYTES || bodyStr.length() >= MAX_BODY_PEEK_BYTES) {
                     bodyStr = bodyStr.substring(0, Math.min(bodyStr.length(), (int) MAX_BODY_PEEK_BYTES)) + "... (truncated)";
                 }
-                sb.append("\n  Body: ").append(bodyStr);
+                sb.append("\n- Body -\n").append(bodyStr);
             } catch (Exception e) {
-                sb.append("\n  Body: [unable to read]");
+                sb.append("\n- Body: [unable to read]");
             }
         }
         STATIC_LOG.info(MARKER, sb.toString());
@@ -110,7 +110,7 @@ public class HttpLogger {
         if (config == null || !config.isLogEnabled() || !config.isLogOnFailure()) {
             return;
         }
-        StringBuilder sb = new StringBuilder("HTTP Request Failed ");
+        StringBuilder sb = new StringBuilder("HTTP Response Failed ");
         appendMethodAndUrl(sb, config, request);
         sb.append(" -> ").append(response.code()).append(" (").append(durationMs).append("ms)");
         if (config.isLogResponseBody()) {
@@ -120,9 +120,9 @@ public class HttpLogger {
                 if (body.contentLength() > MAX_BODY_PEEK_BYTES || bodyStr.length() >= MAX_BODY_PEEK_BYTES) {
                     bodyStr = bodyStr.substring(0, Math.min(bodyStr.length(), (int) MAX_BODY_PEEK_BYTES)) + "... (truncated)";
                 }
-                sb.append("\n  Body: ").append(bodyStr);
+                sb.append("\n- Body -\n").append(bodyStr);
             } catch (Exception e) {
-                sb.append("\n  Body: [unable to read]");
+                sb.append("\n- Body: [unable to read]");
             }
         }
         STATIC_LOG.error(MARKER, sb.toString());
@@ -157,10 +157,10 @@ public class HttpLogger {
             } else {
                 Buffer buffer = new Buffer();
                 body.writeTo(buffer);
-                sb.append("\n  Body: ").append(buffer.readUtf8());
+                sb.append("\n- Body -\n ").append(buffer.readUtf8());
             }
         } catch (Exception e) {
-            sb.append("\n  Body: [unable to read]");
+            sb.append("\n- Body : [unable to read]");
         }
     }
 
@@ -169,7 +169,7 @@ public class HttpLogger {
      */
     private static void appendMultipartBody(StringBuilder sb, MultipartBody body) {
         MediaType mediaType = body.type();
-        sb.append("\n  Body: multipart/").append(mediaType != null ? mediaType.subtype() : "mixed");
+        sb.append("\n- Body multipart/").append(mediaType != null ? mediaType.subtype() : "mixed");
         for (int i = 0; i < body.size(); i++) {
             MultipartBody.Part part = body.part(i);
             Headers partHeaders = part.headers();
@@ -210,7 +210,7 @@ public class HttpLogger {
      * 追加 FormBody 日志：逐个打印表单字段。
      */
     private static void appendFormBody(StringBuilder sb, FormBody body) {
-        sb.append("\n  Body: form-urlencoded");
+        sb.append("\n- Body form-urlencoded");
         for (int i = 0; i < body.size(); i++) {
             sb.append("\n    Field: ").append(body.name(i))
                     .append(" = \"").append(body.value(i)).append("\"");

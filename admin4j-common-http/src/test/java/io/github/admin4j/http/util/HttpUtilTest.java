@@ -25,6 +25,8 @@ public class HttpUtilTest {
     @Before
     public void setUp() {
         HttpDefaultConfig.get().setLogEnabled(true);
+        HttpDefaultConfig.get().setLogRequestHeaders(true);
+        HttpDefaultConfig.get().setLogResponseBody(true);
     }
 
     private static String bodyOf(Response response) {
