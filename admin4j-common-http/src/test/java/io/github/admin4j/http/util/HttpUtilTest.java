@@ -1,8 +1,10 @@
 package io.github.admin4j.http.util;
 
+import io.github.admin4j.http.util.core.HttpDefaultConfig;
 import io.github.admin4j.http.util.core.Pair;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -10,9 +12,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link HttpUtil}.
@@ -20,7 +20,12 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @author admin4j
  * @since 0.10.0
  */
-class HttpUtilTest {
+public class HttpUtilTest {
+
+    @Before
+    public void setUp() {
+        HttpDefaultConfig.get().setLogEnabled(true);
+    }
 
     private static String bodyOf(Response response) {
         try (ResponseBody body = response.body()) {
@@ -31,8 +36,8 @@ class HttpUtilTest {
         }
     }
 
-    @Test
-    void testGetWithPair() {
+    @org.junit.Test
+    public void testGetWithPair() {
         Response resp = HttpUtil.get("https://httpbin.org/get",
                 Pair.of("name", "test"),
                 Pair.of("page", 1));

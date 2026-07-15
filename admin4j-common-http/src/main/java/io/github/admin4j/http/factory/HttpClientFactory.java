@@ -2,12 +2,11 @@ package io.github.admin4j.http.factory;
 
 import io.github.admin4j.http.util.core.HttpConfig;
 import io.github.admin4j.http.util.core.HttpDefaultConfig;
-import io.github.admin4j.http.util.core.HttpLogger;
+import io.github.admin4j.http.util.core.HttpLogInterceptor;
 import okhttp3.ConnectionPool;
 import okhttp3.Credentials;
 import okhttp3.JavaNetCookieJar;
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import org.apache.commons.lang3.StringUtils;
 
 import java.net.CookieManager;
@@ -54,13 +53,14 @@ public class HttpClientFactory {
             connectionPool = new ConnectionPool(httpConfig.getMaxIdleConnections(), httpConfig.getKeepAliveDuration(), TimeUnit.SECONDS);
         }
 
-        HttpLoggingInterceptor logInterceptor = new HttpLoggingInterceptor(new HttpLogger(httpConfig.getLogName()));
-        logInterceptor.setLevel(httpConfig.getLoggLevel());
+        //HttpLoggingInterceptor logInterceptor = new HttpLoggingInterceptor(new HttpLogger(httpConfig.getLogName()));
+        //logInterceptor.setLevel(httpConfig.getLoggLevel());
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .connectionPool(connectionPool)
                 //跳转由自己控制
                 .followRedirects(httpConfig.isFollowRedirects())
-                .addNetworkInterceptor(logInterceptor)
+                .addInterceptor(new HttpLogInterceptor())
+                //.addNetworkInterceptor(logInterceptor)
                 .readTimeout(Duration.ofSeconds(httpConfig.getReadTimeout()))
                 .connectTimeout(Duration.ofSeconds(httpConfig.getReadTimeout()));
 
