@@ -5,6 +5,7 @@ import io.github.admin4j.http.curl.CurlParser;
 import io.github.admin4j.http.exception.HttpException;
 import io.github.admin4j.http.factory.HttpClientFactory;
 import io.github.admin4j.http.util.core.*;
+import lombok.Getter;
 import okhttp3.*;
 import okhttp3.internal.http.HttpMethod;
 import org.slf4j.Logger;
@@ -56,6 +57,7 @@ import java.util.function.Consumer;
  * @author admin4j
  * @since 2024/1/1
  */
+@Getter
 public class HttpRequest {
 
     private static final Logger log = LoggerFactory.getLogger(HttpRequest.class);
@@ -68,7 +70,14 @@ public class HttpRequest {
     private final Map<String, Object> multipartParams = new LinkedHashMap<>();
     private Object body;
     private MediaTypeEnum mediaType;
+
+    /**
+     * 请求超时时间（秒），默认为 -1，表示使用 OkHttp 的默认设置。
+     */
     private long readTimeoutSeconds = -1;
+    /**
+     * 连接超时时间（秒），默认为 -1，表示使用 OkHttp 的默认设置。
+     */
     private long connectTimeoutSeconds = -1;
 
     private HttpConfig httpConfig = HttpDefaultConfig.get();
@@ -504,8 +513,11 @@ public class HttpRequest {
      */
     private OkHttpClient getClient() {
 
-        OkHttpClient okHttpClient = HttpClientFactory.okHttpClient(httpConfig);
-        return okHttpClient;
+        if (httpConfig.equals(HttpDefaultConfig.get())) {
+            return HttpDefaultConfig.getClient();
+        } else {
+            return HttpClientFactory.okHttpClient(httpConfig);
+        }
     }
 
     /**
@@ -514,6 +526,12 @@ public class HttpRequest {
     private Request buildOkHttpRequest() {
         String fullUrl = buildFullUrl();
         Request.Builder reqBuilder = new Request.Builder().url(fullUrl);
+
+        if (httpConfig.equals(HttpDefaultConfig.get()) && (connectTimeoutSeconds > 0 || readTimeoutSeconds > 0)) {
+            httpConfig = HttpDefaultConfig.get().copy();
+            httpConfig.setConnectTimeout(connectTimeoutSeconds);
+            httpConfig.setReadTimeout(readTimeoutSeconds);
+        }
 
         // 设置默认 headers (User-Agent, Referer)
         if (!headerParams.containsKey(HttpHeaderKey.USER_AGENT)) {
